@@ -253,16 +253,7 @@ document.addEventListener('DOMContentLoaded', function() {
 function openShorts() {
     const shortsContainer = document.getElementById('shorts-container');
     shortsContainer.classList.remove('hidden');
-    document.body.style.overflow = 'hidden'; // Prevent main body scrolling
-}
-
-function closeShorts() {
-    const shortsContainer = document.getElementById('shorts-container');
-    shortsContainer.classList.add('hidden');
-    document.body.style.overflow = ''; // Restore scrolling
-}
-
-// --- SHORTS GENERATION LOGIC ---
+    document.body.style.overflow = 'hidden'; /// --- SHORTS GENERATION LOGIC ---
 document.addEventListener('DOMContentLoaded', function() {
     const shortsWrapper = document.getElementById('shortsWrapper');
     if (!shortsWrapper) return;
@@ -270,44 +261,44 @@ document.addEventListener('DOMContentLoaded', function() {
     // A pool of authentic-sounding headlines, briefs, and tags
     const templates = [
         {
-            tag: '?? Breaking',
-            headline: \"Punjab's New Water Conservation Mission: 4,000 Villages Set to Receive Solar Tube-Wells\",
-            brief: \"The initiative aims to save up to 30% of groundwater resources while providing free, renewable energy to farmers across the state. Phase 1 begins next month.\"
+            tag: '🔴 Breaking',
+            headline: "Punjab's New Water Conservation Mission: 4,000 Villages Set to Receive Solar Tube-Wells",
+            brief: "The initiative aims to save up to 30% of groundwater resources while providing free, renewable energy to farmers across the state. Phase 1 begins next month."
         },
         {
             tag: 'Politics',
-            headline: \"State Assembly Passes Resolution on Education Reform Funding\",
-            brief: \"?12,000 Crore allocated specifically for rural school infrastructure, digital classrooms, and teacher training programs starting this fiscal year.\"
+            headline: "State Assembly Passes Resolution on Education Reform Funding",
+            brief: "₹12,000 Crore allocated specifically for rural school infrastructure, digital classrooms, and teacher training programs starting this fiscal year."
         },
         {
             tag: 'Sports',
-            headline: \"Punjab FC Triumphs in ISL Semifinals with Stunning 90th-Minute Goal\",
-            brief: \"The local heroes secure their spot in the finals after a breathtaking finish against the defending champions in front of a sold-out home crowd.\"
+            headline: "Punjab FC Triumphs in ISL Semifinals with Stunning 90th-Minute Goal",
+            brief: "The local heroes secure their spot in the finals after a breathtaking finish against the defending champions in front of a sold-out home crowd."
         },
         {
             tag: 'Agriculture',
-            headline: \"Record Wheat Procurement Expected This Season Across Mandis\",
-            brief: \"State procurement agencies have geared up with enhanced logistics and digital payment gateways to ensure seamless transactions for farmers within 48 hours.\"
+            headline: "Record Wheat Procurement Expected This Season Across Mandis",
+            brief: "State procurement agencies have geared up with enhanced logistics and digital payment gateways to ensure seamless transactions for farmers within 48 hours."
         },
         {
             tag: 'Business',
-            headline: \"Major Tech Hub Proposed for Mohali to Attract Global Investments\",
-            brief: \"The proposed IT city expansion is expected to generate over 50,000 direct jobs and solidify Punjab's position as a premier destination for tech enterprises.\"
+            headline: "Major Tech Hub Proposed for Mohali to Attract Global Investments",
+            brief: "The proposed IT city expansion is expected to generate over 50,000 direct jobs and solidify Punjab's position as a premier destination for tech enterprises."
         },
         {
             tag: 'Culture',
-            headline: \"Amritsar Heritage Walk Initiative Draws Record International Tourist Footfall\",
-            brief: \"The newly launched guided tours exploring the rich history and architecture of the walled city have been a massive hit among international travelers.\"
+            headline: "Amritsar Heritage Walk Initiative Draws Record International Tourist Footfall",
+            brief: "The newly launched guided tours exploring the rich history and architecture of the walled city have been a massive hit among international travelers."
         },
         {
             tag: 'Health',
-            headline: \"New Super-Specialty Hospital Inaugurated in Bathinda\",
-            brief: \"The 500-bed facility brings advanced cardiac and oncology care to the Malwa region, significantly reducing the need for patients to travel to Chandigarh.\"
+            headline: "New Super-Specialty Hospital Inaugurated in Bathinda",
+            brief: "The 500-bed facility brings advanced cardiac and oncology care to the Malwa region, significantly reducing the need for patients to travel to Chandigarh."
         },
         {
             tag: 'Infrastructure',
-            headline: \"Delhi-Amritsar-Katra Expressway Progress on Fast Track\",
-            brief: \"Construction of the vital economic corridor is ahead of schedule, promising to reduce travel time between major cities and boost regional trade.\"
+            headline: "Delhi-Amritsar-Katra Expressway Progress on Fast Track",
+            brief: "Construction of the vital economic corridor is ahead of schedule, promising to reduce travel time between major cities and boost regional trade."
         }
     ];
 
@@ -320,27 +311,39 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Use a fixed seed for picsum.photos to guarantee real, working images that don't change
         const imageId = (i * 13) % 1000 + 10; // Generate deterministic IDs
-        const imageUrl = \https://picsum.photos/id/\/800/1000\;
+        const imageUrl = `https://picsum.photos/id/${imageId}/800/1000`;
         
         // Randomize views and comments slightly
         const views = Math.floor(Math.random() * 500) + 10;
         const comments = Math.floor(Math.random() * 200) + 5;
 
-        htmlContent += \
+        htmlContent += `
             <div class="short-slide">
-                <div class="short-bg" style="background-image: url('\');"></div>
+                <div class="short-bg" style="background-image: url('${imageUrl}');"></div>
                 <div class="short-content">
-                    <div class="short-tag">\</div>
-                    <h2 class="short-headline">\</h2>
-                    <p class="short-brief">\</p>
+                    <div class="short-tag">${template.tag}</div>
+                    <h2 class="short-headline">${template.headline}</h2>
+                    <p class="short-brief">${template.brief}</p>
                     <div class="short-meta">
-                        <span>??? \K views</span>
-                        <span>?? \ comments</span>
+                        <span>👁️ ${views}K views</span>
+                        <span>💬 ${comments} comments</span>
                     </div>
                 </div>
             </div>
-        \;
+        `;
     }
 
     shortsWrapper.innerHTML = htmlContent;
 });
+
+function openShorts() {
+    const shortsContainer = document.getElementById('shorts-container');
+    shortsContainer.classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+}
+
+function closeShorts() {
+    const shortsContainer = document.getElementById('shorts-container');
+    shortsContainer.classList.add('hidden');
+    document.body.style.overflow = '';
+}
