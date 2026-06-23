@@ -24,12 +24,7 @@
             scroll-behavior: smooth;
         }
 
-        body {
-            background: var(--deep-navy);
-            color: var(--text-primary);
-            font-family: 'Inter', sans-serif;
-            overflow-x: hidden;
-        }
+        html, body { background: var(--deep-navy); color: var(--text-primary); font-family: 'Inter', sans-serif; overflow-x: hidden; width: 100%; max-width: 100vw; position: relative; margin: 0; padding: 0; }
 
         /* ── SCROLLBAR ── */
         ::-webkit-scrollbar {
@@ -493,13 +488,7 @@
             filter: brightness(1);
         }
 
-        .side-card-body {
-            padding: 12px 14px;
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-        }
+        .side-card-html, body { background: var(--deep-navy); color: var(--text-primary); font-family: 'Inter', sans-serif; overflow-x: hidden; width: 100%; max-width: 100vw; position: relative; margin: 0; padding: 0; }
 
         .side-cat {
             font-size: 9px;
@@ -900,13 +889,7 @@
             filter: brightness(1);
         }
 
-        .news-card-body {
-            padding: 14px;
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
+        .news-card-html, body { background: var(--deep-navy); color: var(--text-primary); font-family: 'Inter', sans-serif; overflow-x: hidden; width: 100%; max-width: 100vw; position: relative; margin: 0; padding: 0; }
 
         .news-card-cat {
             font-size: 9.5px;
@@ -1014,9 +997,7 @@
             filter: brightness(1);
         }
 
-        .list-card-body {
-            flex: 1;
-        }
+        .list-card-html, body { background: var(--deep-navy); color: var(--text-primary); font-family: 'Inter', sans-serif; overflow-x: hidden; width: 100%; max-width: 100vw; position: relative; margin: 0; padding: 0; }
 
         .list-card-cat {
             font-size: 9px;
@@ -1388,9 +1369,7 @@
             border-radius: 4px;
         }
 
-        .video-card-body {
-            padding: 12px 14px;
-        }
+        .video-card-html, body { background: var(--deep-navy); color: var(--text-primary); font-family: 'Inter', sans-serif; overflow-x: hidden; width: 100%; max-width: 100vw; position: relative; margin: 0; padding: 0; }
 
         .video-title {
             font-size: 13px;
@@ -1542,11 +1521,7 @@
             margin-bottom: 3px;
         }
 
-        .toast-body {
-            font-size: 11px;
-            color: var(--text-muted);
-            line-height: 1.4;
-        }
+        .toast-html, body { background: var(--deep-navy); color: var(--text-primary); font-family: 'Inter', sans-serif; overflow-x: hidden; width: 100%; max-width: 100vw; position: relative; margin: 0; padding: 0; }
 
         /* ── PROGRESS BAR ── */
         .reading-progress {
