@@ -249,3 +249,15 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 });
+// --- SHORTS LOGIC ---
+function openShorts() {
+    const shortsContainer = document.getElementById('shorts-container');
+    shortsContainer.classList.remove('hidden');
+    document.body.style.overflow = 'hidden'; // Prevent main body scrolling
+}
+
+function closeShorts() {
+    const shortsContainer = document.getElementById('shorts-container');
+    shortsContainer.classList.add('hidden');
+    document.body.style.overflow = ''; // Restore scrolling
+}

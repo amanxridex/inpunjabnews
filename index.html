@@ -88,14 +88,16 @@
                 </div>
 
                 <div class="header-search">
-                    <input class="search-box" type="text" placeholder="Search news, topics…" id="searchBox">
-                    <button class="search-btn" onclick="doSearch()">🔍</button>
                     <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()" title="Toggle Light/Dark Mode">☀️</button>
                     <button class="mobile-menu-btn" id="mobileMenuBtn" onclick="toggleMobileMenu()">☰</button>
                 </div>
             </div>
 
             <nav class="main-nav">
+                <div class="nav-search" style="display: flex; align-items: center; padding: 0 16px;">
+                    <input class="search-box" type="text" placeholder="Search news, topics…" id="searchBox" style="height: 32px; padding: 0 12px; border-radius: 16px; border: 1px solid var(--card-border); background: var(--card-bg); color: var(--text-primary);">
+                    <button class="search-btn" onclick="doSearch()" style="background: none; border: none; cursor: pointer; margin-left: -30px;">🔍</button>
+                </div>
                 <a class="nav-item breaking" onclick="scrollToSection('breaking')">🔴 Breaking</a>
                 <a class="nav-item active" onclick="scrollToSection('hero')">Home</a>
                 <a class="nav-item" onclick="scrollToSection('punjab')">Punjab</a>
@@ -1155,6 +1157,61 @@
 
     <!-- Back to Top -->
     <button id="back-top" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+
+    <!-- Shorts Floating Action Button -->
+    <button id="shorts-fab" class="shorts-fab" onclick="openShorts()">
+        <img src="SHORTS.png" alt="Shorts">
+    </button>
+
+    <!-- Shorts Overlay Container -->
+    <div id="shorts-container" class="shorts-container hidden">
+        <button class="shorts-back-btn" onclick="closeShorts()">⬅ Back</button>
+        <div class="shorts-wrapper">
+            
+            <!-- Dummy Short 1 -->
+            <div class="short-slide">
+                <div class="short-bg" style="background-image: url('https://images.unsplash.com/photo-1590050752117-238cb0fb12b1?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80');"></div>
+                <div class="short-content">
+                    <div class="short-tag">🔴 Breaking</div>
+                    <h2 class="short-headline">Punjab's New Water Conservation Mission: 4,000 Villages Set to Receive Solar Tube-Wells</h2>
+                    <p class="short-brief">The initiative aims to save up to 30% of groundwater resources while providing free, renewable energy to farmers across the state. Phase 1 begins next month.</p>
+                    <div class="short-meta">
+                        <span>👁️ 124K views</span>
+                        <span>💬 450 comments</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Dummy Short 2 -->
+            <div class="short-slide">
+                <div class="short-bg" style="background-image: url('https://images.unsplash.com/photo-1582236371520-410a8b13d2f9?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80');"></div>
+                <div class="short-content">
+                    <div class="short-tag" style="background: var(--card-border);">Politics</div>
+                    <h2 class="short-headline">State Assembly Passes Resolution on Education Reform Funding</h2>
+                    <p class="short-brief">₹12,000 Crore allocated specifically for rural school infrastructure, digital classrooms, and teacher training programs starting this fiscal year.</p>
+                    <div class="short-meta">
+                        <span>👁️ 89K views</span>
+                        <span>💬 212 comments</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Dummy Short 3 -->
+            <div class="short-slide">
+                <div class="short-bg" style="background-image: url('https://images.unsplash.com/photo-1623944648762-b91c06282845?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80');"></div>
+                <div class="short-content">
+                    <div class="short-tag" style="background: var(--gold); color: #000;">Sports</div>
+                    <h2 class="short-headline">Punjab FC Triumphs in ISL Semifinals with Stunning 90th-Minute Goal</h2>
+                    <p class="short-brief">The local heroes secure their spot in the finals after a breathtaking finish against the defending champions in front of a sold-out home crowd.</p>
+                    <div class="short-meta">
+                        <span>👁️ 250K views</span>
+                        <span>💬 1.2K comments</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
 
     <script src="index.js"></script>
 </body>
