@@ -257,10 +257,10 @@ function openShorts() {
 }
 // --- DYNAMIC DATA FETCHING (SUPABASE) ---
 document.addEventListener('DOMContentLoaded', async function() {
-    if (typeof supabase === 'undefined') return;
+    if (typeof supabaseClient === 'undefined') return;
 
     try {
-        const { data: articles, error } = await supabase
+        const { data: articles, error } = await supabaseClient
             .from('articles')
             .select('*, categories(name, slug)')
             .eq('is_published', true)
