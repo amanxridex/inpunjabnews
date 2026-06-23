@@ -1,0 +1,1149 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InPunjab News – ਪੰਜਾਬ ਦੀ ਆਵਾਜ਼</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Inter:wght@300;400;500;600;700&family=Noto+Sans+Gurmukhi:wght@400;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="index.css">
+</head>
+
+<body>
+
+    <!-- Reading Progress -->
+    <div class="reading-progress" id="readingProgress"></div>
+
+    <!-- Breaking News Ticker -->
+    <div class="ticker-bar">
+        <div class="ticker-label">🔴 Breaking</div>
+        <div class="ticker-track" id="tickerTrack">
+            <span>Punjab CM announces new agricultural policy — direct benefit to 12 lakh farmers</span>
+            <span>Amritsar: Golden Temple receives record 1.2 lakh pilgrims on Gurpurab</span>
+            <span>Ludhiana industries report 18% growth in exports this quarter</span>
+            <span>Chandigarh: High Court orders immediate action on river pollution</span>
+            <span>India-Pakistan border: BSF nabs three smugglers near Firozpur</span>
+            <span>Punjab Cabinet approves ₹4,200 crore smart city projects for Jalandhar and Patiala</span>
+            <span>National: PM addresses NITI Aayog session, focuses on Punjab agricultural reform</span>
+            <span>Sports: Punjab FC enters ISL semifinals after thrilling 3-2 win</span>
+            <span>Weather: Heavy monsoon expected across central Punjab next 48 hours</span>
+            <span>Punjab announces free bus travel for women in rural areas from July</span>
+            <!-- duplicate for seamless loop -->
+            <span>Punjab CM announces new agricultural policy — direct benefit to 12 lakh farmers</span>
+            <span>Amritsar: Golden Temple receives record 1.2 lakh pilgrims on Gurpurab</span>
+            <span>Ludhiana industries report 18% growth in exports this quarter</span>
+            <span>Chandigarh: High Court orders immediate action on river pollution</span>
+            <span>India-Pakistan border: BSF nabs three smugglers near Firozpur</span>
+        </div>
+    </div>
+
+    <!-- Top Bar -->
+    <div class="top-bar">
+        <div class="top-bar-inner">
+            <div class="top-bar-left">
+                <span><span class="live-dot"></span> LIVE</span>
+                <span>📅 Tuesday, June 23, 2026</span>
+                <span class="weather-badge">☁️ Chandigarh 34°C</span>
+            </div>
+            <div class="top-bar-right">
+                <a href="#">ਪੰਜਾਬੀ</a>
+                <a href="#">हिन्दी</a>
+                <a href="#">English</a>
+                <a href="#">Subscribe</a>
+                <a href="#">Login</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Header -->
+    <header class="main-header">
+        <div class="header-inner">
+            <div class="header-top">
+                <div class="logo-block">
+                    <div class="logo-icon">🦅</div>
+                    <div class="logo-text">
+                        <div class="logo-main">In<span>Punjab</span> News</div>
+                        <div class="logo-tagline">ਪੰਜਾਬ ਦੀ ਆਵਾਜ਼ • Voice of Punjab</div>
+                    </div>
+                </div>
+
+                <div class="header-ad-banner">
+                    <div class="ad-label">Advertisement</div>
+                    <div class="ad-content">✦ Punjab Kesari Real Estate Expo 2026 ✦</div>
+                    <div class="ad-sub">June 28–30 • Expo Centre, Chandigarh | Free Entry</div>
+                </div>
+
+                <div class="header-search">
+                    <input class="search-box" type="text" placeholder="Search news, topics…" id="searchBox">
+                    <button class="search-btn" onclick="doSearch()">🔍</button>
+                </div>
+            </div>
+
+            <nav class="main-nav">
+                <a class="nav-item breaking" onclick="scrollToSection('breaking')">🔴 Breaking</a>
+                <a class="nav-item active" onclick="scrollToSection('hero')">Home</a>
+                <a class="nav-item" onclick="scrollToSection('punjab')">Punjab</a>
+                <a class="nav-item" onclick="scrollToSection('regions')">Regions</a>
+                <a class="nav-item" onclick="scrollToSection('national')">National</a>
+                <a class="nav-item" onclick="scrollToSection('politics')">Politics</a>
+                <a class="nav-item" onclick="scrollToSection('business')">Business</a>
+                <a class="nav-item" onclick="scrollToSection('sports')">Sports</a>
+                <a class="nav-item" onclick="scrollToSection('entertainment')">Entertainment</a>
+                <a class="nav-item" onclick="scrollToSection('videos')">📹 Videos</a>
+                <a class="nav-item" onclick="scrollToSection('opinion')">Opinion</a>
+                <a class="nav-item" onclick="scrollToSection('photos')">Photos</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- HERO SECTION -->
+    <section id="hero" class="hero-section">
+        <div class="container">
+            <div class="hero-grid">
+                <!-- Main Story -->
+                <div class="hero-main">
+                    <img src="https://images.unsplash.com/photo-1605000797499-95a51c5269ae?w=900&q=80"
+                        alt="Punjab Fields">
+                    <div class="hero-overlay">
+                        <span class="hero-category">Punjab • Agriculture</span>
+                        <div class="hero-title">Punjab's New Water Conservation Mission: 4,000 Villages Set to Receive
+                            Solar Tube-Wells in Revolutionary Green Drive</div>
+                        <div class="hero-meta">
+                            <span class="author">By Harpreet Singh</span>
+                            <span>3 hours ago</span>
+                            <span>👁 12.4K views</span>
+                            <span>💬 248 comments</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Side Stories -->
+                <div class="hero-side">
+                    <div class="side-card">
+                        <img src="https://images.unsplash.com/photo-1477281765962-ef34e8bb0967?w=400&q=80"
+                            alt="Golden Temple">
+                        <div class="side-card-body">
+                            <div class="side-cat">Religion • Amritsar</div>
+                            <div class="side-title">Golden Temple's New Langar Kitchen to Serve 2 Lakh Pilgrims Daily
+                                Using Solar Energy</div>
+                            <div class="side-meta">2 hours ago • 8.2K views</div>
+                        </div>
+                    </div>
+                    <div class="side-card">
+                        <img src="https://images.unsplash.com/photo-1542601906897-ecd20a0c7b21?w=400&q=80"
+                            alt="Environment">
+                        <div class="side-card-body">
+                            <div class="side-cat">Politics • Chandigarh</div>
+                            <div class="side-title">AAP Government Tables ₹12,000 Crore Budget for Infrastructure in
+                                Upcoming Assembly Session</div>
+                            <div class="side-meta">4 hours ago • 6.7K views</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- AD STRIP -->
+    <div class="ad-strip">
+        <div class="container">
+            <div class="ad-strip-inner">
+                <div class="ad-strip-badge">Advertisement</div>
+                <div class="ad-strip-content">
+                    <div class="ad-item">
+                        <div class="ad-item-icon">🏡</div>
+                        <div>
+                            <div class="ad-item-text">DLF Punjab — Luxury Homes from ₹45 Lakh</div>
+                            <div class="ad-item-sub">Mohali · Ludhiana · Amritsar</div>
+                        </div>
+                    </div>
+                    <div class="ad-item">
+                        <div class="ad-item-icon">🎓</div>
+                        <div>
+                            <div class="ad-item-text">Chandigarh University MBA 2026 Admissions Open</div>
+                            <div class="ad-item-sub">World Ranking #551 | Apply Now</div>
+                        </div>
+                    </div>
+                    <div class="ad-item">
+                        <div class="ad-item-icon">💊</div>
+                        <div>
+                            <div class="ad-item-text">PGI Chandigarh Health Check Camps This Weekend</div>
+                            <div class="ad-item-sub">Free for Senior Citizens</div>
+                        </div>
+                    </div>
+                    <div class="ad-item">
+                        <div class="ad-item-icon">🚗</div>
+                        <div>
+                            <div class="ad-item-text">Tata Motors Punjab — Drive Home a New Nexon</div>
+                            <div class="ad-item-sub">0% Finance Till July 31</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="ad-strip-badge">Sponsored</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MAIN CONTENT + SIDEBAR -->
+    <div class="container">
+        <div class="main-content">
+
+            <!-- LEFT COLUMN -->
+            <div class="left-col">
+
+                <!-- BREAKING NEWS -->
+                <div id="breaking" class="section-pad">
+                    <div class="section-header">
+                        <div class="section-title">🔴 Breaking News</div>
+                        <a href="#" class="section-more">All Breaking →</a>
+                    </div>
+                    <div class="card-grid-3 fade-up">
+                        <div class="news-card">
+                            <div class="breaking-badge">Breaking</div>
+                            <img class="news-card-img"
+                                src="https://images.unsplash.com/photo-1529107386315-e1a2ed48a620?w=500&q=75" alt="">
+                            <div class="news-card-body">
+                                <div class="news-card-cat">🔴 Punjab • Law & Order</div>
+                                <div class="news-card-title">High Alert in Amritsar After Intelligence Report; Security
+                                    Forces Deploy at Key Border Points</div>
+                                <div class="news-card-excerpt">Security forces placed on high alert after credible
+                                    intelligence inputs were shared with state agencies this morning, officials confirm.
+                                </div>
+                                <div class="news-card-footer">
+                                    <span class="time">🕐 35 min ago</span>
+                                    <div class="news-card-actions">
+                                        <button class="action-btn" onclick="likeCard(this)">🤍</button>
+                                        <button class="action-btn">🔗</button>
+                                        <button class="action-btn">💬 42</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="news-card">
+                            <div class="breaking-badge">Breaking</div>
+                            <img class="news-card-img"
+                                src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=500&q=75" alt="">
+                            <div class="news-card-body">
+                                <div class="news-card-cat">🔴 National • Politics</div>
+                                <div class="news-card-title">PM Modi Calls Emergency Meeting Over Indus Waters Treaty
+                                    Dispute; Punjab Delegation Invited</div>
+                                <div class="news-card-excerpt">A critical inter-ministerial meeting scheduled for
+                                    Thursday will address Punjab's concerns on water sharing agreements.</div>
+                                <div class="news-card-footer">
+                                    <span class="time">🕐 1 hr ago</span>
+                                    <div class="news-card-actions">
+                                        <button class="action-btn" onclick="likeCard(this)">🤍</button>
+                                        <button class="action-btn">🔗</button>
+                                        <button class="action-btn">💬 187</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="news-card">
+                            <img class="news-card-img"
+                                src="https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=500&q=75" alt="">
+                            <div class="news-card-body">
+                                <div class="news-card-cat">Punjab • Economy</div>
+                                <div class="news-card-title">Punjab's Textile Export Surges 22% — Ludhiana Hosiery Hub
+                                    Leads With ₹3,200 Crore Deals</div>
+                                <div class="news-card-excerpt">State's textile sector posts strongest quarterly
+                                    performance in a decade, government credits new export facilitation policy.</div>
+                                <div class="news-card-footer">
+                                    <span class="time">🕐 2 hrs ago</span>
+                                    <div class="news-card-actions">
+                                        <button class="action-btn" onclick="likeCard(this)">🤍</button>
+                                        <button class="action-btn">🔗</button>
+                                        <button class="action-btn">💬 63</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PUNJAB NEWS -->
+                <div id="punjab" class="section-pad">
+                    <div class="section-header">
+                        <div class="section-title">🌾 Punjab News</div>
+                        <a href="#" class="section-more">More Punjab →</a>
+                    </div>
+                    <div class="card-grid-2 fade-up">
+                        <div class="news-card featured">
+                            <img class="news-card-img"
+                                src="https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=600&q=75"
+                                alt="Farming">
+                            <div class="news-card-body">
+                                <span class="cat-pill cat-punjab">Punjab</span>
+                                <div class="news-card-title">Stubble Burning Down 67%: Punjab's Satellite-Monitored
+                                    Farming Revolution Shows Real Results for Third Consecutive Season</div>
+                                <div class="news-card-excerpt">The state government's combined strategy of incentives,
+                                    penalties, and alternative crop support has yielded significant results in reducing
+                                    air pollution. Farmer cooperatives say the shift is economically viable now.</div>
+                                <div class="news-card-footer">
+                                    <span class="time">🕐 5 hrs ago • By Jaswant Kaur</span>
+                                    <div class="news-card-actions">
+                                        <button class="action-btn" onclick="likeCard(this)">🤍</button>
+                                        <button class="action-btn">💬 94</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="news-card">
+                            <img class="news-card-img"
+                                src="https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=600&q=75"
+                                alt="Business">
+                            <div class="news-card-body">
+                                <span class="cat-pill cat-business">Business</span>
+                                <div class="news-card-title">Startup Punjab 2026: 847 New Tech Startups Registered in
+                                    Mohali This Year as Silicon Valley of North India Vision Takes Shape</div>
+                                <div class="news-card-excerpt">Mohali's IT City has attracted ₹2,100 crore in venture
+                                    capital this year alone. Young entrepreneurs from across North India are choosing
+                                    Punjab over Bengaluru, citing better living costs.</div>
+                                <div class="news-card-footer">
+                                    <span class="time">🕐 6 hrs ago • By Ravi Sharma</span>
+                                    <div class="news-card-actions">
+                                        <button class="action-btn" onclick="likeCard(this)">🤍</button>
+                                        <button class="action-btn">💬 71</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- List format -->
+                    <div class="fade-up">
+                        <div class="list-card">
+                            <img class="list-card-img"
+                                src="https://images.unsplash.com/photo-1565843708714-52ecf69ab81f?w=200&q=70" alt="">
+                            <div class="list-card-body">
+                                <div class="list-card-cat">Education • Punjab</div>
+                                <div class="list-card-title">Punjab Government to Open 500 New Smart Classrooms in Rural
+                                    Government Schools Before Year-End</div>
+                                <div class="list-card-meta">7 hrs ago • 3.1K views</div>
+                            </div>
+                        </div>
+                        <div class="list-card">
+                            <img class="list-card-img"
+                                src="https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=200&q=70" alt="">
+                            <div class="list-card-body">
+                                <div class="list-card-cat">Health • Punjab</div>
+                                <div class="list-card-title">AAP's Free Mohalla Clinic Model Reaches 1 Crore
+                                    Consultations Milestone in Punjab — Health Minister Hails Success</div>
+                                <div class="list-card-meta">8 hrs ago • 5.6K views</div>
+                            </div>
+                        </div>
+                        <div class="list-card">
+                            <img class="list-card-img"
+                                src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=200&q=70" alt="">
+                            <div class="list-card-body">
+                                <div class="list-card-cat">Crime • Punjab</div>
+                                <div class="list-card-title">Punjab Police Cracks Down on Organized Cyber Fraud Network;
+                                    23 Arrested Across Jalandhar, Moga and Hoshiarpur</div>
+                                <div class="list-card-meta">9 hrs ago • 4.8K views</div>
+                            </div>
+                        </div>
+                        <div class="list-card">
+                            <img class="list-card-img"
+                                src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=200&q=70" alt="">
+                            <div class="list-card-body">
+                                <div class="list-card-cat">Infrastructure • Punjab</div>
+                                <div class="list-card-title">Amritsar-Delhi Expressway Phase 2: Work Resumes After
+                                    8-Month Delay; Completion Now Targeted for December 2026</div>
+                                <div class="list-card-meta">10 hrs ago • 2.9K views</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- AD LEADERBOARD -->
+                <div class="leaderboard-ad fade-up">
+                    <div class="ad-label">Advertisement</div>
+                    <div class="leaderboard-ad-inner">
+                        <div>
+                            <div class="leaderboard-ad-content">🏦 Punjab National Bank — Zero Fee Savings Account for
+                                Farmers</div>
+                            <div class="leaderboard-ad-sub">Apply Online at pnbindia.in | Kisan Credit Card with ₹3 Lakh
+                                limit | Doorstep Banking Available</div>
+                        </div>
+                        <button class="leaderboard-ad-cta">Apply Now</button>
+                    </div>
+                </div>
+
+                <!-- REGIONS -->
+                <div id="regions" class="section-pad">
+                    <div class="section-header">
+                        <div class="section-title">📍 Regions of Punjab</div>
+                        <a href="#" class="section-more">All Regions →</a>
+                    </div>
+
+                    <div class="region-tabs" id="regionTabs">
+                        <div class="region-tab active" onclick="switchRegion('amritsar', this)">🏯 Amritsar</div>
+                        <div class="region-tab" onclick="switchRegion('ludhiana', this)">🏭 Ludhiana</div>
+                        <div class="region-tab" onclick="switchRegion('chandigarh', this)">🏛 Chandigarh</div>
+                        <div class="region-tab" onclick="switchRegion('jalandhar', this)">📻 Jalandhar</div>
+                        <div class="region-tab" onclick="switchRegion('patiala', this)">👑 Patiala</div>
+                        <div class="region-tab" onclick="switchRegion('mohali', this)">💻 Mohali</div>
+                        <div class="region-tab" onclick="switchRegion('firozpur', this)">⚔ Firozpur</div>
+                        <div class="region-tab" onclick="switchRegion('bathinda', this)">⚗ Bathinda</div>
+                        <div class="region-tab" onclick="switchRegion('hoshiarpur', this)">🌿 Hoshiarpur</div>
+                        <div class="region-tab" onclick="switchRegion('gurdaspur', this)">🏔 Gurdaspur</div>
+                        <div class="region-tab" onclick="switchRegion('moga', this)">🌾 Moga</div>
+                        <div class="region-tab" onclick="switchRegion('ferozepur', this)">🛡 Ferozepur</div>
+                    </div>
+
+                    <div id="regionContent" class="card-grid-3 fade-up">
+                        <!-- Filled by JS -->
+                    </div>
+                </div>
+
+                <!-- NATIONAL NEWS -->
+                <div id="national" class="section-pad">
+                    <div class="section-header">
+                        <div class="section-title">🇮🇳 National News</div>
+                        <a href="#" class="section-more">More National →</a>
+                    </div>
+                    <div class="national-section">
+                        <div class="national-grid">
+                            <div class="national-featured">
+                                <img src="https://images.unsplash.com/photo-1532375810709-75b1da00537c?w=600&q=75"
+                                    alt="India">
+                                <div class="national-featured-overlay">
+                                    <span class="cat-pill cat-national">National • Politics</span>
+                                    <div
+                                        style="font-family:'Playfair Display',serif;font-size:20px;font-weight:700;margin-bottom:8px;">
+                                        India Unveils ₹28 Lakh Crore Infrastructure Plan; Punjab to Receive ₹1.8 Lakh
+                                        Crore for Highways and Railways</div>
+                                    <div style="font-size:11px;color:rgba(255,255,255,0.55);">2 hrs ago • By Deepak
+                                        Anand</div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="list-card">
+                                    <img class="list-card-img"
+                                        src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=200&q=70"
+                                        alt="">
+                                    <div class="list-card-body">
+                                        <div class="list-card-cat">Economy • National</div>
+                                        <div class="list-card-title">India's GDP Grows 7.4% in Q1 2026 — Third Fastest
+                                            Among G20 Nations; Agriculture Sector Leads</div>
+                                        <div class="list-card-meta">3 hrs ago • 14.2K views</div>
+                                    </div>
+                                </div>
+                                <div class="list-card">
+                                    <img class="list-card-img"
+                                        src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200&q=70"
+                                        alt="">
+                                    <div class="list-card-body">
+                                        <div class="list-card-cat">Politics • Delhi</div>
+                                        <div class="list-card-title">Opposition Calls Emergency Parliament Session Over
+                                            Water Sharing Dispute; Rajya Sabha Expected to See Heated Debate</div>
+                                        <div class="list-card-meta">4 hrs ago • 9.8K views</div>
+                                    </div>
+                                </div>
+                                <div class="list-card">
+                                    <img class="list-card-img"
+                                        src="https://images.unsplash.com/photo-1529107386315-e1a2ed48a620?w=200&q=70"
+                                        alt="">
+                                    <div class="list-card-body">
+                                        <div class="list-card-cat">Security • National</div>
+                                        <div class="list-card-title">India-China Border Talks Enter 22nd Round; Army
+                                            Chief Confirms No Tension at Disputed Points</div>
+                                        <div class="list-card-meta">5 hrs ago • 7.3K views</div>
+                                    </div>
+                                </div>
+                                <div class="list-card">
+                                    <img class="list-card-img"
+                                        src="https://images.unsplash.com/photo-1496347646636-ea47f7d6b37b?w=200&q=70"
+                                        alt="">
+                                    <div class="list-card-body">
+                                        <div class="list-card-cat">Environment • National</div>
+                                        <div class="list-card-title">India to Plant 3 Billion Trees by 2030 Under Green
+                                            Shield Mission — Punjab to Contribute 85 Million</div>
+                                        <div class="list-card-meta">6 hrs ago • 4.1K views</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- POLITICS -->
+                <div id="politics" class="section-pad">
+                    <div class="section-header">
+                        <div class="section-title">🏛 Politics</div>
+                        <a href="#" class="section-more">More Politics →</a>
+                    </div>
+                    <div class="card-grid-4 fade-up">
+                        <div class="news-card">
+                            <img class="news-card-img"
+                                src="https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=400&q=70" alt="">
+                            <div class="news-card-body">
+                                <span class="cat-pill cat-politics">Politics</span>
+                                <div class="news-card-title">Bhagwant Mann Holds Public Durbar in Sangrur; 4,000
+                                    Grievances Filed in Single Day</div>
+                                <div class="news-card-meta">5 hrs ago</div>
+                            </div>
+                        </div>
+                        <div class="news-card">
+                            <img class="news-card-img"
+                                src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&q=70" alt="">
+                            <div class="news-card-body">
+                                <span class="cat-pill cat-politics">Politics</span>
+                                <div class="news-card-title">Congress Punjab Chief Announces 10-Point Manifesto for 2027
+                                    Assembly Polls, Targets Rural Voters</div>
+                                <div class="news-card-meta">7 hrs ago</div>
+                            </div>
+                        </div>
+                        <div class="news-card">
+                            <img class="news-card-img"
+                                src="https://images.unsplash.com/photo-1557804506-669a67965ba0?w=400&q=70" alt="">
+                            <div class="news-card-body">
+                                <span class="cat-pill cat-politics">Politics</span>
+                                <div class="news-card-title">SAD Intensifies Protest Against Power Cuts; Calls Hartal in
+                                    8 Districts on Friday</div>
+                                <div class="news-card-meta">8 hrs ago</div>
+                            </div>
+                        </div>
+                        <div class="news-card">
+                            <img class="news-card-img"
+                                src="https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=400&q=70" alt="">
+                            <div class="news-card-body">
+                                <span class="cat-pill cat-politics">Politics</span>
+                                <div class="news-card-title">BJP Punjab Launches 'Mission 40' Strategy to Recapture Lost
+                                    Ground Before State Elections</div>
+                                <div class="news-card-meta">9 hrs ago</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SPORTS -->
+                <div id="sports" class="section-pad">
+                    <div class="section-header">
+                        <div class="section-title">🏆 Sports</div>
+                        <a href="#" class="section-more">More Sports →</a>
+                    </div>
+                    <!-- Match Cards -->
+                    <div class="sports-row fade-up" style="margin-bottom:18px;">
+                        <div class="match-card">
+                            <div class="match-sport">🏏 Cricket • IPL 2026</div>
+                            <div class="match-teams">
+                                <div class="match-team"><span>PBKS</span><span class="match-score">187/4</span></div>
+                                <div class="match-team"><span>CSK</span><span class="match-score">142/6</span></div>
+                            </div>
+                            <div class="match-status">🟢 Live — 18th Over</div>
+                        </div>
+                        <div class="match-card">
+                            <div class="match-sport">⚽ Football • ISL</div>
+                            <div class="match-teams">
+                                <div class="match-team"><span>Punjab FC</span><span class="match-score">3</span></div>
+                                <div class="match-team"><span>Mumbai City</span><span class="match-score">2</span></div>
+                            </div>
+                            <div class="match-status">✅ Full Time</div>
+                        </div>
+                        <div class="match-card">
+                            <div class="match-sport">🏒 Hockey • ProLeague</div>
+                            <div class="match-teams">
+                                <div class="match-team"><span>India</span><span class="match-score">4</span></div>
+                                <div class="match-team"><span>Belgium</span><span class="match-score">2</span></div>
+                            </div>
+                            <div class="match-status">✅ India Won!</div>
+                        </div>
+                        <div class="match-card">
+                            <div class="match-sport">🎾 Tennis • Wimbledon</div>
+                            <div class="match-teams">
+                                <div class="match-team"><span>Sumit Nagal</span><span class="match-score">6-4</span>
+                                </div>
+                                <div class="match-team"><span>Cilic</span><span class="match-score">3-6</span></div>
+                            </div>
+                            <div class="match-status">✅ QF Entry!</div>
+                        </div>
+                        <div class="match-card">
+                            <div class="match-sport">🏊 Athletics</div>
+                            <div class="match-teams">
+                                <div class="match-team"><span>Neeraj Chopra</span><span></span></div>
+                                <div class="match-team"><span>World Champs Qualifier</span><span
+                                        class="match-score">88.7m</span></div>
+                            </div>
+                            <div class="match-status">✅ Qualified!</div>
+                        </div>
+                    </div>
+
+                    <div class="card-grid-3 fade-up">
+                        <div class="news-card">
+                            <img class="news-card-img"
+                                src="https://images.unsplash.com/photo-1531415074968-036ba1b575da?w=400&q=70"
+                                alt="Sports">
+                            <div class="news-card-body">
+                                <span class="cat-pill cat-sports">Cricket</span>
+                                <div class="news-card-title">Shubman Gill Named Punjab's Pride Award Winner for
+                                    Record-Breaking ODI Century Streak This Season</div>
+                                <div class="news-card-footer"><span class="time">🕐 4 hrs ago</span><button
+                                        class="action-btn">💬 341</button></div>
+                            </div>
+                        </div>
+                        <div class="news-card">
+                            <img class="news-card-img"
+                                src="https://images.unsplash.com/photo-1552674605-db6ffd4facb5?w=400&q=70" alt="Sports">
+                            <div class="news-card-body">
+                                <span class="cat-pill cat-sports">Hockey</span>
+                                <div class="news-card-title">Punjab Hockey Team Sweeps National Championship 7th Time;
+                                    Coach Credits Indigenous Training Methods</div>
+                                <div class="news-card-footer"><span class="time">🕐 6 hrs ago</span><button
+                                        class="action-btn">💬 128</button></div>
+                            </div>
+                        </div>
+                        <div class="news-card">
+                            <img class="news-card-img"
+                                src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&q=70"
+                                alt="Sports">
+                            <div class="news-card-body">
+                                <span class="cat-pill cat-sports">Kabaddi</span>
+                                <div class="news-card-title">Punjab Warriors Crush Haryana Steelers 54-38 in Pro Kabaddi
+                                    League — Home Crowd Goes Wild at Patiala Arena</div>
+                                <div class="news-card-footer"><span class="time">🕐 Yesterday</span><button
+                                        class="action-btn">💬 89</button></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- LEADERBOARD AD 2 -->
+                <div class="leaderboard-ad fade-up">
+                    <div class="ad-label">Advertisement</div>
+                    <div class="leaderboard-ad-inner">
+                        <div>
+                            <div class="leaderboard-ad-content">📱 Jio Punjab Special — Unlimited 5G @ ₹179/Month</div>
+                            <div class="leaderboard-ad-sub">Now Live in Amritsar, Ludhiana, Chandigarh, Jalandhar,
+                                Patiala | First 3 Months Free</div>
+                        </div>
+                        <button class="leaderboard-ad-cta">Get Offer</button>
+                    </div>
+                </div>
+
+                <!-- ENTERTAINMENT -->
+                <div id="entertainment" class="section-pad">
+                    <div class="section-header">
+                        <div class="section-title">🎬 Entertainment</div>
+                        <a href="#" class="section-more">More →</a>
+                    </div>
+                    <div class="card-grid-4 fade-up">
+                        <div class="news-card">
+                            <img class="news-card-img"
+                                src="https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?w=400&q=70" alt="">
+                            <div class="news-card-body">
+                                <span class="cat-pill cat-entertainment">Pollywood</span>
+                                <div class="news-card-title">Diljit Dosanjh's New Album "Waris" Breaks Spotify Records —
+                                    40 Million Streams in 24 Hours</div>
+                                <div class="news-card-footer"><span class="time">🕐 3 hrs ago</span></div>
+                            </div>
+                        </div>
+                        <div class="news-card">
+                            <img class="news-card-img"
+                                src="https://images.unsplash.com/photo-1485846234645-a62644f84728?w=400&q=70" alt="">
+                            <div class="news-card-body">
+                                <span class="cat-pill cat-entertainment">Film</span>
+                                <div class="news-card-title">Punjabi Blockbuster "Sardar" Opens to Record ₹22 Crore
+                                    Opening Weekend; Stampede Scenes at Multiplexes</div>
+                                <div class="news-card-footer"><span class="time">🕐 5 hrs ago</span></div>
+                            </div>
+                        </div>
+                        <div class="news-card">
+                            <img class="news-card-img"
+                                src="https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?w=400&q=70" alt="">
+                            <div class="news-card-body">
+                                <span class="cat-pill cat-entertainment">Music</span>
+                                <div class="news-card-title">AP Dhillon Performs at Chandigarh Music Festival — 50,000
+                                    Fans Attend Despite Unexpected Rain</div>
+                                <div class="news-card-footer"><span class="time">🕐 Yesterday</span></div>
+                            </div>
+                        </div>
+                        <div class="news-card">
+                            <img class="news-card-img"
+                                src="https://images.unsplash.com/photo-1513151233558-d860c5398176?w=400&q=70" alt="">
+                            <div class="news-card-body">
+                                <span class="cat-pill cat-entertainment">Awards</span>
+                                <div class="news-card-title">PTC Punjabi Film Awards 2026: Winners List — "Mitti Na Fol"
+                                    Sweeps 5 Major Categories</div>
+                                <div class="news-card-footer"><span class="time">🕐 2 days ago</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- BUSINESS -->
+                <div id="business" class="section-pad">
+                    <div class="section-header">
+                        <div class="section-title">💼 Business & Economy</div>
+                        <a href="#" class="section-more">More Business →</a>
+                    </div>
+                    <div class="card-grid-3 fade-up">
+                        <div class="news-card">
+                            <img class="news-card-img"
+                                src="https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=400&q=70" alt="">
+                            <div class="news-card-body">
+                                <span class="cat-pill cat-business">Markets</span>
+                                <div class="news-card-title">Sensex Crosses 85,000 Mark for First Time — Punjab's
+                                    Banking Stocks Lead the Rally</div>
+                                <div class="news-card-excerpt">Market analysts attribute the surge to positive FII
+                                    inflows and strong domestic consumption data released this morning.</div>
+                                <div class="news-card-footer"><span class="time">🕐 2 hrs ago</span><button
+                                        class="action-btn">💬 56</button></div>
+                            </div>
+                        </div>
+                        <div class="news-card">
+                            <img class="news-card-img"
+                                src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?w=400&q=70" alt="">
+                            <div class="news-card-body">
+                                <span class="cat-pill cat-business">Industry</span>
+                                <div class="news-card-title">Amazon Opens Largest Distribution Hub in Ludhiana — 3,000
+                                    Jobs Created; Punjab Becomes Logistics Capital</div>
+                                <div class="news-card-excerpt">The 18-lakh sq ft facility in Ludhiana's industrial zone
+                                    will serve all of North India with same-day delivery.</div>
+                                <div class="news-card-footer"><span class="time">🕐 4 hrs ago</span><button
+                                        class="action-btn">💬 112</button></div>
+                            </div>
+                        </div>
+                        <div class="news-card">
+                            <img class="news-card-img"
+                                src="https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=400&q=70" alt="">
+                            <div class="news-card-body">
+                                <span class="cat-pill cat-business">Agriculture</span>
+                                <div class="news-card-title">MSP for Wheat Raised to ₹2,450/Quintal — Punjab Farmers
+                                    React Mixed; Kisan Unions Call It Insufficient</div>
+                                <div class="news-card-excerpt">The 6.5% hike announced by the Centre was met with
+                                    cautious acceptance from farmers' bodies who say input costs have risen faster.
+                                </div>
+                                <div class="news-card-footer"><span class="time">🕐 5 hrs ago</span><button
+                                        class="action-btn">💬 234</button></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- VIDEOS -->
+                <div id="videos" class="section-pad">
+                    <div class="section-header">
+                        <div class="section-title">📹 Video News</div>
+                        <a href="#" class="section-more">All Videos →</a>
+                    </div>
+                    <div class="video-grid fade-up">
+                        <div class="video-card">
+                            <div class="video-thumb">
+                                <img src="https://images.unsplash.com/photo-1605000797499-95a51c5269ae?w=400&q=70"
+                                    alt="">
+                                <div class="play-btn">▶</div>
+                                <div class="video-duration">4:32</div>
+                            </div>
+                            <div class="video-card-body">
+                                <div class="video-title">Ground Report: Farmers in Sangrur Explain Why They Switched
+                                    from Wheat to Maize</div>
+                                <div class="video-meta"><span>InPunjab News</span><span>2 hrs ago</span><span>👁
+                                        18K</span></div>
+                            </div>
+                        </div>
+                        <div class="video-card">
+                            <div class="video-thumb">
+                                <img src="https://images.unsplash.com/photo-1477281765962-ef34e8bb0967?w=400&q=70"
+                                    alt="">
+                                <div class="play-btn">▶</div>
+                                <div class="video-duration">7:15</div>
+                            </div>
+                            <div class="video-card-body">
+                                <div class="video-title">Exclusive: Inside the Golden Temple's New Environmental
+                                    Protection Initiative</div>
+                                <div class="video-meta"><span>InPunjab News</span><span>5 hrs ago</span><span>👁
+                                        31K</span></div>
+                            </div>
+                        </div>
+                        <div class="video-card">
+                            <div class="video-thumb">
+                                <img src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=400&q=70"
+                                    alt="">
+                                <div class="play-btn">▶</div>
+                                <div class="video-duration">2:48</div>
+                            </div>
+                            <div class="video-card-body">
+                                <div class="video-title">Kabaddi World Cup 2026: India's Punjab Players Train Hard for
+                                    Gold</div>
+                                <div class="video-meta"><span>Sports Desk</span><span>Yesterday</span><span>👁
+                                        44K</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- OPINION -->
+                <div id="opinion" class="section-pad">
+                    <div class="section-header">
+                        <div class="section-title">✍️ Opinion & Analysis</div>
+                        <a href="#" class="section-more">More Opinion →</a>
+                    </div>
+                    <div class="card-grid-3 fade-up">
+                        <div class="opinion-card">
+                            <div class="opinion-author">
+                                <div class="author-avatar">HS</div>
+                                <div>
+                                    <div class="author-name">Harbhajan Singh Sondhi</div>
+                                    <div class="author-role">Senior Political Analyst</div>
+                                </div>
+                            </div>
+                            <div class="opinion-title">Why Punjab's 2027 Elections Will Be the Most Consequential in
+                                Three Decades — And What's Really at Stake</div>
+                            <div class="opinion-excerpt">The three-way battle between AAP, Congress, and SAD-BJP
+                                alliance is no longer just about governance — it's about the soul of Punjab's democratic
+                                identity...</div>
+                        </div>
+                        <div class="opinion-card">
+                            <div class="opinion-author">
+                                <div class="author-avatar" style="background:linear-gradient(135deg,#00C87A,#0080FF);">
+                                    PK</div>
+                                <div>
+                                    <div class="author-name">Priya Khanna</div>
+                                    <div class="author-role">Economic Correspondent</div>
+                                </div>
+                            </div>
+                            <div class="opinion-title">The Real Cost of Punjab's Drug Crisis: Why Economic Intervention
+                                Matters More Than Police Crackdowns</div>
+                            <div class="opinion-excerpt">Data shows that districts with robust employment generation see
+                                40% lower addiction rates. The state needs a comprehensive economic rehabilitation
+                                strategy...</div>
+                        </div>
+                        <div class="opinion-card">
+                            <div class="opinion-author">
+                                <div class="author-avatar" style="background:linear-gradient(135deg,#B464FF,#FF3A5E);">
+                                    JS</div>
+                                <div>
+                                    <div class="author-name">Jagjit Singh Balveer</div>
+                                    <div class="author-role">Agricultural Expert</div>
+                                </div>
+                            </div>
+                            <div class="opinion-title">Diversification or Crisis: Punjab's Farmers Face an Impossible
+                                Choice Between Tradition and Survival</div>
+                            <div class="opinion-excerpt">The paddy-wheat cycle has served Punjab for 60 years, but
+                                groundwater depletion is making it unsustainable. What should replace it? No one has a
+                                clear answer...</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PHOTOS -->
+                <div id="photos" class="section-pad">
+                    <div class="section-header">
+                        <div class="section-title">📸 Photo Gallery</div>
+                        <a href="#" class="section-more">Full Gallery →</a>
+                    </div>
+                    <div class="gallery-grid fade-up">
+                        <div class="gallery-item">
+                            <img src="https://images.unsplash.com/photo-1477281765962-ef34e8bb0967?w=400&q=70" alt="">
+                            <div class="gallery-overlay">Golden Temple at Dawn</div>
+                        </div>
+                        <div class="gallery-item">
+                            <img src="https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=400&q=70" alt="">
+                            <div class="gallery-overlay">Punjab Wheat Fields</div>
+                        </div>
+                        <div class="gallery-item">
+                            <img src="https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?w=400&q=70" alt="">
+                            <div class="gallery-overlay">Baisakhi Celebrations</div>
+                        </div>
+                        <div class="gallery-item">
+                            <img src="https://images.unsplash.com/photo-1543466835-00a7907e9de1?w=400&q=70" alt="">
+                            <div class="gallery-overlay">Punjab Wildlife</div>
+                        </div>
+                        <div class="gallery-item">
+                            <img src="https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=400&q=70" alt="">
+                            <div class="gallery-overlay">Chandigarh Skyline</div>
+                        </div>
+                        <div class="gallery-item">
+                            <img src="https://images.unsplash.com/photo-1531415074968-036ba1b575da?w=400&q=70" alt="">
+                            <div class="gallery-overlay">Sports Day Punjab</div>
+                        </div>
+                        <div class="gallery-item">
+                            <img src="https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=400&q=70" alt="">
+                            <div class="gallery-overlay">Punjab Tech Summit</div>
+                        </div>
+                        <div class="gallery-item">
+                            <img src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=400&q=70" alt="">
+                            <div class="gallery-overlay">Cultural Festival</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SUBSCRIBE -->
+                <div class="subscribe-band fade-up">
+                    <div class="subscribe-text">
+                        <h3>📰 Stay Ahead — Get Punjab First</h3>
+                        <p>Breaking news, exclusive stories, and morning briefings straight to your inbox.</p>
+                    </div>
+                    <div class="subscribe-form">
+                        <input class="subscribe-input" type="email" placeholder="Enter your email address">
+                        <button class="subscribe-btn" onclick="subscribeEmail()">Subscribe Free →</button>
+                    </div>
+                </div>
+
+            </div><!-- /left-col -->
+
+            <!-- SIDEBAR -->
+            <aside class="sidebar">
+
+                <!-- Trending -->
+                <div class="sidebar-widget">
+                    <div class="widget-title"><span>🔥</span> Trending Now</div>
+                    <div class="trending-list" id="trendingList">
+                        <div class="trending-item">
+                            <div class="trending-num">01</div>
+                            <div>
+                                <div class="trending-cat">Politics</div>
+                                <div class="trending-text">Bhagwant Mann's 100-Day Report Card — What Punjab Got and
+                                    What It Missed</div>
+                            </div>
+                        </div>
+                        <div class="trending-item">
+                            <div class="trending-num">02</div>
+                            <div>
+                                <div class="trending-cat">Crime</div>
+                                <div class="trending-text">Drug Menace: Exclusive Ground Report from Tarn Taran's
+                                    Frontline Villages</div>
+                            </div>
+                        </div>
+                        <div class="trending-item">
+                            <div class="trending-num">03</div>
+                            <div>
+                                <div class="trending-cat">Entertainment</div>
+                                <div class="trending-text">Diljit Dosanjh Breaks India's Concert Attendance Record in
+                                    Chandigarh Show</div>
+                            </div>
+                        </div>
+                        <div class="trending-item">
+                            <div class="trending-num">04</div>
+                            <div>
+                                <div class="trending-cat">Sports</div>
+                                <div class="trending-text">Shubman Gill Hits 3rd Consecutive Century — Sets New Indian
+                                    Batting Record</div>
+                            </div>
+                        </div>
+                        <div class="trending-item">
+                            <div class="trending-num">05</div>
+                            <div>
+                                <div class="trending-cat">Economy</div>
+                                <div class="trending-text">Punjab's NRI Investment Up 34% — Diaspora Bets Big on Home
+                                    State</div>
+                            </div>
+                        </div>
+                        <div class="trending-item">
+                            <div class="trending-num">06</div>
+                            <div>
+                                <div class="trending-cat">Agriculture</div>
+                                <div class="trending-text">Solar Farming Revolution: Kishan Earns More from Sun Than
+                                    from Soil in Bathinda</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sidebar Ad -->
+                <div class="sidebar-ad">
+                    <div class="ad-label">Advertisement</div>
+                    <div class="sidebar-ad-icon">🏠</div>
+                    <div class="sidebar-ad-title">Omaxe Chandigarh Extension</div>
+                    <div class="sidebar-ad-text">Premium 3BHK apartments starting ₹68 Lakh. RERA approved. Just 15 min
+                        from Chandigarh airport. Ready to move.</div>
+                    <button class="sidebar-ad-btn">Book a Site Visit</button>
+                </div>
+
+                <!-- Poll Widget -->
+                <div class="sidebar-widget">
+                    <div class="widget-title"><span>🗳</span> Today's Poll</div>
+                    <p style="font-size:12px;color:var(--text-secondary);margin-bottom:14px;line-height:1.5;">Who should
+                        lead Punjab's agricultural reform agenda?</p>
+                    <div class="poll-options" id="pollOptions">
+                        <div class="poll-option" onclick="vote(this, 42)">
+                            <div class="poll-bar" style="width:0%"></div>
+                            <div class="poll-option-text">State Government <span class="poll-percent">42%</span></div>
+                        </div>
+                        <div class="poll-option" onclick="vote(this, 28)">
+                            <div class="poll-bar" style="width:0%"></div>
+                            <div class="poll-option-text">Farmer Unions <span class="poll-percent">28%</span></div>
+                        </div>
+                        <div class="poll-option" onclick="vote(this, 19)">
+                            <div class="poll-bar" style="width:0%"></div>
+                            <div class="poll-option-text">Central Government <span class="poll-percent">19%</span></div>
+                        </div>
+                        <div class="poll-option" onclick="vote(this, 11)">
+                            <div class="poll-bar" style="width:0%"></div>
+                            <div class="poll-option-text">Agricultural Universities <span
+                                    class="poll-percent">11%</span></div>
+                        </div>
+                    </div>
+                    <div class="poll-total" id="pollTotal">4,821 votes cast • Tap to vote</div>
+                </div>
+
+                <!-- Weather Widget -->
+                <div class="sidebar-widget">
+                    <div class="widget-title"><span>🌤</span> Punjab Weather</div>
+                    <div style="display:flex;flex-direction:column;gap:10px;">
+                        <div
+                            style="display:flex;justify-content:space-between;align-items:center;padding:8px;background:var(--deep-navy);border-radius:8px;">
+                            <span style="font-size:12px;font-weight:600;">🏛 Chandigarh</span>
+                            <span style="font-size:14px;font-weight:700;color:var(--saffron);">34°C ⛅</span>
+                        </div>
+                        <div
+                            style="display:flex;justify-content:space-between;align-items:center;padding:8px;background:var(--deep-navy);border-radius:8px;">
+                            <span style="font-size:12px;font-weight:600;">🏯 Amritsar</span>
+                            <span style="font-size:14px;font-weight:700;color:var(--saffron);">37°C ☀️</span>
+                        </div>
+                        <div
+                            style="display:flex;justify-content:space-between;align-items:center;padding:8px;background:var(--deep-navy);border-radius:8px;">
+                            <span style="font-size:12px;font-weight:600;">🏭 Ludhiana</span>
+                            <span style="font-size:14px;font-weight:700;color:var(--saffron);">36°C 🌩</span>
+                        </div>
+                        <div
+                            style="display:flex;justify-content:space-between;align-items:center;padding:8px;background:var(--deep-navy);border-radius:8px;">
+                            <span style="font-size:12px;font-weight:600;">📻 Jalandhar</span>
+                            <span style="font-size:14px;font-weight:700;color:var(--saffron);">35°C ⛅</span>
+                        </div>
+                        <div
+                            style="display:flex;justify-content:space-between;align-items:center;padding:8px;background:var(--deep-navy);border-radius:8px;">
+                            <span style="font-size:12px;font-weight:600;">👑 Patiala</span>
+                            <span style="font-size:14px;font-weight:700;color:var(--saffron);">38°C ☀️</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sidebar Ad 2 -->
+                <div class="sidebar-ad"
+                    style="background:linear-gradient(135deg,#000d1a 0%,#001a33 100%);border-color:var(--gold);">
+                    <div class="ad-label">Advertisement</div>
+                    <div class="sidebar-ad-icon">🎓</div>
+                    <div class="sidebar-ad-title" style="color:var(--text-primary);">Chandigarh University</div>
+                    <div class="sidebar-ad-text">MBA, BCA, Engineering 2026 Admissions. Ranked #1 in Punjab. 95%
+                        Placement Record.</div>
+                    <button class="sidebar-ad-btn" style="background:var(--gold);color:var(--deep-navy);">Apply
+                        Now</button>
+                </div>
+
+                <!-- Latest Updates -->
+                <div class="sidebar-widget">
+                    <div class="widget-title"><span>⚡</span> Latest Updates</div>
+                    <div style="display:flex;flex-direction:column;gap:12px;" id="latestUpdates">
+                        <div
+                            style="font-size:11px;color:var(--text-muted);padding:8px;background:var(--deep-navy);border-radius:6px;border-left:3px solid var(--red-accent);cursor:pointer;">
+                            <div style="font-weight:700;color:var(--text-secondary);margin-bottom:3px;">BSF seizes
+                                heroin worth ₹12 cr near Attari border</div>
+                            <div>20 min ago</div>
+                        </div>
+                        <div
+                            style="font-size:11px;color:var(--text-muted);padding:8px;background:var(--deep-navy);border-radius:6px;border-left:3px solid var(--saffron);cursor:pointer;">
+                            <div style="font-weight:700;color:var(--text-secondary);margin-bottom:3px;">Punjab CM to
+                                address farmers at Kisan Mela in Ludhiana tomorrow</div>
+                            <div>45 min ago</div>
+                        </div>
+                        <div
+                            style="font-size:11px;color:var(--text-muted);padding:8px;background:var(--deep-navy);border-radius:6px;border-left:3px solid var(--green-accent);cursor:pointer;">
+                            <div style="font-weight:700;color:var(--text-secondary);margin-bottom:3px;">India's GDP data
+                                release expected at 5:30 PM today</div>
+                            <div>1 hr ago</div>
+                        </div>
+                        <div
+                            style="font-size:11px;color:var(--text-muted);padding:8px;background:var(--deep-navy);border-radius:6px;border-left:3px solid var(--saffron);cursor:pointer;">
+                            <div style="font-weight:700;color:var(--text-secondary);margin-bottom:3px;">PBKS vs CSK:
+                                Punjab Kings need 46 off 24 balls</div>
+                            <div>Live</div>
+                        </div>
+                        <div
+                            style="font-size:11px;color:var(--text-muted);padding:8px;background:var(--deep-navy);border-radius:6px;border-left:3px solid var(--text-muted);cursor:pointer;">
+                            <div style="font-weight:700;color:var(--text-secondary);margin-bottom:3px;">Flood alert
+                                issued for 3 districts ahead of heavy rain tonight</div>
+                            <div>2 hrs ago</div>
+                        </div>
+                    </div>
+                </div>
+
+            </aside>
+
+        </div><!-- /main-content -->
+    </div><!-- /container -->
+
+    <!-- FOOTER -->
+    <footer class="main-footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-about">
+                    <div class="logo-main">In<span style="color:var(--saffron)">Punjab</span> News</div>
+                    <p>Punjab's most trusted independent news platform — delivering accurate, unbiased journalism to 4
+                        million readers daily across Chandigarh, Amritsar, Ludhiana, Jalandhar, and beyond. We cover
+                        Punjab like no one else.</p>
+                    <div class="social-links">
+                        <div class="social-btn">𝕏</div>
+                        <div class="social-btn">f</div>
+                        <div class="social-btn">in</div>
+                        <div class="social-btn">▶</div>
+                        <div class="social-btn">📷</div>
+                    </div>
+                </div>
+                <div class="footer-col">
+                    <h4>Punjab Regions</h4>
+                    <ul class="footer-links">
+                        <li><a href="#">Amritsar</a></li>
+                        <li><a href="#">Ludhiana</a></li>
+                        <li><a href="#">Chandigarh</a></li>
+                        <li><a href="#">Jalandhar</a></li>
+                        <li><a href="#">Patiala</a></li>
+                        <li><a href="#">Mohali</a></li>
+                        <li><a href="#">Bathinda</a></li>
+                        <li><a href="#">Firozpur</a></li>
+                        <li><a href="#">Hoshiarpur</a></li>
+                        <li><a href="#">Gurdaspur</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Categories</h4>
+                    <ul class="footer-links">
+                        <li><a href="#">Breaking News</a></li>
+                        <li><a href="#">Politics</a></li>
+                        <li><a href="#">Agriculture</a></li>
+                        <li><a href="#">Business</a></li>
+                        <li><a href="#">Sports</a></li>
+                        <li><a href="#">Entertainment</a></li>
+                        <li><a href="#">Crime</a></li>
+                        <li><a href="#">Education</a></li>
+                        <li><a href="#">Health</a></li>
+                        <li><a href="#">Opinion</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Company</h4>
+                    <ul class="footer-links">
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="#">Editorial Team</a></li>
+                        <li><a href="#">Advertise With Us</a></li>
+                        <li><a href="#">Careers</a></li>
+                        <li><a href="#">Contact Us</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms of Use</a></li>
+                        <li><a href="#">Corrections Policy</a></li>
+                        <li><a href="#">RSS Feed</a></li>
+                        <li><a href="#">App Download</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <span>© 2026 InPunjab News. All rights reserved. | Made with ❤️ in Punjab</span>
+                <span>🇮🇳 ਸਤਿ ਸ੍ਰੀ ਅਕਾਲ • Jai Punjab</span>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Toast Container -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- Back to Top -->
+    <button id="back-top" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+
+    <script src="index.js"></script>
+</body>
+
+</html>
