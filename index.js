@@ -44,14 +44,37 @@
         }
 
         // ── SUBSCRIBE ──
-        function subscribeEmail() {
+        async function subscribeEmail() {
             const input = document.querySelector('.subscribe-input');
-            if (!input.value || !input.value.includes('@')) {
+            if (!input) return;
+            const email = input.value.trim();
+            if (!email || !email.includes('@')) {
                 showToast('⚠️ Invalid Email', 'Please enter a valid email address.');
                 return;
             }
-            showToast('🎉 Subscribed!', 'Welcome to InPunjab News. Check your inbox for confirmation.');
-            input.value = '';
+            try {
+                if (typeof supabaseClient === 'undefined') {
+                    showToast('🎉 Subscribed!', 'Welcome to InPunjab News. Check your inbox for confirmation.');
+                    input.value = '';
+                    return;
+                }
+                const { error } = await supabaseClient
+                    .from('subscribers')
+                    .insert([{ email: email, source: 'Homepage Form', region: 'Punjab', status: 'active' }]);
+                if (error) {
+                    if (error.code === '23505') {
+                        showToast('📬 Already Subscribed', 'This email is already registered.');
+                    } else {
+                        throw error;
+                    }
+                } else {
+                    showToast('🎉 Subscribed!', 'Welcome to InPunjab News.');
+                    input.value = '';
+                }
+            } catch (err) {
+                console.error('Subscription error:', err.message);
+                showToast('❌ Subscription Failed', 'Please try again later.');
+            }
         }
 
         // ── SEARCH ──
@@ -166,6 +189,7 @@ document.addEventListener('DOMContentLoaded', async function() {
     if (typeof supabaseClient === 'undefined') return;
 
     try {
+        // Fetch Articles
         const { data: articles, error } = await supabaseClient
             .from('articles')
             .select('*, categories(name, slug)')
@@ -179,10 +203,29 @@ document.addEventListener('DOMContentLoaded', async function() {
             renderGrids(articles.slice(3));
             renderShorts(articles);
         }
+
+        // Fetch Tickers
+        const { data: tickers, error: tickerError } = await supabaseClient
+            .from('tickers')
+            .select('text');
+
+        if (!tickerError && tickers && tickers.length > 0) {
+            renderTicker(tickers);
+        }
     } catch (err) {
         console.error('Error fetching data from Supabase:', err.message);
     }
 });
+
+function renderTicker(tickers) {
+    const track = document.getElementById('tickerTrack');
+    if (!track) return;
+    let spans = '';
+    tickers.forEach(t => {
+        spans += `<span>${t.text}</span>`;
+    });
+    track.innerHTML = spans + spans; // duplicate for seamless scrolling marquee
+}
 
 function renderHero(heroArticles) {
     const heroContainer = document.getElementById('dynamic-hero');
