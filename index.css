@@ -1961,3 +1961,36 @@ img, video, canvas, audio, iframe, embed, object {
         grid-template-columns: 1fr !important;
     }
 }
+
+/* --- ROBUST MOBILE FIX --- */
+@media (max-width: 992px) {
+    * {
+        min-width: 0;
+    }
+    /* Revert min-width: 0 for things that need it */
+    .ticker-track, .ad-strip-content, .main-nav {
+        min-width: max-content;
+    }
+    .list-card-img, .side-card img, .news-card-img {
+        min-width: auto;
+    }
+    .hero-side {
+        flex-direction: column !important;
+    }
+    .list-card {
+        max-width: 100%;
+    }
+    .list-card > div {
+        min-width: 0;
+        flex: 1;
+    }
+    .card-grid-3, .card-grid-4, .card-grid-2, .national-grid, .video-grid, .gallery-grid, .footer-grid {
+        grid-template-columns: 1fr !important;
+        width: 100%;
+    }
+    .container, .header-inner, .top-bar-inner {
+        width: 100%;
+        max-width: 100vw;
+        padding: 0 15px;
+    }
+}
