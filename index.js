@@ -378,9 +378,15 @@ function renderShorts(articles) {
                     <div class="short-tag">${art.tag || artCat}</div>
                     <h2 class="short-headline">${art.title}</h2>
                     <p class="short-brief">${art.brief || art.title}</p>
-                    <div class="short-meta">
-                        <span>👁️ ${views}K views</span>
-                        <span>💬 ${comments} comments</span>
+                    <div class="short-actions">
+                        <div class="short-action-btn btn-views">
+                            <span class="icon">👁️</span>
+                            <span class="count">${views}K</span>
+                        </div>
+                        <a href="https://api.whatsapp.com/send?text=${encodeURIComponent(art.title + ' - Read more on InPunjab News!')}" target="_blank" class="short-action-btn btn-whatsapp">
+                            <span class="icon">💬</span>
+                            <span class="count">Share</span>
+                        </a>
                     </div>
                 </div>
             </div>

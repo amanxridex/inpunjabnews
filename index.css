@@ -2167,6 +2167,7 @@ img, video, canvas, audio, iframe, embed, object {
 .short-slide {
     width: 100%;
     height: 100vh;
+    height: 100dvh;
     scroll-snap-align: start;
     position: relative;
     display: flex;
@@ -2175,7 +2176,7 @@ img, video, canvas, audio, iframe, embed, object {
 }
 
 .short-bg {
-    flex: 0 0 50vh; /* Exactly 50% height */
+    flex: 0 0 50dvh; /* Exactly 50% height */
     width: 100%;
     background-size: cover;
     background-position: center;
@@ -2186,6 +2187,7 @@ img, video, canvas, audio, iframe, embed, object {
 .short-content {
     flex: 1; /* Take the remaining 50% height */
     padding: 30px 20px;
+    padding-bottom: 40px; /* Fix for mobile address bar */
     color: #1A0533; /* Dark text for white background */
     overflow-y: auto; /* Allow scrolling if text is too long */
     display: flex;
@@ -2232,4 +2234,34 @@ img, video, canvas, audio, iframe, embed, object {
     font-size: 13px;
     color: #777; /* Medium gray */
     margin-top: auto; /* Push to bottom of content area */
+}
+
+.short-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: auto;
+}
+
+.short-action-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+    border: none;
+    outline: none;
+}
+
+.btn-views {
+    background: #f0f0f0;
+    color: #333;
+}
+
+.btn-whatsapp {
+    background: #25D366;
+    color: white;
 }
