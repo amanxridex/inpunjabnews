@@ -255,77 +255,129 @@ function openShorts() {
     shortsContainer.classList.remove('hidden');
     document.body.style.overflow = 'hidden';
 }
-// --- SHORTS GENERATION LOGIC ---
-document.addEventListener('DOMContentLoaded', function() {
+// --- DYNAMIC DATA FETCHING (SUPABASE) ---
+document.addEventListener('DOMContentLoaded', async function() {
+    if (typeof supabase === 'undefined') return;
+
+    try {
+        const { data: articles, error } = await supabase
+            .from('articles')
+            .select('*, categories(name, slug)')
+            .eq('is_published', true)
+            .order('created_at', { ascending: false });
+
+        if (error) throw error;
+
+        if (articles && articles.length > 0) {
+            renderHero(articles.slice(0, 3));
+            renderGrids(articles.slice(3));
+            renderShorts(articles);
+        }
+    } catch (err) {
+        console.error('Error fetching data from Supabase:', err.message);
+    }
+});
+
+function renderHero(heroArticles) {
+    const heroContainer = document.getElementById('dynamic-hero');
+    if (!heroContainer || heroArticles.length === 0) return;
+
+    const mainArt = heroArticles[0];
+    const catName = mainArt.categories ? mainArt.categories.name : 'News';
+    const tag = mainArt.tag || catName;
+
+    let html = `
+        <div class="hero-main">
+            <img src="${mainArt.image_url}" alt="${mainArt.title}">
+            <div class="hero-overlay">
+                <span class="hero-category">Punjab • ${catName}</span>
+                <div class="hero-title">${mainArt.title}</div>
+                <div class="hero-meta">
+                    <span class="author">By InPunjab Desk</span>
+                    <span>Just now</span>
+                    <span>👁 ${mainArt.view_count || 100} views</span>
+                    <span>💬 ${mainArt.comment_count || 0} comments</span>
+                </div>
+            </div>
+        </div>
+        <div class="hero-side">
+    `;
+
+    for (let i = 1; i < heroArticles.length; i++) {
+        const art = heroArticles[i];
+        const artCat = art.categories ? art.categories.name : 'News';
+        html += `
+            <div class="side-card">
+                <img src="${art.image_url}" alt="${art.title}">
+                <div class="side-card-body">
+                    <div class="side-cat">${artCat}</div>
+                    <div class="side-title">${art.title}</div>
+                    <div class="side-meta">Just now • ${art.view_count || 100} views</div>
+                </div>
+            </div>
+        `;
+    }
+
+    html += '</div>';
+    heroContainer.innerHTML = html;
+}
+
+function renderGrids(articles) {
+    // Distribute remaining articles across the empty grid containers
+    const categoriesToPopulate = ['punjab', 'regions', 'national', 'politics', 'business', 'sports', 'entertainment'];
+    
+    let artIdx = 0;
+    
+    for (const cat of categoriesToPopulate) {
+        let gridIdx = 0;
+        while (true) {
+            const gridContainer = document.getElementById(`dynamic-grid-${cat}-${gridIdx}`);
+            if (!gridContainer) break;
+
+            let gridHtml = '';
+            for (let i = 0; i < 4; i++) {
+                if (artIdx >= articles.length) artIdx = 0; // Wrap around for demo
+                const art = articles[artIdx];
+                const artCat = art.categories ? art.categories.name : 'News';
+                const pillClass = `cat-pill cat-${artCat.toLowerCase()}`;
+
+                gridHtml += `
+                    <div class="news-card">
+                        <img class="news-card-img" src="${art.image_url}" alt="${art.title}">
+                        <div class="news-card-body">
+                            <span class="${pillClass}">${artCat}</span>
+                            <div class="news-card-title">${art.title}</div>
+                            <div class="news-card-meta">Just now</div>
+                        </div>
+                    </div>
+                `;
+                artIdx++;
+            }
+            gridContainer.innerHTML = gridHtml;
+            gridIdx++;
+        }
+    }
+}
+
+function renderShorts(articles) {
     const shortsWrapper = document.getElementById('shortsWrapper');
     if (!shortsWrapper) return;
 
-    // A pool of authentic-sounding headlines, briefs, and tags
-    const templates = [
-        {
-            tag: '🔴 Breaking',
-            headline: "Punjab's New Water Conservation Mission: 4,000 Villages Set to Receive Solar Tube-Wells",
-            brief: "The initiative aims to save up to 30% of groundwater resources while providing free, renewable energy to farmers across the state. Phase 1 begins next month."
-        },
-        {
-            tag: 'Politics',
-            headline: "State Assembly Passes Resolution on Education Reform Funding",
-            brief: "₹12,000 Crore allocated specifically for rural school infrastructure, digital classrooms, and teacher training programs starting this fiscal year."
-        },
-        {
-            tag: 'Sports',
-            headline: "Punjab FC Triumphs in ISL Semifinals with Stunning 90th-Minute Goal",
-            brief: "The local heroes secure their spot in the finals after a breathtaking finish against the defending champions in front of a sold-out home crowd."
-        },
-        {
-            tag: 'Agriculture',
-            headline: "Record Wheat Procurement Expected This Season Across Mandis",
-            brief: "State procurement agencies have geared up with enhanced logistics and digital payment gateways to ensure seamless transactions for farmers within 48 hours."
-        },
-        {
-            tag: 'Business',
-            headline: "Major Tech Hub Proposed for Mohali to Attract Global Investments",
-            brief: "The proposed IT city expansion is expected to generate over 50,000 direct jobs and solidify Punjab's position as a premier destination for tech enterprises."
-        },
-        {
-            tag: 'Culture',
-            headline: "Amritsar Heritage Walk Initiative Draws Record International Tourist Footfall",
-            brief: "The newly launched guided tours exploring the rich history and architecture of the walled city have been a massive hit among international travelers."
-        },
-        {
-            tag: 'Health',
-            headline: "New Super-Specialty Hospital Inaugurated in Bathinda",
-            brief: "The 500-bed facility brings advanced cardiac and oncology care to the Malwa region, significantly reducing the need for patients to travel to Chandigarh."
-        },
-        {
-            tag: 'Infrastructure',
-            headline: "Delhi-Amritsar-Katra Expressway Progress on Fast Track",
-            brief: "Construction of the vital economic corridor is ahead of schedule, promising to reduce travel time between major cities and boost regional trade."
-        }
-    ];
-
     let htmlContent = '';
     
-    // Generate 50 items
-    for (let i = 0; i < 50; i++) {
-        // Pick a random template
-        const template = templates[Math.floor(Math.random() * templates.length)];
-        
-        // Use a fixed seed for picsum.photos to guarantee real, working images that don't change
-        const imageId = (i * 13) % 1000 + 10; // Generate deterministic IDs
-        const imageUrl = `https://picsum.photos/id/${imageId}/800/1000`;
-        
-        // Randomize views and comments slightly
-        const views = Math.floor(Math.random() * 500) + 10;
-        const comments = Math.floor(Math.random() * 200) + 5;
+    for (let i = 0; i < articles.length; i++) {
+        const art = articles[i];
+        const artCat = art.categories ? art.categories.name : 'News';
+        const views = art.view_count || Math.floor(Math.random() * 500) + 10;
+        const comments = art.comment_count || Math.floor(Math.random() * 200) + 5;
 
         htmlContent += `
             <div class="short-slide">
-                <div class="short-bg" style="background-image: url('${imageUrl}');"></div>
+                <div class="short-bg" style="background-image: url('${art.image_url}');"></div>
                 <div class="short-content">
-                    <div class="short-tag">${template.tag}</div>
-                    <h2 class="short-headline">${template.headline}</h2>
-                    <p class="short-brief">${template.brief}</p>
+                    <div class="short-tag">${art.tag || artCat}</div>
+                    <h2 class="short-headline">${art.title}</h2>
+                    <p class="short-brief">${art.brief || art.title}</p>
                     <div class="short-meta">
                         <span>👁️ ${views}K views</span>
                         <span>💬 ${comments} comments</span>
@@ -336,7 +388,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     shortsWrapper.innerHTML = htmlContent;
-});
+}
 
 function openShorts() {
     const shortsContainer = document.getElementById('shorts-container');
