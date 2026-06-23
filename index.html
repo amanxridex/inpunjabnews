@@ -13,7 +13,8 @@
     <script>
         // Prevent FOUC: Apply theme immediately before rendering
         const savedTheme = localStorage.getItem('theme');
-        if (savedTheme === 'light') {
+        // Default to light theme if no preference is saved
+        if (savedTheme !== 'dark') {
             document.documentElement.setAttribute('data-theme', 'light');
         }
     </script>

@@ -226,20 +226,26 @@ function toggleTheme() {
         // Switch to Dark
         htmlEl.removeAttribute('data-theme');
         localStorage.setItem('theme', 'dark');
-        toggleBtn.textContent = '??';
+        toggleBtn.textContent = '☀️';
     } else {
         // Switch to Light
         htmlEl.setAttribute('data-theme', 'light');
         localStorage.setItem('theme', 'light');
-        toggleBtn.textContent = '??';
+        toggleBtn.textContent = '🌙';
     }
 }
 
-// Set initial button icon based on saved theme
+// Set initial button icon based on saved theme (default is light)
 document.addEventListener('DOMContentLoaded', function() {
     const savedTheme = localStorage.getItem('theme');
     const toggleBtn = document.getElementById('themeToggle');
-    if (savedTheme === 'light' && toggleBtn) {
-        toggleBtn.textContent = '??';
+    if (toggleBtn) {
+        if (savedTheme === 'dark') {
+            toggleBtn.textContent = '☀️';
+        } else {
+            toggleBtn.textContent = '🌙';
+            // Also ensure the data attribute is set if they haven't explicitly set it yet
+            document.documentElement.setAttribute('data-theme', 'light');
+        }
     }
 });
