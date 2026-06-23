@@ -193,7 +193,7 @@ function renderHero(heroArticles) {
     const tag = mainArt.tag || catName;
 
     let html = `
-        <div class="hero-main">
+        <div class="hero-main" style="cursor: pointer;" onclick="window.location.href='article.html?id=${mainArt.id}'">
             <img src="${mainArt.image_url}" alt="${mainArt.title}">
             <div class="hero-overlay">
                 <span class="hero-category">Punjab • ${catName}</span>
@@ -213,7 +213,7 @@ function renderHero(heroArticles) {
         const art = heroArticles[i];
         const artCat = art.categories ? art.categories.name : 'News';
         html += `
-            <div class="side-card">
+            <div class="side-card" style="cursor: pointer;" onclick="window.location.href='article.html?id=${art.id}'">
                 <img src="${art.image_url}" alt="${art.title}">
                 <div class="side-card-body">
                     <div class="side-cat">${artCat}</div>
@@ -248,7 +248,7 @@ function renderGrids(articles) {
                 const pillClass = `cat-pill cat-${artCat.toLowerCase()}`;
 
                 gridHtml += `
-                    <div class="news-card">
+                    <div class="news-card" style="cursor: pointer;" onclick="window.location.href='article.html?id=${art.id}'">
                         <img class="news-card-img" src="${art.image_url}" alt="${art.title}">
                         <div class="news-card-body">
                             <span class="${pillClass}">${artCat}</span>
