@@ -1994,3 +1994,44 @@ img, video, canvas, audio, iframe, embed, object {
         padding: 0 15px;
     }
 }
+
+/* ── SPLASH SCREEN ── */
+.splash-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: var(--deep-navy);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999999;
+    transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.splash-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    animation: splashPulse 2s infinite ease-in-out;
+}
+
+.splash-logo {
+    max-width: 80vw;
+    max-height: 120px;
+    object-fit: contain;
+    filter: drop-shadow(0 0 20px rgba(255, 107, 0, 0.2));
+}
+
+@keyframes splashPulse {
+    0% { transform: scale(0.95); opacity: 0.8; }
+    50% { transform: scale(1.05); opacity: 1; filter: drop-shadow(0 0 30px rgba(255, 107, 0, 0.4)); }
+    100% { transform: scale(0.95); opacity: 0.8; }
+}
+
+.splash-screen.hidden {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}

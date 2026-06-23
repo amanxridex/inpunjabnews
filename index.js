@@ -198,3 +198,20 @@ function toggleMobileMenu() {
         nav.classList.toggle('show-menu');
     }
 }
+// --- SPLASH SCREEN LOGIC ---
+document.addEventListener('DOMContentLoaded', function() {
+    const splash = document.getElementById('splash-screen');
+    
+    if (!sessionStorage.getItem('splashShown')) {
+        setTimeout(() => {
+            splash.classList.add('hidden');
+            setTimeout(() => {
+                splash.remove();
+            }, 600);
+        }, 1800);
+        sessionStorage.setItem('splashShown', 'true');
+    } else {
+        splash.style.display = 'none';
+        splash.remove();
+    }
+});
