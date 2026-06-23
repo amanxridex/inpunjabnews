@@ -2171,35 +2171,25 @@ img, video, canvas, audio, iframe, embed, object {
     position: relative;
     display: flex;
     flex-direction: column;
-    justify-content: flex-end;
+    background: #ffffff; /* White background for the text half */
 }
 
 .short-bg {
-    position: absolute;
-    top: 0;
-    left: 0;
+    flex: 0 0 50vh; /* Exactly 50% height */
     width: 100%;
-    height: 100%;
     background-size: cover;
     background-position: center;
-    z-index: 1;
-}
-
-.short-bg::after {
-    content: "";
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 60%;
-    background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0) 100%);
+    position: relative;
+    /* Removed absolute positioning and removed gradient overlay */
 }
 
 .short-content {
-    position: relative;
-    z-index: 2;
+    flex: 1; /* Take the remaining 50% height */
     padding: 30px 20px;
-    color: white;
+    color: #1A0533; /* Dark text for white background */
+    overflow-y: auto; /* Allow scrolling if text is too long */
+    display: flex;
+    flex-direction: column;
 }
 
 .short-tag {
@@ -2212,6 +2202,7 @@ img, video, canvas, audio, iframe, embed, object {
     font-weight: 700;
     margin-bottom: 12px;
     text-transform: uppercase;
+    align-self: flex-start;
 }
 
 .short-headline {
@@ -2220,16 +2211,17 @@ img, video, canvas, audio, iframe, embed, object {
     font-weight: 700;
     line-height: 1.2;
     margin-bottom: 12px;
-    color: #fff;
+    color: #1A0533;
 }
 
 .short-brief {
     font-size: 15px;
     line-height: 1.5;
-    color: #ddd;
+    color: #444; /* Dark gray */
     margin-bottom: 16px;
+    /* Optional: Remove line clamp to let them scroll the full brief if desired. I'll leave a clamp for consistency but increase it */
     display: -webkit-box;
-    -webkit-line-clamp: 4;
+    -webkit-line-clamp: 6;
     -webkit-box-orient: vertical;
     overflow: hidden;
 }
@@ -2238,5 +2230,6 @@ img, video, canvas, audio, iframe, embed, object {
     display: flex;
     gap: 16px;
     font-size: 13px;
-    color: #aaa;
+    color: #777; /* Medium gray */
+    margin-top: auto; /* Push to bottom of content area */
 }
