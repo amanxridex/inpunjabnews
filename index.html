@@ -10,6 +10,13 @@
         href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Inter:wght@300;400;500;600;700&family=Noto+Sans+Gurmukhi:wght@400;700&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="index.css">
+    <script>
+        // Prevent FOUC: Apply theme immediately before rendering
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'light') {
+            document.documentElement.setAttribute('data-theme', 'light');
+        }
+    </script>
 </head>
 
 <body>
@@ -82,6 +89,7 @@
                 <div class="header-search">
                     <input class="search-box" type="text" placeholder="Search news, topics…" id="searchBox">
                     <button class="search-btn" onclick="doSearch()">🔍</button>
+                    <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()" title="Toggle Light/Dark Mode">☀️</button>
                     <button class="mobile-menu-btn" id="mobileMenuBtn" onclick="toggleMobileMenu()">☰</button>
                 </div>
             </div>

@@ -215,3 +215,31 @@ document.addEventListener('DOMContentLoaded', function() {
         splash.remove();
     }
 });
+
+// --- THEME TOGGLE LOGIC ---
+function toggleTheme() {
+    const htmlEl = document.documentElement;
+    const currentTheme = htmlEl.getAttribute('data-theme');
+    const toggleBtn = document.getElementById('themeToggle');
+    
+    if (currentTheme === 'light') {
+        // Switch to Dark
+        htmlEl.removeAttribute('data-theme');
+        localStorage.setItem('theme', 'dark');
+        toggleBtn.textContent = '??';
+    } else {
+        // Switch to Light
+        htmlEl.setAttribute('data-theme', 'light');
+        localStorage.setItem('theme', 'light');
+        toggleBtn.textContent = '??';
+    }
+}
+
+// Set initial button icon based on saved theme
+document.addEventListener('DOMContentLoaded', function() {
+    const savedTheme = localStorage.getItem('theme');
+    const toggleBtn = document.getElementById('themeToggle');
+    if (savedTheme === 'light' && toggleBtn) {
+        toggleBtn.textContent = '??';
+    }
+});
