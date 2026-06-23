@@ -253,7 +253,9 @@ document.addEventListener('DOMContentLoaded', function() {
 function openShorts() {
     const shortsContainer = document.getElementById('shorts-container');
     shortsContainer.classList.remove('hidden');
-    document.body.style.overflow = 'hidden'; /// --- SHORTS GENERATION LOGIC ---
+    document.body.style.overflow = 'hidden';
+}
+// --- SHORTS GENERATION LOGIC ---
 document.addEventListener('DOMContentLoaded', function() {
     const shortsWrapper = document.getElementById('shortsWrapper');
     if (!shortsWrapper) return;
