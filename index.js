@@ -190,3 +190,11 @@
         showToast('👋 Welcome!', 'You\'re reading InPunjab News — ਪੰਜਾਬ ਦੀ ਆਵਾਜ਼', 1000);
         showToast('🔴 Breaking', 'PBKS vs CSK Live — Punjab Kings need 46 off 24 balls!', 3500);
         showToast('⚡ Alert', 'Heavy rain warning for Ludhiana, Jalandhar tonight', 6000);
+
+// ── MOBILE MENU ──
+function toggleMobileMenu() {
+    const nav = document.querySelector('.main-nav');
+    if(nav) {
+        nav.classList.toggle('show-menu');
+    }
+}
