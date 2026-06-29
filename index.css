@@ -2306,10 +2306,16 @@ img, video, canvas, audio, iframe, embed, object {
 }
 
 /* Hide Google Translate Toolbar */
-.goog-te-banner-frame.skiptranslate {
+.goog-te-banner-frame,
+.goog-te-banner-frame.skiptranslate,
+iframe.goog-te-banner-frame,
+.VIpgJd-ZVi9od-ORHb-OEVmcd,
+.VIpgJd-ZVi9od-aZ2wEe-wOHMyf {
     display: none !important;
+    visibility: hidden !important;
 }
 body {
     top: 0px !important;
+    position: static !important;
 }
 
