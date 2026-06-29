@@ -368,8 +368,8 @@ body, .card, .side-card, .list-card, .news-card, .top-bar, .main-header, .main-n
         .main-nav {
             display: flex;
             gap: 0;
-            overflow-x: auto;
-            scrollbar-width: none;
+            overflow: visible;
+            flex-wrap: wrap;
         }
 
         .main-nav::-webkit-scrollbar {
