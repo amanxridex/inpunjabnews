@@ -2265,3 +2265,42 @@ img, video, canvas, audio, iframe, embed, object {
     background: #25D366;
     color: white;
 }
+
+/* Dropdown CSS */
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: var(--card-bg);
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.5);
+    z-index: 1000;
+    border: 1px solid var(--card-border);
+    border-top: none;
+    top: 100%;
+    left: 0;
+}
+
+.dropdown-content a {
+    color: var(--text-primary);
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    font-size: 13px;
+    font-weight: 500;
+    transition: background-color 0.2s, color 0.2s;
+    cursor: pointer;
+}
+
+.dropdown-content a:hover {
+    background-color: var(--tag-bg);
+    color: var(--saffron);
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
