@@ -2304,3 +2304,12 @@ img, video, canvas, audio, iframe, embed, object {
 .dropdown:hover .dropdown-content {
     display: block;
 }
+
+/* Hide Google Translate Toolbar */
+.goog-te-banner-frame.skiptranslate {
+    display: none !important;
+}
+body {
+    top: 0px !important;
+}
+
