@@ -57,11 +57,10 @@
 <span class="weather-badge">☁️ Chandigarh 34°C</span>
 </div>
 <div class="top-bar-right">
-<a href="#">ਪੰਜਾਬੀ</a>
-<a href="#">हिन्दी</a>
-<a href="#">English</a>
+<a href="#" onclick="changeLanguage('pa'); return false;">ਪੰਜਾਬੀ</a>
+<a href="#" onclick="changeLanguage('hi'); return false;">हिन्दी</a>
+<a href="#" onclick="changeLanguage('en'); return false;">English</a>
 <a href="#">Subscribe</a>
-<a href="../admin/index.html">Login</a>
 </div>
 </div>
 </div>
@@ -854,5 +853,19 @@
 </div>
 </div>
 <script src="supabaseClient.js"></script><script src="index.js"></script>
+<div id="google_translate_element" style="position:absolute; top:-10000px; width:1px; height:1px; overflow:hidden;"></div>
+<script type="text/javascript">
+function googleTranslateElementInit() {
+  new google.translate.TranslateElement({pageLanguage: 'en', includedLanguages: 'en,hi,pa', autoDisplay: false}, 'google_translate_element');
+}
+function changeLanguage(langCode) {
+    var selectField = document.querySelector("select.goog-te-combo");
+    if (selectField) {
+        selectField.value = langCode;
+        selectField.dispatchEvent(new Event('change'));
+    }
+}
+</script>
+<script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 </body>
 </html>
