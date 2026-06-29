@@ -2269,7 +2269,7 @@ img, video, canvas, audio, iframe, embed, object {
 /* Dropdown CSS */
 .dropdown {
     position: relative;
-    display: inline-block;
+    display: flex;
 }
 
 .dropdown-content {
