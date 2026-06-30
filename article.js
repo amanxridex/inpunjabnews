@@ -196,3 +196,18 @@ function showArticleToast(title, body) {
         setTimeout(() => toast.remove(), 300);
     }, 4000);
 }
+
+
+// ???? FADE IN SCROLL ????
+document.addEventListener('DOMContentLoaded', () => {
+    const fadeEls = document.querySelectorAll('.fade-up');
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(e => {
+            if (e.isIntersecting) {
+                e.target.classList.add('visible');
+                observer.unobserve(e.target);
+            }
+        });
+    }, { threshold: 0.1 });
+    fadeEls.forEach(el => observer.observe(el));
+});
