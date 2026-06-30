@@ -272,40 +272,53 @@ function renderHero(heroArticles) {
 }
 
 function renderGrids(articles) {
-    // Distribute remaining articles across the empty grid containers
-    const categoriesToPopulate = ['punjab', 'regions', 'national', 'politics', 'business', 'sports', 'entertainment'];
+    if (!articles || articles.length === 0) return;
+    
+    // Select all cards that can be populated dynamically
+    const cards = document.querySelectorAll('.news-card:not(.hero-main):not(.side-card), .list-card');
     
     let artIdx = 0;
     
-    for (const cat of categoriesToPopulate) {
-        let gridIdx = 0;
-        while (true) {
-            const gridContainer = document.getElementById(`dynamic-grid-${cat}-${gridIdx}`);
-            if (!gridContainer) break;
-
-            let gridHtml = '';
-            for (let i = 0; i < 4; i++) {
-                if (artIdx >= articles.length) artIdx = 0; // Wrap around for demo
-                const art = articles[artIdx];
-                const artCat = art.categories ? art.categories.name : 'News';
-                const pillClass = `cat-pill cat-${artCat.toLowerCase()}`;
-
-                gridHtml += `
-                    <div class="news-card" style="cursor: pointer;" onclick="window.location.href='article.html?id=${art.id}'">
-                        <img class="news-card-img" src="${art.image_url}" alt="${art.title}">
-                        <div class="news-card-body">
-                            <span class="${pillClass}">${artCat}</span>
-                            <div class="news-card-title">${art.title}</div>
-                            <div class="news-card-meta">Just now</div>
-                        </div>
-                    </div>
-                `;
-                artIdx++;
+    cards.forEach(card => {
+        if (artIdx >= articles.length) artIdx = 0; // Wrap around if not enough articles
+        const art = articles[artIdx];
+        const artCat = art.categories ? art.categories.name : 'News';
+        
+        // Make the card clickable
+        card.style.cursor = 'pointer';
+        card.onclick = (e) => {
+            // Don't trigger if they clicked an action button (like, share, comment)
+            if (e.target.closest('.action-btn')) return;
+            window.location.href = `article.html?id=${art.id}`;
+        };
+        
+        // Populate Image
+        const img = card.querySelector('img');
+        if (img) img.src = art.image_url;
+        
+        // Populate Title
+        const titleEl = card.querySelector('.news-card-title, .list-card-title');
+        if (titleEl) titleEl.textContent = art.title;
+        
+        // Populate Category
+        const catEl = card.querySelector('.news-card-cat, .list-card-cat, .cat-pill');
+        if (catEl) {
+            // If it's a list card category, it usually has formatting "Education • Punjab", preserve structure if needed, or replace
+            if (catEl.classList.contains('cat-pill')) {
+                catEl.textContent = artCat;
+            } else {
+                // Determine if breaking
+                const isBreaking = catEl.textContent.includes('🔴');
+                catEl.textContent = (isBreaking ? '🔴 ' : '') + artCat + ' • Punjab';
             }
-            gridContainer.innerHTML = gridHtml;
-            gridIdx++;
         }
-    }
+        
+        // Populate Excerpt
+        const excerptEl = card.querySelector('.news-card-excerpt');
+        if (excerptEl) excerptEl.textContent = art.brief || art.title;
+        
+        artIdx++;
+    });
 }
 
 function renderShorts(articles) {
@@ -332,7 +345,7 @@ function renderShorts(articles) {
                             <span class="icon">👁️</span>
                             <span class="count">${views}K</span>
                         </div>
-                        <a href="https://api.whatsapp.com/send?text=${encodeURIComponent(art.title + ' - Read more on InPunjab News!')}" target="_blank" class="short-action-btn btn-whatsapp">
+                        <a href="https://api.whatsapp.com/send?text=${encodeURIComponent(art.title + ' - Read more on InPunjab News! ' + window.location.origin + window.location.pathname.replace('index.html', '') + 'article.html?id=' + art.id)}" target="_blank" class="short-action-btn btn-whatsapp">
                             <span class="icon">💬</span>
                             <span class="count">Share</span>
                         </a>

@@ -39,9 +39,18 @@ document.addEventListener('DOMContentLoaded', async function() {
             <div class="article-meta">
                 <span class="article-cat">${catName}</span>
                 <span>📅 ${dateStr}</span>
-                <span>👁️ ${views} Views</span>
             </div>
             <h1 class="article-title">${article.title}</h1>
+            
+            <div class="article-actions" style="display: flex; gap: 10px; margin-bottom: 25px; flex-wrap: wrap;">
+                <div style="background: var(--card-border); padding: 8px 16px; border-radius: 20px; font-weight: bold; color: var(--text-primary); display: flex; align-items: center; gap: 6px;">
+                    👁️ ${views} Views
+                </div>
+                <a href="https://api.whatsapp.com/send?text=${encodeURIComponent(article.title + ' - Read more on InPunjab News! ' + window.location.href)}" target="_blank" style="background: #25D366; color: white; padding: 8px 16px; border-radius: 20px; font-weight: bold; text-decoration: none; display: flex; align-items: center; gap: 6px; box-shadow: 0 4px 10px rgba(37, 211, 102, 0.3);">
+                    💬 Share on WhatsApp
+                </a>
+            </div>
+
             <img class="article-img" src="${article.image_url}" alt="${article.title}">
             <div class="article-body">
                 ${contentHtml}
