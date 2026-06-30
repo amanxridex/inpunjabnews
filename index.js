@@ -242,7 +242,7 @@ function renderHero(heroArticles) {
                 <span class="hero-category">Punjab • ${catName}</span>
                 <div class="hero-title">${mainArt.title}</div>
                 <div class="hero-meta">
-                    <span class="author">By InPunjab Desk</span>
+                    <span class="author">By ${mainArt.author || 'InPunjab Desk'}</span>
                     <span>Just now</span>
                     <span>👁 ${mainArt.view_count || 100} views</span>
                     <span>💬 ${mainArt.comment_count || 0} comments</span>
