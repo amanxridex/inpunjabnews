@@ -2354,13 +2354,13 @@ body {
     height: auto !important;
     min-height: 100%;
 }
-.news-card-body {
+.news-card-body, .list-card-body, .side-card-body {
     display: flex;
     flex-direction: column;
     flex: 1;
-    padding: 16px !important; box-sizing: border-box !important;
+    padding: 16px !important; 
+    box-sizing: border-box !important;
 }
 .news-card-img, .list-card-img, .side-card img {
-    object-fit: contain !important;
-    background-color: var(--card-bg);
+    object-fit: cover !important;
 }
