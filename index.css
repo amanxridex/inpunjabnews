@@ -2348,3 +2348,19 @@ body {
         display: none !important;
     }
 }
+
+/* --- FIX FOR CUT-OFF IMAGES AND TEXT --- */
+.news-card, .list-card, .side-card {
+    height: auto !important;
+    min-height: 100%;
+}
+.news-card-body {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    padding: 16px;
+}
+.news-card-img, .list-card-img, .side-card img {
+    object-fit: contain !important;
+    background-color: var(--card-bg);
+}
