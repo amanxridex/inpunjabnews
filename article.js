@@ -60,7 +60,7 @@ document.addEventListener('DOMContentLoaded', async function() {
             </div>
 
             <img class="article-img" src="${article.image_url}" alt="${article.title}">
-            <div class="article-body">
+            <div class="article-body" style="text-align: justify;">
                 ${contentHtml}
             </div>
             
