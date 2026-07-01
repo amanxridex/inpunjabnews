@@ -2319,3 +2319,32 @@ body {
     position: static !important;
 }
 
+
+/* Language Pills */
+.lang-pills {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+.lang-pills button {
+    background: var(--card-bg);
+    color: var(--text-primary);
+    border: 1px solid var(--card-border);
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-weight: 500;
+}
+.lang-pills button:hover {
+    background: var(--saffron);
+    color: white;
+    border-color: var(--saffron);
+}
+@media (min-width: 768px) {
+    .mobile-only {
+        display: none !important;
+    }
+}

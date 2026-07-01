@@ -39,7 +39,15 @@ document.addEventListener('DOMContentLoaded', async function() {
             <div class="article-meta">
                 <span class="article-cat">${catName}</span>
                 <span>📅 ${dateStr}</span>
+                <span>✍️ ${article.author || 'InPunjab News'}</span>
             </div>
+            
+            <div class="lang-pills mobile-only">
+                <button onclick="translatePage('en')">English</button>
+                <button onclick="translatePage('pa')">Punjabi</button>
+                <button onclick="translatePage('hi')">Hindi</button>
+            </div>
+            
             <h1 class="article-title">${article.title}</h1>
             
             <div class="article-actions" style="display: flex; gap: 10px; margin-bottom: 25px; flex-wrap: wrap;">
@@ -211,3 +219,18 @@ document.addEventListener('DOMContentLoaded', () => {
     }, { threshold: 0.1 });
     fadeEls.forEach(el => observer.observe(el));
 });
+
+function translatePage(lang) {
+    var selectField = document.querySelector('#google_translate_element select');
+    if (selectField) {
+        for(var i=0; i < selectField.children.length; i++){
+            var option = selectField.children[i];
+            // Google Translate options are like 'en', 'hi', 'pa'
+            if(option.value == lang){
+                selectField.selectedIndex = i;
+                selectField.dispatchEvent(new Event('change'));
+                break;
+            }
+        }
+    }
+}
