@@ -234,3 +234,40 @@ function translatePage(lang) {
         }
     }
 }
+
+// --- MOBILE MENU ---
+function toggleMobileMenu() {
+    const nav = document.querySelector('.main-nav');
+    if(nav) {
+        nav.classList.toggle('show-menu');
+    }
+}
+
+// --- THEME TOGGLE LOGIC ---
+function toggleTheme() {
+    const htmlEl = document.documentElement;
+    const currentTheme = htmlEl.getAttribute('data-theme');
+    const toggleBtn = document.getElementById('themeToggle');
+    if (currentTheme === 'light') {
+        htmlEl.removeAttribute('data-theme');
+        localStorage.setItem('theme', 'dark');
+        if(toggleBtn) toggleBtn.textContent = '??';
+    } else {
+        htmlEl.setAttribute('data-theme', 'light');
+        localStorage.setItem('theme', 'light');
+        if(toggleBtn) toggleBtn.textContent = '??';
+    }
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    const savedTheme = localStorage.getItem('theme');
+    const toggleBtn = document.getElementById('themeToggle');
+    if (toggleBtn) {
+        if (savedTheme === 'dark') {
+            toggleBtn.textContent = '??';
+        } else {
+            toggleBtn.textContent = '??';
+            document.documentElement.setAttribute('data-theme', 'light');
+        }
+    }
+});
