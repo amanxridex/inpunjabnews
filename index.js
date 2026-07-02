@@ -434,7 +434,7 @@ fetchWeather();
 // Refresh weather every 30 mins
 setInterval(fetchWeather, 30 * 60 * 1000);
 // ------------------------------------
-\n
+
 // --- Birthday Modal Logic ---
 function closeBdayModal() {
     const overlay = document.getElementById('bday-modal-overlay');
