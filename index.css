@@ -221,7 +221,7 @@ body, .card, .side-card, .list-card, .news-card, .top-bar, .main-header, .main-n
             color: var(--saffron);
         }
 
-        .weather-badge {
+        .weather-badge, .currency-badge {
             background: var(--tag-bg);
             border: 1px solid var(--saffron);
             color: var(--saffron);
