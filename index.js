@@ -392,7 +392,7 @@ async function fetchCurrencyRates() {
 document.addEventListener('DOMContentLoaded', () => {
     fetchCurrencyRates();
 });
-\n
+
 // --- Real-time Date/Time & Weather ---
 function updateTime() {
     const timeDisplay = document.getElementById('datetime-display');
