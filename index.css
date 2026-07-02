@@ -264,7 +264,11 @@ body, .card, .side-card, .list-card, .news-card, .top-bar, .main-header, .main-n
         }
         
         .logo-block img {
-            height: 72px !important;
+            height: 120px !important;
+            width: auto !important;
+            max-width: none !important;
+            margin-top: -10px;
+            margin-bottom: -10px;
             transition: transform 0.3s;
         }
 
