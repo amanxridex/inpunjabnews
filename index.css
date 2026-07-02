@@ -376,21 +376,6 @@ body, .card, .side-card, .list-card, .news-card, .top-bar, .main-header, .main-n
         .search-btn:hover {
             background: #d85c00;
             transform: translateY(-50%) scale(1.05);
-        }
-
-        /* ── NAV ── */
-        .main-nav {
-            display: flex;
-            gap: 4px;
-            overflow: visible;
-            flex-wrap: wrap;
-            padding-bottom: 8px;
-            align-items: center;
-        }
-
-        .main-nav::-webkit-scrollbar {
-            display: none;
-        }
 
         .nav-item {
             color: var(--text-primary);
