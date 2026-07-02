@@ -50,11 +50,11 @@ document.addEventListener('DOMContentLoaded', async function() {
             
             <h1 class="article-title">${article.title}</h1>
             
-            <div class="article-actions" style="display: flex; gap: 10px; margin-bottom: 25px; flex-wrap: wrap;">
-                <div style="background: var(--card-border); padding: 8px 16px; border-radius: 20px; font-weight: bold; color: var(--text-primary); display: flex; align-items: center; gap: 6px;">
+            <div class="article-actions" style="display: flex; gap: 12px; margin-bottom: 32px; flex-wrap: wrap;">
+                <div style="background: rgba(255, 255, 255, 0.05); border: 1px solid var(--card-border); padding: 8px 16px; border-radius: 24px; font-weight: 600; color: var(--text-primary); display: flex; align-items: center; gap: 8px; font-size: 14px; backdrop-filter: blur(10px);">
                     👁️ ${views} Views
                 </div>
-                <a href="https://api.whatsapp.com/send?text=${encodeURIComponent(article.title + ' - Read more on InPunjab News! ' + window.location.href)}" target="_blank" style="background: #25D366; color: white; padding: 8px 16px; border-radius: 20px; font-weight: bold; text-decoration: none; display: flex; align-items: center; gap: 6px; box-shadow: 0 4px 10px rgba(37, 211, 102, 0.3);">
+                <a href="https://api.whatsapp.com/send?text=${encodeURIComponent(article.title + ' - Read more on InPunjab News! ' + window.location.href)}" target="_blank" class="whatsapp-share-btn" style="display: flex; align-items: center; gap: 8px; text-decoration: none;">
                     💬 Share on WhatsApp
                 </a>
             </div>
@@ -64,21 +64,21 @@ document.addEventListener('DOMContentLoaded', async function() {
                 ${contentHtml}
             </div>
             
-            <div class="comments-section" style="margin-top: 50px; border-top: 1px solid var(--card-border); padding-top: 30px;">
-                <h3 style="font-family: 'Playfair Display', serif; font-size: 24px; margin-bottom: 20px; color: var(--text-primary);">Comments</h3>
-                <div id="comments-list" style="margin-bottom: 30px; display: flex; flex-direction: column; gap: 15px;">
-                    <div style="color: var(--text-muted); font-size: 14px;">Loading comments...</div>
+            <div class="comments-section" style="margin-top: 64px; padding-top: 40px; border-top: 1px solid var(--card-border);">
+                <h3 style="font-family: 'Inter', sans-serif; font-size: 26px; font-weight: 700; margin-bottom: 24px; color: var(--text-primary);">Comments</h3>
+                <div id="comments-list" style="margin-bottom: 40px; display: flex; flex-direction: column; gap: 16px;">
+                    <div style="color: var(--text-muted); font-size: 15px;">Loading comments...</div>
                 </div>
                 
-                <div class="comment-form" style="background: var(--card-bg); padding: 25px; border-radius: 8px; border: 1px solid var(--card-border);">
-                    <h4 style="margin-bottom: 15px; font-size: 16px; font-weight: 600; color: var(--text-primary);">Post a Comment</h4>
-                    <div style="margin-bottom: 15px;">
-                        <input type="text" id="comment-author" placeholder="Your Name" style="width: 100%; padding: 12px 16px; border-radius: 8px; border: 1px solid var(--card-border); background: var(--deep-navy); color: var(--text-primary); outline: none; font-family: inherit;">
+                <div class="comment-form" style="background: var(--card-bg); padding: 32px; border-radius: 16px; border: 1px solid var(--card-border); backdrop-filter: blur(20px);">
+                    <h4 style="margin-bottom: 20px; font-size: 18px; font-weight: 700; color: var(--text-primary);">Post a Comment</h4>
+                    <div style="margin-bottom: 16px;">
+                        <input type="text" id="comment-author" placeholder="Your Name" style="width: 100%; padding: 16px; border-radius: 12px; border: 1px solid var(--card-border); background: var(--app-bg); color: var(--text-primary); outline: none; font-family: inherit; font-size: 15px; box-sizing: border-box;">
                     </div>
-                    <div style="margin-bottom: 15px;">
-                        <textarea id="comment-content" placeholder="Type your comment here..." style="width: 100%; min-height: 100px; padding: 12px 16px; border-radius: 8px; border: 1px solid var(--card-border); background: var(--deep-navy); color: var(--text-primary); outline: none; resize: vertical; font-family: inherit; line-height: 1.5;"></textarea>
+                    <div style="margin-bottom: 20px;">
+                        <textarea id="comment-content" placeholder="Type your comment here..." style="width: 100%; min-height: 120px; padding: 16px; border-radius: 12px; border: 1px solid var(--card-border); background: var(--app-bg); color: var(--text-primary); outline: none; resize: vertical; font-family: inherit; line-height: 1.6; font-size: 15px; box-sizing: border-box;"></textarea>
                     </div>
-                    <button onclick="submitArticleComment('${article.id}', '${article.title.replace(/'/g, "\\'")}')" style="background: var(--saffron); color: white; border: none; padding: 12px 24px; border-radius: 8px; font-weight: bold; cursor: pointer; transition: background 0.2s;">Submit Comment</button>
+                    <button onclick="submitArticleComment('${article.id}', '${article.title.replace(/'/g, "\\'")}')" style="background: rgba(0, 122, 255, 0.1); color: var(--saffron); border: 1px solid rgba(0, 122, 255, 0.2); padding: 14px 28px; border-radius: 24px; font-weight: 700; cursor: pointer; transition: all 0.2s ease;">Submit Comment</button>
                 </div>
             </div>
         `;
@@ -129,12 +129,12 @@ async function loadApprovedComments(articleId) {
         }
         
         listContainer.innerHTML = comments.map(c => `
-            <div style="background: var(--card-bg); padding: 16px; border-radius: 8px; border: 1px solid rgba(30, 42, 69, 0.5); text-align: left;">
-                <div style="display: flex; justify-content: space-between; font-size: 12px; color: var(--text-muted); margin-bottom: 8px;">
-                    <span style="font-weight: bold; color: var(--saffron);">${c.username}</span>
+            <div style="background: var(--card-bg); padding: 20px; border-radius: 12px; border: 1px solid var(--card-border); text-align: left; backdrop-filter: blur(10px);">
+                <div style="display: flex; justify-content: space-between; font-size: 13px; color: var(--text-muted); margin-bottom: 12px;">
+                    <span style="font-weight: 700; color: var(--saffron);">${c.username}</span>
                     <span>${new Date(c.created_at).toLocaleDateString()}</span>
                 </div>
-                <div style="font-size: 14px; color: var(--text-secondary); line-height: 1.5;">${c.content}</div>
+                <div style="font-size: 15px; color: var(--text-secondary); line-height: 1.6;">${c.content}</div>
             </div>
         `).join('');
     } catch (err) {

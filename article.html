@@ -102,59 +102,37 @@
 <div class="article-layout">
     <!-- LEFT AD -->
     <aside class="article-ad">
-        <div class="ad-label" style="font-size:10px; margin-bottom:10px;">Advertisement</div>
-        <div style="display: flex; flex-direction: column; gap: 20px;">
-            <div style="background: var(--card-bg); border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.05); text-align: center; border: 1px solid var(--card-border);">
-                <img src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=300&h=250&fit=crop" style="width: 100%; height: auto; border-bottom: 1px solid var(--card-border);" alt="Real Estate Ad" />
-                <div style="padding: 10px; font-size: 12px; font-weight: bold; color: var(--text-primary);">DLF Luxury Homes<br/><span style="color:var(--saffron); font-weight:normal;">Starts ₹45 Lakh</span></div>
+        <div class="ad-label-sm">Advertisement</div>
+        <div class="article-ad-stack">
+            <div class="article-ad-card">
+                <img src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=300&h=250&fit=crop" class="article-ad-img" alt="Real Estate Ad" />
+                <div class="article-ad-text">DLF Luxury Homes<br/><span class="article-ad-highlight">Starts ₹45 Lakh</span></div>
             </div>
-            <div style="background: var(--card-bg); border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.05); text-align: center; border: 1px solid var(--card-border);">
-                <img src="https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=300&h=250&fit=crop" style="width: 100%; height: auto; border-bottom: 1px solid var(--card-border);" alt="University Ad" />
-                <div style="padding: 10px; font-size: 12px; font-weight: bold; color: var(--text-primary);">CU Admissions 2026<br/><span style="color:var(--saffron); font-weight:normal;">Apply Online Now</span></div>
+            <div class="article-ad-card">
+                <img src="https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=300&h=250&fit=crop" class="article-ad-img" alt="University Ad" />
+                <div class="article-ad-text">CU Admissions 2026<br/><span class="article-ad-highlight">Apply Online Now</span></div>
             </div>
         </div>
     </aside>
 
     <!-- ARTICLE CONTENT -->
-    <div class="article-content" id="article-container" style="width: 100%; max-width: 800px; min-height: 60vh;">
-        <div style="text-align: center; padding: 50px;">
-            <div class="loading-spinner" style="display:inline-block; width: 40px; height: 40px; border: 4px solid #f3f3f3; border-top: 4px solid var(--saffron); border-radius: 50%; animation: spin 1s linear infinite;"></div>
+    <div class="article-content" id="article-container">
+        <div class="article-loading">
+            <div class="loading-spinner"></div>
             <p>Loading article...</p>
         </div>
     </div>
 
     <!-- RIGHT AD -->
     <aside class="article-ad">
-        <div class="ad-label" style="font-size:10px; margin-bottom:10px;">Advertisement</div>
-        <div style="display: flex; flex-direction: column; gap: 20px;">
-            <div style="background: var(--card-bg); border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.05); text-align: center; border: 1px solid var(--card-border);">
-                <img src="https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=300&h=600&fit=crop" style="width: 100%; height: auto; border-bottom: 1px solid var(--card-border);" alt="Tech Summit Ad" />
-                <div style="padding: 10px; font-size: 12px; font-weight: bold; color: var(--text-primary);">Punjab Tech Summit<br/><span style="color:var(--saffron); font-weight:normal;">Register Today</span></div>
+        <div class="ad-label-sm">Advertisement</div>
+        <div class="article-ad-stack">
+            <div class="article-ad-card">
+                <img src="https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=300&h=600&fit=crop" class="article-ad-img" alt="Tech Summit Ad" />
+                <div class="article-ad-text">Punjab Tech Summit<br/><span class="article-ad-highlight">Register Today</span></div>
             </div>
         </div>
     </aside>
-</div>
-<style>
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        .article-title { font-family: 'Playfair Display', serif; font-size: 36px; font-weight: 900; margin-bottom: 20px; line-height: 1.2; color: var(--text-primary); }
-        .article-meta { display: flex; gap: 15px; color: var(--text-muted); font-size: 14px; margin-bottom: 30px; align-items: center; }
-        .article-cat { background: var(--saffron); color: white; padding: 4px 10px; border-radius: 4px; font-weight: bold; text-transform: uppercase; font-size: 12px; }
-        .article-img { width: 100%; max-height: 500px; object-fit: cover; border-radius: 8px; margin-bottom: 30px; }
-        .article-body { font-size: 18px; line-height: 1.8; color: var(--text-secondary); }
-        .article-body p { margin-bottom: 20px; }
-        .article-body h2, .article-body h3 { color: var(--text-primary); margin-top: 30px; margin-bottom: 15px; }
-        .error-msg { text-align: center; color: var(--red-accent); padding: 50px; font-size: 18px; }
-        .back-link { display: inline-block; margin-bottom: 20px; color: var(--saffron); text-decoration: none; font-weight: bold; }
-        .back-link:hover { text-decoration: underline; }
-        
-        .article-layout { display: flex; justify-content: center; gap: 40px; align-items: flex-start; padding: 40px 0; }
-        .article-ad { width: 160px; position: sticky; top: 120px; flex-shrink: 0; }
-        .ad-vertical { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 8px; min-height: 600px; display: flex; align-items: center; justify-content: center; color: var(--text-muted); font-size: 14px; }
-        @media (max-width: 1100px) {
-            .article-layout { flex-direction: column; align-items: center; padding: 20px 0; gap: 20px; }
-            .article-ad { display: none; }
-        }
-    </style>
 </div>
 </section>
 <!-- AD STRIP -->

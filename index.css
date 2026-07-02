@@ -2383,3 +2383,167 @@ body {
 .news-card-img, .list-card-img, .side-card img {
     object-fit: cover !important;
 }
+
+/* --- ARTICLE PAGE REDESIGN --- */
+.article-title {
+    font-family: 'Inter', sans-serif;
+    font-size: 38px;
+    font-weight: 800;
+    margin-bottom: 24px;
+    line-height: 1.25;
+    color: var(--text-primary);
+    letter-spacing: -0.5px;
+}
+.article-meta {
+    display: flex;
+    gap: 16px;
+    color: var(--text-muted);
+    font-size: 14px;
+    margin-bottom: 32px;
+    align-items: center;
+    font-weight: 500;
+}
+.article-cat {
+    background: rgba(0, 122, 255, 0.1);
+    color: var(--saffron); /* Keep a nice accent but maybe more blueish */
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 12px;
+    letter-spacing: 1px;
+}
+.article-img {
+    width: 100%;
+    max-height: 540px;
+    object-fit: cover;
+    border-radius: 16px;
+    margin-bottom: 36px;
+    box-shadow: 0 12px 32px rgba(0,0,0,0.06);
+}
+.article-body {
+    font-size: 19px;
+    line-height: 1.85;
+    color: var(--text-secondary);
+    font-weight: 400;
+}
+.article-body p {
+    margin-bottom: 24px;
+}
+.article-body h2, .article-body h3 {
+    color: var(--text-primary);
+    margin-top: 40px;
+    margin-bottom: 16px;
+    font-weight: 700;
+}
+.error-msg {
+    text-align: center;
+    color: var(--red-accent);
+    padding: 60px;
+    font-size: 18px;
+    font-weight: 500;
+}
+.back-link {
+    display: inline-flex;
+    align-items: center;
+    margin-bottom: 24px;
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.2s ease;
+}
+.back-link:hover {
+    color: var(--text-primary);
+}
+.article-layout {
+    display: flex;
+    justify-content: center;
+    gap: 48px;
+    align-items: flex-start;
+    padding: 48px 0;
+}
+.article-ad {
+    width: 220px;
+    position: sticky;
+    top: 120px;
+    flex-shrink: 0;
+}
+.ad-label-sm {
+    font-size: 10px;
+    margin-bottom: 12px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 700;
+}
+.article-ad-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+.article-ad-card {
+    background: var(--card-bg);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.04);
+    text-align: center;
+    border: 1px solid var(--card-border);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    transition: transform 0.3s ease, border-color 0.3s ease;
+    cursor: pointer;
+}
+.article-ad-card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(0, 122, 255, 0.3);
+}
+.article-ad-img {
+    width: 100%;
+    height: auto;
+    border-bottom: 1px solid var(--card-border);
+}
+.article-ad-text {
+    padding: 16px;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text-primary);
+    line-height: 1.4;
+}
+.article-ad-highlight {
+    color: var(--saffron);
+    font-weight: 500;
+    display: block;
+    margin-top: 4px;
+}
+.article-loading {
+    text-align: center;
+    padding: 80px 20px;
+    color: var(--text-muted);
+}
+.whatsapp-share-btn {
+    background: rgba(37, 211, 102, 0.1) !important;
+    color: #25D366 !important;
+    border: 1px solid rgba(37, 211, 102, 0.2) !important;
+    backdrop-filter: blur(10px);
+    border-radius: 24px !important;
+    font-weight: 600 !important;
+    padding: 8px 16px !important;
+    transition: all 0.3s ease !important;
+}
+.whatsapp-share-btn:hover {
+    background: rgba(37, 211, 102, 0.15) !important;
+    border-color: rgba(37, 211, 102, 0.4) !important;
+    transform: scale(1.02);
+}
+
+@media (max-width: 1100px) {
+    .article-layout {
+        flex-direction: column;
+        align-items: center;
+        padding: 32px 0;
+        gap: 32px;
+    }
+    .article-ad {
+        display: none;
+    }
+}
