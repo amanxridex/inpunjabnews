@@ -446,14 +446,11 @@ function closeBdayModal() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    // Show modal if not seen in this session
-    if (!sessionStorage.getItem('bdayModalSeen')) {
-        setTimeout(() => {
+    setTimeout(() => {
             const overlay = document.getElementById('bday-modal-overlay');
             if (overlay) {
                 overlay.classList.add('show');
             }
         }, 800); // slight delay for dramatic effect
-    }
 });
 // ----------------------------
