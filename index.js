@@ -445,12 +445,11 @@ function closeBdayModal() {
     }
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-    setTimeout(() => {
-            const overlay = document.getElementById('bday-modal-overlay');
-            if (overlay) {
-                overlay.classList.add('show');
-            }
-        }, 800); // slight delay for dramatic effect
-});
+// Modal initialized immediately
+setTimeout(() => {
+    const overlay = document.getElementById('bday-modal-overlay');
+    if (overlay) {
+        overlay.classList.add('show');
+    }
+}, 800); // slight delay for dramatic effect
 // ----------------------------
