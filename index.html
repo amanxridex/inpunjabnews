@@ -62,8 +62,8 @@
 <span><span class="live-dot"></span> LIVE</span>
 <span>📅 Tuesday, June 23, 2026</span>
 <span class="weather-badge">🌤️ Chandigarh 34°C</span>
-<span class="currency-badge">💵 USD: ₹83.45</span>
-<span class="currency-badge">💷 GBP: ₹105.60</span>
+<span class="currency-badge" id="rate-usd">💵 USD: Loading...</span>
+<span class="currency-badge" id="rate-gbp">💷 GBP: Loading...</span>
 </div>
 <div class="top-bar-right">
 <a href="#" onclick="changeLanguage('pa'); return false;">ਪੰਜਾਬੀ</a>
@@ -1070,7 +1070,7 @@
 <!-- Dynamic shorts injected via JS -->
 </div>
 </div>
-<script src="supabaseClient.js"></script><script src="index.js"></script>
+<script src="supabaseClient.js"></script><script src="index.js?v=1.1"></script>
 <div id="google_translate_element" style="position:absolute; top:-10000px; width:1px; height:1px; overflow:hidden;"></div>
 <script type="text/javascript">
 function googleTranslateElementInit() {

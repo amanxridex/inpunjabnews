@@ -369,3 +369,31 @@ function closeShorts() {
     shortsContainer.classList.add('hidden');
     document.body.style.overflow = '';
 }
+        // ?? CURRENCY FETCH
+        async function fetchCurrencyRates() {
+            try {
+                const usdRes = await fetch('https://open.er-api.com/v6/latest/USD');
+                const usdData = await usdRes.json();
+                const usdRate = usdData.rates.INR.toFixed(2);
+                
+                const gbpRes = await fetch('https://open.er-api.com/v6/latest/GBP');
+                const gbpData = await gbpRes.json();
+                const gbpRate = gbpData.rates.INR.toFixed(2);
+                
+                const usdEl = document.getElementById('rate-usd');
+                const gbpEl = document.getElementById('rate-gbp');
+                
+                if (usdEl) usdEl.innerHTML = ?? USD: ?;
+                if (gbpEl) gbpEl.innerHTML = ?? GBP: ?;
+            } catch (error) {
+                console.error('Failed to fetch currency rates:', error);
+                const usdEl = document.getElementById('rate-usd');
+                const gbpEl = document.getElementById('rate-gbp');
+                if (usdEl) usdEl.innerHTML = '?? USD: ?83.45';
+                if (gbpEl) gbpEl.innerHTML = '?? GBP: ?105.60';
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            fetchCurrencyRates();
+        });
