@@ -378,7 +378,23 @@ body, .card, .side-card, .list-card, .news-card, .top-bar, .main-header, .main-n
             transform: translateY(-50%) scale(1.05);
         }
 
-        .nav-item {
+        
+/* ── NAV ── */
+.main-nav {
+    display: flex;
+    justify-content: center;
+    gap: 4px;
+    overflow: visible;
+    flex-wrap: wrap;
+    padding-bottom: 8px;
+    align-items: center;
+}
+
+.main-nav::-webkit-scrollbar {
+    display: none;
+}
+
+.nav-item {
             color: var(--text-primary);
             text-decoration: none;
             font-size: 14px;
