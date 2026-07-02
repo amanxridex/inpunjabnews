@@ -51,52 +51,48 @@
 </div>
 <!-- Main Header -->
 <header class="main-header">
-<div class="header-inner">
-<div class="header-top">
-<div class="logo-block" style="max-width: 60vw;">
-<img alt="InPunjab News Logo" src="OFFICIAL LOGO.png" style="height: 100px; max-width: 100%; object-fit: contain;"/>
-</div>
-<div class="header-ad-banner">
-<div class="ad-label">Advertisement</div>
-<div class="ad-content">✦ Punjab Kesari Real Estate Expo 2026 ✦</div>
-<div class="ad-sub">June 28–30 • Expo Centre, Chandigarh | Free Entry</div>
-</div>
-<div class="header-search">
-<button class="theme-toggle" id="themeToggle" onclick="toggleTheme()" title="Toggle Light/Dark Mode">☀️</button>
-<button class="mobile-menu-btn" id="mobileMenuBtn" onclick="toggleMobileMenu()">☰</button>
-</div>
-</div>
-<nav class="main-nav">
-<div class="nav-search" style="display: flex; align-items: center; padding: 0 16px; position: relative;">
-<input class="search-box" id="searchBox" placeholder="Search news, topics…" style="height: 32px; width: 200px; padding: 0 36px 0 16px; border-radius: 16px; border: 1px solid var(--card-border); background: var(--card-bg); color: var(--text-primary); outline: none;" type="text"/>
-<button class="search-btn" onclick="doSearch()" style="background: none; border: none; cursor: pointer; position: absolute; right: 24px; top: 50%; transform: translateY(-50%);">🔍</button>
-</div>
-<a class="nav-item breaking" onclick="scrollToSection('breaking')">🔴 Breaking</a>
-<a class="nav-item active" onclick="scrollToSection('hero')">Home</a>
-<div class="dropdown">
-<a class="nav-item">Punjab ▾</a>
-<div class="dropdown-content">
-<a onclick="scrollToSection('ludhiana')">Ludhiana</a>
-<a onclick="scrollToSection('amritsar')">Amritsar</a>
-<a onclick="scrollToSection('jalandhar')">Jalandhar</a>
-<a onclick="scrollToSection('patiala')">Patiala</a>
-<a onclick="scrollToSection('mohali')">Mohali</a>
-<a onclick="scrollToSection('bathinda')">Bathinda</a>
-<a onclick="scrollToSection('pathankot')">Pathankot</a>
-<a onclick="scrollToSection('hoshiarpur')">Hoshiarpur</a>
-<a onclick="scrollToSection('moga')">Moga</a>
-<a onclick="scrollToSection('kapurthala')">Kapurthala</a>
-</div>
-</div>
-<a class="nav-item" onclick="scrollToSection('regions')">Regions</a>
-<a class="nav-item" onclick="scrollToSection('national')">National</a>
-<a class="nav-item" onclick="scrollToSection('politics')">Politics</a>
-<a class="nav-item" onclick="scrollToSection('business')">Business</a>
-<a class="nav-item" onclick="scrollToSection('sports')">Sports</a>
-<a class="nav-item" onclick="scrollToSection('entertainment')">Entertainment</a>
-
-</nav>
-</div>
+    <div class="header-inner">
+        <div class="header-top">
+            <a href="index.html" class="logo-block" style="text-decoration: none;">
+                <img alt="InPunjab News Logo" src="OFFICIAL LOGO.png" style="height: 48px;"/>
+            </a>
+            
+            <div class="header-ad-banner">
+                <div class="ad-label">Sponsored</div>
+                <div class="ad-content">✦ Punjab Kesari Expo 2026 ✦</div>
+            </div>
+            
+            <div class="header-search">
+                <div class="nav-search" style="position: relative;">
+                    <input class="search-box" id="searchBox" placeholder="Search news, topics…" type="text"/>
+                    <button class="search-btn" onclick="doSearch()">🔍</button>
+                </div>
+                <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()" title="Toggle Light/Dark Mode">☀️</button>
+                <button class="mobile-menu-btn" id="mobileMenuBtn" onclick="toggleMobileMenu()">☰</button>
+            </div>
+        </div>
+        
+        <nav class="main-nav">
+            <a class="nav-item breaking" onclick="scrollToSection('breaking')">🔴 Breaking</a>
+            <a class="nav-item active" onclick="scrollToSection('hero')">Home</a>
+            <div class="dropdown">
+                <a class="nav-item">Punjab ▾</a>
+                <div class="dropdown-content">
+                    <a href="#">Chandigarh</a>
+                    <a href="#">Amritsar</a>
+                    <a href="#">Ludhiana</a>
+                    <a href="#">Jalandhar</a>
+                </div>
+            </div>
+            <a class="nav-item">National</a>
+            <a class="nav-item">World</a>
+            <a class="nav-item">Sports</a>
+            <a class="nav-item">Entertainment</a>
+            <a class="nav-item">Business</a>
+            <a class="nav-item">Education</a>
+            <a class="nav-item">NRI</a>
+        </nav>
+    </div>
 </header>
 <!-- HERO SECTION -->
 <section class="hero-section" id="hero">
