@@ -434,3 +434,26 @@ fetchWeather();
 // Refresh weather every 30 mins
 setInterval(fetchWeather, 30 * 60 * 1000);
 // ------------------------------------
+\n
+// --- Birthday Modal Logic ---
+function closeBdayModal() {
+    const overlay = document.getElementById('bday-modal-overlay');
+    if (overlay) {
+        overlay.classList.remove('show');
+        // Optional: save to session storage so it doesn't show again on reload
+        sessionStorage.setItem('bdayModalSeen', 'true');
+    }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    // Show modal if not seen in this session
+    if (!sessionStorage.getItem('bdayModalSeen')) {
+        setTimeout(() => {
+            const overlay = document.getElementById('bday-modal-overlay');
+            if (overlay) {
+                overlay.classList.add('show');
+            }
+        }, 800); // slight delay for dramatic effect
+    }
+});
+// ----------------------------
