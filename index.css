@@ -1,35 +1,35 @@
 :root {
-    /* DARK MODE (Default) */
-    --saffron: #C026D3;
-    --saffron-light: #FFD700;
-    --deep-navy: #1A0533;
-    --card-bg: #0D001A;
-    --card-border: #7B2FBE;
-    --text-primary: #FFFFFF;
-    --text-secondary: #D4C5E3;
-    --text-muted: #8F7CA8;
-    --green-accent: #00C87A;
-    --red-accent: #FF3A5E;
-    --gold: #FFD700;
-    --ad-bg: #2E1A47;
-    --tag-bg: rgba(192, 38, 211, 0.15);
+    /* DARK MODE (Default) - Apple Style */
+    --saffron: #0A84FF; /* Main Accent - Apple Blue */
+    --saffron-light: #5E5CE6; /* Secondary Accent - Purple */
+    --deep-navy: #000000; /* Pure black background */
+    --card-bg: rgba(28, 28, 30, 0.7); /* Glass dark grey */
+    --card-border: rgba(255, 255, 255, 0.12);
+    --text-primary: #F5F5F7;
+    --text-secondary: #EBEBF5;
+    --text-muted: #8E8E93;
+    --green-accent: #30D158; /* Apple Green */
+    --red-accent: #FF453A; /* Apple Red */
+    --gold: #FFD60A; /* Apple Yellow */
+    --ad-bg: rgba(28, 28, 30, 0.9);
+    --tag-bg: rgba(10, 132, 255, 0.15);
 }
 
 [data-theme="light"] {
-    /* LIGHT MODE */
-    --saffron: #7B2FBE;
-    --saffron-light: #C026D3;
-    --deep-navy: #F8F5FB;
-    --card-bg: #FFFFFF;
-    --card-border: #E6D8F5;
-    --text-primary: #1A0533;
-    --text-secondary: #5C4B75;
-    --text-muted: #8E80A3;
-    --green-accent: #00A663;
-    --red-accent: #E52D4E;
-    --gold: #D4AF37;
-    --ad-bg: #EAE2F2;
-    --tag-bg: rgba(123, 47, 190, 0.1);
+    /* LIGHT MODE - Apple Style */
+    --saffron: #007AFF; /* Main Accent - Apple Blue */
+    --saffron-light: #5856D6; /* Secondary Accent - Purple */
+    --deep-navy: #F5F5F7; /* Apple light grey background */
+    --card-bg: rgba(255, 255, 255, 0.75); /* Glass white */
+    --card-border: rgba(0, 0, 0, 0.08);
+    --text-primary: #1D1D1F;
+    --text-secondary: #3A3A3C;
+    --text-muted: #86868B;
+    --green-accent: #34C759;
+    --red-accent: #FF3B30;
+    --gold: #FFCC00;
+    --ad-bg: #FFFFFF;
+    --tag-bg: rgba(0, 122, 255, 0.1);
 }
 
 /* Theme transition */
@@ -148,8 +148,9 @@ body, .card, .side-card, .list-card, .news-card, .top-bar, .main-header, .main-n
 
         /* ── TOP BAR ── */
         .top-bar {
-            background: rgba(10, 15, 30, 0.95);
-            backdrop-filter: blur(12px);
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
             border-bottom: 1px solid var(--card-border);
             padding: 6px 0;
             font-size: 11px;
@@ -232,9 +233,11 @@ body, .card, .side-card, .list-card, .news-card, .top-bar, .main-header, .main-n
 
         /* ── HEADER ── */
         .main-header {
-            background: var(--deep-navy);
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
             padding: 16px 0 0;
-            border-bottom: 3px solid var(--saffron);
+            border-bottom: 1px solid var(--card-border);
             position: sticky;
             top: 29px;
             z-index: 998;
@@ -506,26 +509,29 @@ body, .card, .side-card, .list-card, .news-card, .top-bar, .main-header, .main-n
 
         .side-card {
             background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
             border: 1px solid var(--card-border);
-            border-radius: 10px;
+            border-radius: 16px;
             overflow: hidden;
             cursor: pointer;
             display: flex;
             flex-direction: column;
             transition: border-color 0.2s, transform 0.2s;
             flex: 1;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.04);
         }
 
         .side-card:hover {
             border-color: var(--saffron);
             transform: translateX(-3px);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
         }
 
         .side-card img {
             width: 100%;
             height: 120px;
             object-fit: cover;
-            filter: brightness(0.8);
             transition: filter 0.3s;
         }
 
@@ -901,20 +907,23 @@ body, .card, .side-card, .list-card, .news-card, .top-bar, .main-header, .main-n
 
         .news-card {
             background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
             border: 1px solid var(--card-border);
-            border-radius: 10px;
+            border-radius: 16px;
             overflow: hidden;
             cursor: pointer;
             transition: border-color 0.25s, transform 0.25s, box-shadow 0.25s;
             display: flex;
             flex-direction: column;
             position: relative;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.04);
         }
 
         .news-card:hover {
             border-color: var(--saffron);
             transform: translateY(-4px);
-            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(255, 107, 0, 0.15);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1), 0 0 0 1px var(--saffron);
         }
 
         .news-card.featured {
@@ -1014,18 +1023,25 @@ body, .card, .side-card, .list-card, .news-card, .top-bar, .main-header, .main-n
         .list-card {
             display: flex;
             gap: 12px;
-            padding: 12px 0;
-            border-bottom: 1px solid var(--card-border);
+            padding: 12px;
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            margin-bottom: 8px;
             cursor: pointer;
-            transition: padding-left 0.2s;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.02);
         }
 
         .list-card:hover {
-            padding-left: 8px;
+            transform: translateX(4px);
+            box-shadow: 0 4px 16px rgba(0,0,0,0.06);
         }
 
         .list-card:last-child {
-            border-bottom: none;
+            margin-bottom: 0;
         }
 
         .list-card-img {
