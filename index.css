@@ -2369,8 +2369,9 @@ body {
 
 /* --- FIX FOR CUT-OFF IMAGES AND TEXT --- */
 .news-card, .list-card, .side-card {
-    height: auto !important;
-    min-height: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
 }
 .news-card-body, .list-card-body, .side-card-body {
     display: flex;
