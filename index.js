@@ -383,14 +383,14 @@ function closeShorts() {
                 const usdEl = document.getElementById('rate-usd');
                 const gbpEl = document.getElementById('rate-gbp');
                 
-                if (usdEl) usdEl.innerHTML = ?? USD: ?;
-                if (gbpEl) gbpEl.innerHTML = ?? GBP: ?;
+                if (usdEl) usdEl.innerHTML = `💵 USD: ₹${usdRate}`;
+                if (gbpEl) gbpEl.innerHTML = `💷 GBP: ₹${gbpRate}`;
             } catch (error) {
                 console.error('Failed to fetch currency rates:', error);
                 const usdEl = document.getElementById('rate-usd');
                 const gbpEl = document.getElementById('rate-gbp');
-                if (usdEl) usdEl.innerHTML = '?? USD: ?83.45';
-                if (gbpEl) gbpEl.innerHTML = '?? GBP: ?105.60';
+                if (usdEl) usdEl.innerHTML = '💵 USD: ₹83.45';
+                if (gbpEl) gbpEl.innerHTML = '💷 GBP: ₹105.60';
             }
         }
 
