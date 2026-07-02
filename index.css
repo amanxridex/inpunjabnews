@@ -2594,7 +2594,7 @@ body {
         }
         [data-theme="dark"] .ad-content {
             color: #fef3c7;
-        }\n
+        }
 /* Birthday Modal */
 .bday-modal-overlay {
     position: fixed;
@@ -2671,7 +2671,7 @@ body {
     -webkit-text-fill-color: transparent;
     padding: 10px 0;
 }
-\n
+
 /* --- MOBILE HEADER FIXES --- */
 @media (max-width: 768px) {
     /* Top Bar scrolling for long items */
