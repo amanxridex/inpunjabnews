@@ -68,6 +68,16 @@ document.addEventListener('DOMContentLoaded', async function() {
                 ${contentHtml}
             </div>
             
+            <!-- Google AdSense Fluid Ad -->
+            <div class="article-ad-fluid" style="margin-top: 40px; margin-bottom: 20px;">
+                <ins class="adsbygoogle"
+                     style="display:block"
+                     data-ad-format="fluid"
+                     data-ad-layout-key="-fc+5g+70-cl-1m"
+                     data-ad-client="ca-pub-9624803444729340"
+                     data-ad-slot="9534626117"></ins>
+            </div>
+            
             <div class="comments-section" style="margin-top: 64px; padding-top: 40px; border-top: 1px solid var(--card-border);">
                 <h3 style="font-family: 'Inter', sans-serif; font-size: 26px; font-weight: 700; margin-bottom: 24px; color: var(--text-primary);">Comments</h3>
                 <div id="comments-list" style="margin-bottom: 40px; display: flex; flex-direction: column; gap: 16px;">
@@ -88,6 +98,13 @@ document.addEventListener('DOMContentLoaded', async function() {
         `;
 
         container.innerHTML = html;
+
+        // Initialize AdSense for the newly injected ins tag
+        try {
+            (window.adsbygoogle = window.adsbygoogle || []).push({});
+        } catch (e) {
+            console.error("AdSense error:", e);
+        }
 
         // Dynamically increment view count in database using the RPC function
         try {
