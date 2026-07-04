@@ -435,21 +435,4 @@ fetchWeather();
 setInterval(fetchWeather, 30 * 60 * 1000);
 // ------------------------------------
 
-// --- Birthday Modal Logic ---
-function closeBdayModal() {
-    const overlay = document.getElementById('bday-modal-overlay');
-    if (overlay) {
-        overlay.classList.remove('show');
-        // Optional: save to session storage so it doesn't show again on reload
-        sessionStorage.setItem('bdayModalSeen', 'true');
-    }
-}
 
-// Modal initialized immediately
-setTimeout(() => {
-    const overlay = document.getElementById('bday-modal-overlay');
-    if (overlay) {
-        overlay.classList.add('show');
-    }
-}, 800); // slight delay for dramatic effect
-// ----------------------------
