@@ -230,13 +230,20 @@ function renderHero(heroArticles) {
     const catName = mainArt.categories ? mainArt.categories.name : 'News';
     const tag = mainArt.tag || catName;
 
+    const renderMedia = (url, alt) => {
+        if(url && url.toLowerCase().endsWith('.mp4')) {
+            return `<video src="${url}" controls preload="metadata" onclick="event.stopPropagation()" style="width: 100%; height: 100%; object-fit: cover;"></video>`;
+        }
+        return `<img src="${url}" alt="${alt}">`;
+    };
+
     let html = `
         <div class="hero-main" style="cursor: pointer;" onclick="window.location.href='article.html?id=${mainArt.id}'">
-            <img src="${mainArt.image_url}" alt="${mainArt.title}">
-            <div class="hero-overlay">
+            ${renderMedia(mainArt.image_url, mainArt.title)}
+            <div class="hero-overlay" style="pointer-events: none;">
                 <span class="hero-category">Punjab • ${catName}</span>
                 <div class="hero-title">${mainArt.title}</div>
-                <div class="hero-meta">
+                <div class="hero-meta" style="pointer-events: auto;">
                     <span class="author">By ${mainArt.author || 'InPunjab Desk'}</span>
                     <span>Just now</span>
                     <span>👁 ${mainArt.view_count || 100} views</span>
@@ -252,7 +259,7 @@ function renderHero(heroArticles) {
         const artCat = art.categories ? art.categories.name : 'News';
         html += `
             <div class="side-card" style="cursor: pointer;" onclick="window.location.href='article.html?id=${art.id}'">
-                <img src="${art.image_url}" alt="${art.title}">
+                ${renderMedia(art.image_url, art.title)}
                 <div class="side-card-body">
                     <div class="side-cat">${artCat}</div>
                     <div class="side-title">${art.title}</div>
@@ -289,7 +296,21 @@ function renderGrids(articles) {
         
         // Populate Image
         const img = card.querySelector('img');
-        if (img) img.src = art.image_url;
+        if (img) {
+            if (art.image_url && art.image_url.toLowerCase().endsWith('.mp4')) {
+                const video = document.createElement('video');
+                video.src = art.image_url;
+                video.controls = true;
+                video.preload = "metadata";
+                video.style.width = "100%";
+                video.style.height = "100%";
+                video.style.objectFit = "cover";
+                video.onclick = (e) => e.stopPropagation();
+                img.replaceWith(video);
+            } else {
+                img.src = art.image_url;
+            }
+        }
         
         // Populate Title
         const titleEl = card.querySelector('.news-card-title, .list-card-title');
@@ -328,11 +349,18 @@ function renderShorts(articles) {
         const views = art.view_count || Math.floor(Math.random() * 500) + 10;
         const comments = art.comment_count || Math.floor(Math.random() * 200) + 5;
 
+        let mediaHtml = '';
+        if (art.image_url && art.image_url.toLowerCase().endsWith('.mp4')) {
+            mediaHtml = `<video class="short-bg" src="${art.image_url}" controls preload="metadata" style="object-fit: cover; width: 100%; height: 100%; position: absolute; top: 0; left: 0; z-index: 0;"></video>`;
+        } else {
+            mediaHtml = `<div class="short-bg" style="background-image: url('${art.image_url}');"></div>`;
+        }
+
         htmlContent += `
             <div class="short-slide">
-                <div class="short-bg" style="background-image: url('${art.image_url}');"></div>
-                <div class="short-content">
-                    <div class="short-tag">${art.tag || artCat}</div>
+                ${mediaHtml}
+                <div class="short-content" style="pointer-events: none;">
+                    <div class="short-tag" style="pointer-events: auto;">${art.tag || artCat}</div>
                     <h2 class="short-headline">${art.title}</h2>
                     <p class="short-brief">${art.brief || art.title}</p>
                     <div class="short-actions">

@@ -59,7 +59,11 @@ document.addEventListener('DOMContentLoaded', async function() {
                 </a>
             </div>
 
-            <img class="article-img" src="${article.image_url}" alt="${article.title}">
+            ${
+                (article.image_url && article.image_url.toLowerCase().endsWith('.mp4'))
+                ? `<video class="article-img" src="${article.image_url}" controls preload="metadata" style="width: 100%; border-radius: 12px; margin-bottom: 20px;"></video>`
+                : `<img class="article-img" src="${article.image_url}" alt="${article.title}">`
+            }
             <div class="article-body" style="text-align: justify;">
                 ${contentHtml}
             </div>
