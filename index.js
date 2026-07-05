@@ -302,6 +302,7 @@ function renderGrids(articles) {
                 video.src = art.image_url;
                 video.controls = true;
                 video.preload = "metadata";
+                video.className = img.className; // Maintain CSS class
                 video.style.width = "100%";
                 video.style.height = "100%";
                 video.style.objectFit = "cover";
