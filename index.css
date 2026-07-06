@@ -2612,19 +2612,20 @@ body {
     }
     .top-bar-left {
         display: flex;
-        overflow-x: auto;
-        white-space: nowrap;
+        flex-wrap: wrap;
         width: 100%;
+        justify-content: center;
+        gap: 10px;
         padding-bottom: 5px;
-        -webkit-overflow-scrolling: touch;
-        justify-content: flex-start;
-        gap: 15px;
     }
     .top-bar-left::-webkit-scrollbar {
         display: none;
     }
     .top-bar-left span {
         flex-shrink: 0;
+    }
+    .currency-badge {
+        display: none !important;
     }
     .top-bar-right {
         justify-content: center;
