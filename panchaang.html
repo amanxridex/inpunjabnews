@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Daily Panchaang – InPunjab News</title>
+    <link href="https://fonts.googleapis.com" rel="preconnect"/>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Inter:wght@300;400;500;600;700&family=Noto+Sans+Gurmukhi:wght@400;700&display=swap" rel="stylesheet"/>
+    <link href="index.css?v=1.5" rel="stylesheet"/>
+    <script>
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme !== 'dark') {
+            document.documentElement.setAttribute('data-theme', 'light');
+        }
+    </script>
+    <style>
+        .panchaang-container {
+            max-width: 800px;
+            margin: 40px auto;
+            background: var(--surface-color, #ffffff);
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            text-align: center;
+        }
+        .date-picker-container {
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+        .date-picker-container label {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-color, #333);
+        }
+        .date-picker-container input {
+            padding: 12px 16px;
+            font-size: 16px;
+            border: 1px solid var(--border-color, #ddd);
+            border-radius: 8px;
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-color, #f9f9f9);
+            color: var(--text-color, #333);
+            outline: none;
+            transition: border-color 0.3s;
+        }
+        .date-picker-container input:focus {
+            border-color: var(--primary-color, #d32f2f);
+        }
+        .panchaang-content {
+            font-family: 'Noto Sans Gurmukhi', 'Inter', sans-serif;
+            font-size: 18px;
+            line-height: 1.8;
+            white-space: pre-wrap;
+            text-align: left;
+            padding: 30px;
+            background: var(--bg-color, #f8f9fa);
+            border-radius: 8px;
+            border-left: 4px solid var(--primary-color, #d32f2f);
+            color: var(--text-color, #333);
+        }
+        .panchaang-header {
+            font-family: 'Playfair Display', serif;
+            font-size: 36px;
+            color: var(--primary-color, #d32f2f);
+            margin-bottom: 25px;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Top Bar -->
+<div class="top-bar">
+    <div class="top-bar-inner">
+        <div class="top-bar-left">
+            <span><span class="live-dot"></span> LIVE</span>
+            <span id="datetime-display">📅 Loading date...</span>
+        </div>
+        <div class="top-bar-right">
+            <a href="index.html">Home</a>
+        </div>
+    </div>
+</div>
+
+<!-- Main Header -->
+<header class="main-header">
+    <div class="header-inner">
+        <div class="header-top">
+            <a href="index.html" class="logo-block" style="text-decoration: none;">
+                <img alt="InPunjab News Logo" src="OFFICIAL LOGO.png"/>
+            </a>
+            <div class="header-search">
+                <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()" title="Toggle Light/Dark Mode">☀️</button>
+            </div>
+        </div>
+        
+        <nav class="main-nav">
+            <a href="index.html" class="nav-item">Home</a>
+            <a href="panchaang.html" class="nav-item active">Daily Panchaang</a>
+        </nav>
+    </div>
+</header>
+
+<div class="container">
+    <div class="panchaang-container fade-up">
+        <h1 class="panchaang-header">📅 Daily Panchaang</h1>
+        
+        <div class="date-picker-container">
+            <label for="panchaang-date">Select Date: </label>
+            <input type="date" id="panchaang-date" />
+        </div>
+
+        <div id="panchaang-display" class="panchaang-content">
+            <!-- Content will be injected here -->
+        </div>
+    </div>
+</div>
+
+<script>
+    function toggleTheme() {
+        const html = document.documentElement;
+        const btn = document.getElementById('themeToggle');
+        if (html.getAttribute('data-theme') === 'dark') {
+            html.setAttribute('data-theme', 'light');
+            localStorage.setItem('theme', 'light');
+            if(btn) btn.innerHTML = '☀️';
+        } else {
+            html.setAttribute('data-theme', 'dark');
+            localStorage.setItem('theme', 'dark');
+            if(btn) btn.innerHTML = '🌙';
+        }
+    }
+    
+    document.addEventListener('DOMContentLoaded', () => {
+        const btn = document.getElementById('themeToggle');
+        if(btn && document.documentElement.getAttribute('data-theme') === 'dark') {
+            btn.innerHTML = '🌙';
+        }
+    });
+
+    const panchaangData = {
+        '2026-07-08': `🙏🙏जय श्री गंगा जी की 🙏🙏
+🙏🙏आज का पंचांग 🙏🙏 
+दिनांक - 08 जुलाई 2026
+दिन - बुधवार 
+विक्रम संवत् - 2083
+अयन - उत्तरायण 
+ऋतु - ग्रीष्म 
+मास - आषाढ़ 
+पक्ष - कृष्ण पक्ष 
+तिथि - अष्टमी 12.17 तक तदुपरांत नवमी 
+नक्षत्र - रेवती 16:00 तक तदुपरांत अश्विनी 
+योग - अतिगण्ड 12:31 तक तदुपरांत सुकर्म 
+दिशाशूल - उत्तर, उत्तर पूर्व 
+सूर्योदय - 05:19
+सूर्यास्त - 19:22
+राहुकाल - 12:00 से 13:30
+आज का विचार - सबसे खूबसूरत आपकी वाणी है चाहे तो दिल जीत ले चाहे तो दिल चीर दे इन्सान वाणी से ही अपनों को पराया और पराए को अपना बना लेता है l
+              स्व: पं धनीराम जी झा 
+           पं मनोज झा उपाध्यक्ष श्रीगंगा सभा हरिद्वार 
+                  Mob: 9837191534
+                               8126356107
+                               7417623106`
+    };
+
+    const dateInput = document.getElementById('panchaang-date');
+    const displayArea = document.getElementById('panchaang-display');
+
+    // Get current date in IST
+    const getISTDateString = () => {
+        const now = new Date();
+        const istOffset = 5.5 * 60 * 60 * 1000;
+        const istTime = new Date(now.getTime() + now.getTimezoneOffset() * 60000 + istOffset);
+        
+        const year = istTime.getFullYear();
+        const month = String(istTime.getMonth() + 1).padStart(2, '0');
+        const day = String(istTime.getDate()).padStart(2, '0');
+        
+        return `${year}-${month}-${day}`;
+    };
+
+    const todayStr = getISTDateString();
+    dateInput.max = todayStr;
+    dateInput.value = todayStr;
+
+    const renderPanchaang = (dateStr) => {
+        if (panchaangData[dateStr]) {
+            displayArea.textContent = panchaangData[dateStr];
+        } else {
+            displayArea.innerHTML = `<div style="text-align: center; color: var(--text-color, #888);">
+                <p>No panchaang data available for <strong>${dateStr}</strong>.</p>
+                <p>Please check back later or select another date.</p>
+            </div>`;
+        }
+    };
+
+    renderPanchaang(dateInput.value);
+
+    dateInput.addEventListener('change', (e) => {
+        const selectedDate = e.target.value;
+        if (selectedDate > todayStr) {
+            alert("Future dates are not allowed. Reverting to today.");
+            e.target.value = todayStr;
+            renderPanchaang(todayStr);
+        } else {
+            renderPanchaang(selectedDate);
+        }
+    });
+
+    function updateClock() {
+        const now = new Date();
+        const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+        const dateString = now.toLocaleDateString('en-US', options);
+        const clockDisplay = document.getElementById('datetime-display');
+        if(clockDisplay) clockDisplay.innerText = '📅 ' + dateString;
+    }
+    updateClock();
+    setInterval(updateClock, 60000);
+</script>
+
+</body>
+</html>
