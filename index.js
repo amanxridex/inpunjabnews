@@ -115,10 +115,7 @@
         }, { threshold: 0.1 });
         fadeEls.forEach(el => observer.observe(el));
 
-        // ── WELCOME TOASTS ──
-        showToast('👋 Welcome!', 'You\'re reading InPunjab News — ਪੰਜਾਬ ਦੀ ਆਵਾਜ਼', 1000);
-        showToast('🔴 Breaking', 'PBKS vs CSK Live — Punjab Kings need 46 off 24 balls!', 3500);
-        showToast('⚡ Alert', 'Heavy rain warning for Ludhiana, Jalandhar tonight', 6000);
+
 
 // ── MOBILE MENU ──
 function toggleMobileMenu() {
