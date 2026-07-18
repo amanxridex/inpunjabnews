@@ -197,27 +197,20 @@ document.addEventListener('DOMContentLoaded', async function() {
             renderHero(articles.slice(0, 3));
             renderGrids(articles.slice(3));
             renderShorts(articles);
+            renderTicker(articles.slice(0, 5));
         }
 
-        // Fetch Tickers
-        const { data: tickers, error: tickerError } = await supabaseClient
-            .from('tickers')
-            .select('text');
-
-        if (!tickerError && tickers && tickers.length > 0) {
-            renderTicker(tickers);
-        }
     } catch (err) {
         console.error('Error fetching data from Supabase:', err.message);
     }
 });
 
-function renderTicker(tickers) {
+function renderTicker(articles) {
     const track = document.getElementById('tickerTrack');
     if (!track) return;
     let spans = '';
-    tickers.forEach(t => {
-        spans += `<span>${t.text}</span>`;
+    articles.forEach(a => {
+        spans += `<span><a href="article.html?id=${a.id}" style="color: inherit; text-decoration: none;">${a.title}</a></span>`;
     });
     track.innerHTML = spans + spans; // duplicate for seamless scrolling marquee
 }
