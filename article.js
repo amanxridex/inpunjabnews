@@ -292,3 +292,23 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 });
+
+// --- Ad Modal Logic ---
+function closeAdModal() {
+    const overlay = document.getElementById('ad-modal-overlay');
+    if (overlay) {
+        overlay.classList.remove('show');
+        sessionStorage.setItem('adModalSeen', 'true');
+    }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    if (!sessionStorage.getItem('adModalSeen')) {
+        setTimeout(() => {
+            const overlay = document.getElementById('ad-modal-overlay');
+            if (overlay) {
+                overlay.classList.add('show');
+            }
+        }, 1500);
+    }
+});
