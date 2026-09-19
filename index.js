@@ -480,7 +480,7 @@ function renderTicker(articles) {
 
     let spans = '';
     articles.forEach(a => {
-        spans += `<span><a href="article.html?id=${a.id}">${escapeHtml(a.title)}</a></span>`;
+        spans += `<span><span class="ticker-bolt">⚡</span><a href="article.html?id=${a.id}">${escapeHtml(a.title)}</a></span>`;
     });
 
     track.innerHTML = spans + spans; // Duplicate for seamless infinite marquee loop

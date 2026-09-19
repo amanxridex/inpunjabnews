@@ -188,7 +188,7 @@ function formatFullDate(dateString) {
     });
 }
 
-// Helper: Format Article Body into Clean Paragraphs & Images
+// Helper: Format Article Body into Clean Paragraphs, Subheads, & Datelines
 function formatArticleBody(content) {
     if (!content) return '<p>No content available for this report.</p>';
 
@@ -201,13 +201,29 @@ function formatArticleBody(content) {
     const paragraphs = content.split(/\n\s*\n/).filter(p => p.trim());
     if (paragraphs.length > 0) {
         return paragraphs.map(p => {
+            let text = p.trim();
+
+            // Detect subheadings (starts with ➖ or • or all caps/short bold)
+            if (text.startsWith('➖') || text.startsWith('*ਆਮ') || text.startsWith('*ਕਾਂਗਰਸ') || (text.startsWith('*') && text.endsWith('*') && text.length < 150)) {
+                const cleanSub = text.replace(/^[➖•\*\s]+|[*\s]+$/g, '');
+                return `<h3 class="article-subhead">${escapeHtml(cleanSub)}</h3>`;
+            }
+
+            // Detect dateline at start of paragraph (e.g. "ਜਲੰਧਰ, 15 ਸਤੰਬਰ।" or "जालंधर, 12 सितंबर।")
+            let formattedText = escapeHtml(text);
+            formattedText = formattedText.replace(/^(ਜਲੰਧਰ|ਅੰਮ੍ਰਿਤਸਰ|ਲੁਧਿਆਣਾ|ਚੰਡੀਗੜ੍ਹ|ਜਾਲੰਧਰ|जालंधर|अमृतसर|लुधियाना|चंडीगढ़)[^।.]+[।.]/i, '<strong class="dateline">$&</strong>');
+
+            // Format markdown bold *text* into strong
+            formattedText = formattedText.replace(/\*([^*]+)\*/g, '<strong>$1</strong>');
+
             // Preserve single line breaks inside paragraph
-            const formatted = p.replace(/\n/g, '<br>');
-            return `<p>${formatted}</p>`;
+            formattedText = formattedText.replace(/\n/g, '<br>');
+
+            return `<p>${formattedText}</p>`;
         }).join('');
     }
 
-    return `<p>${content}</p>`;
+    return `<p>${escapeHtml(content)}</p>`;
 }
 
 // ── 5. Render Article Content ──
@@ -218,7 +234,7 @@ function renderArticleContent(article) {
     const readTime = estimateReadTime(article.content);
     const dateFormatted = formatFullDate(article.created_at);
     const authorName = article.author || 'vicky suri';
-    const tag = article.tag || 'Punjab';
+    const tag = article.tag || 'Punjab Special';
     const views = (article.view_count || 120) + 1;
 
     // Lead Media Tag (Video or Image)
@@ -235,7 +251,25 @@ function renderArticleContent(article) {
             mediaHtml = `
                 <div class="article-lead-media-wrap">
                     <img src="${article.image_url}" alt="${escapeHtml(article.title)}" onerror="this.src='INPUNJABNEWSLOGO.png'">
-                    <div class="media-caption-bar">📷 Ground Coverage • InPunjab News Bureau</div>
+                    <div class="media-caption-bar">📷 InPunjab Newsroom • Ground Reality & Verified Report</div>
+                </div>
+            `;
+        }
+    }
+
+    // Aaj Tak Style Key Highlights Extraction
+    let highlightsHtml = '';
+    if (article.brief) {
+        const points = article.brief.split(/[•\n\r]+/).map(p => p.trim()).filter(p => p.length > 5);
+        if (points.length > 0) {
+            highlightsHtml = `
+                <div class="article-highlights-box">
+                    <div class="highlights-header">
+                        <span>⚡ ਮੁੱਖ ਨੁਕਤੇ • KEY HIGHLIGHTS</span>
+                    </div>
+                    <ul class="highlights-list">
+                        ${points.map(pt => `<li>${escapeHtml(pt)}</li>`).join('')}
+                    </ul>
                 </div>
             `;
         }
@@ -248,14 +282,18 @@ function renderArticleContent(article) {
     mainContainer.innerHTML = `
         <!-- Article Header Package -->
         <div class="article-header-package">
-            <span class="article-tag-badge">${escapeHtml(tag)}</span>
+            <div style="display: flex; align-items: center; gap: 8px;">
+                <span class="article-tag-badge">${escapeHtml(tag)}</span>
+                <span class="article-exclusive-badge">🔴 EXCLUSIVE</span>
+            </div>
             <h1 class="article-main-title">${escapeHtml(article.title)}</h1>
 
-            ${article.brief ? `<div class="article-lead-brief">${escapeHtml(article.brief)}</div>` : ''}
+            <!-- Aaj Tak Key Highlights Box -->
+            ${highlightsHtml}
 
             <!-- Metadata Row -->
             <div class="article-byline-row">
-                <span class="byline-author">✍️ By ${escapeHtml(authorName)}</span>
+                <span class="byline-author">✍️ By ${escapeHtml(authorName)} <span style="color:#10B981;">✓</span></span>
                 <span>📅 ${dateFormatted}</span>
                 <span>⏱️ ${readTime} min read</span>
                 <span>👁️ ${views} views</span>
