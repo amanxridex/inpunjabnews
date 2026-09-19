@@ -9,12 +9,99 @@ let pendingDeleteId = null;
 
 // DOM Elements
 document.addEventListener('DOMContentLoaded', () => {
+    checkAuth();
+});
+
+// ── Authentication Gate (Username: vicky / Password: 1234567) ──
+function checkAuth() {
+    const isAuth = localStorage.getItem('inpunjab_admin_auth') === 'true';
+    const loginScreen = document.getElementById('loginScreen');
+    const appContainer = document.getElementById('adminAppContainer');
+
+    if (isAuth) {
+        if (loginScreen) loginScreen.style.display = 'none';
+        if (appContainer) appContainer.style.display = 'flex';
+        initAdminApp();
+    } else {
+        if (loginScreen) loginScreen.style.display = 'flex';
+        if (appContainer) appContainer.style.display = 'none';
+    }
+}
+
+function handleLoginSubmit(event) {
+    if (event && event.preventDefault) event.preventDefault();
+
+    const usernameInput = document.getElementById('loginUsername');
+    const passwordInput = document.getElementById('loginPassword');
+    const errorMsg = document.getElementById('loginErrorMsg');
+
+    const username = usernameInput ? usernameInput.value.trim() : '';
+    const password = passwordInput ? passwordInput.value : '';
+
+    // Required credentials: username "vicky", password "1234567"
+    if (username === 'vicky' && password === '1234567') {
+        localStorage.setItem('inpunjab_admin_auth', 'true');
+        if (errorMsg) errorMsg.style.display = 'none';
+
+        const loginScreen = document.getElementById('loginScreen');
+        const appContainer = document.getElementById('adminAppContainer');
+
+        if (loginScreen) loginScreen.style.display = 'none';
+        if (appContainer) appContainer.style.display = 'flex';
+
+        showToast('👋 Welcome back, Vicky Suri!');
+        initAdminApp();
+    } else {
+        if (errorMsg) {
+            errorMsg.style.display = 'flex';
+            errorMsg.textContent = '⚠️ Incorrect username or password. Please try again.';
+        }
+        if (passwordInput) {
+            passwordInput.value = '';
+            passwordInput.focus();
+        }
+        showToast('❌ Invalid credentials');
+    }
+}
+
+function handleLogout() {
+    if (confirm('Are you sure you want to log out of InPunjab Admin?')) {
+        localStorage.removeItem('inpunjab_admin_auth');
+        const loginScreen = document.getElementById('loginScreen');
+        const appContainer = document.getElementById('adminAppContainer');
+        const passwordInput = document.getElementById('loginPassword');
+
+        if (passwordInput) passwordInput.value = '';
+        if (appContainer) appContainer.style.display = 'none';
+        if (loginScreen) loginScreen.style.display = 'flex';
+        showToast('Logged out successfully');
+    }
+}
+
+function togglePasswordVisibility() {
+    const passwordInput = document.getElementById('loginPassword');
+    const toggleBtn = document.querySelector('.pwd-toggle-btn');
+    if (!passwordInput) return;
+
+    if (passwordInput.type === 'password') {
+        passwordInput.type = 'text';
+        if (toggleBtn) toggleBtn.textContent = '🙈';
+    } else {
+        passwordInput.type = 'password';
+        if (toggleBtn) toggleBtn.textContent = '👁️';
+    }
+}
+
+let isAppInitialized = false;
+function initAdminApp() {
+    if (isAppInitialized) return;
+    isAppInitialized = true;
     initTabs();
     initImageUploader();
     initTags();
     initForm();
     loadArticles();
-});
+}
 
 // ── Tab Navigation ──
 function initTabs() {

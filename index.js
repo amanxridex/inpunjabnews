@@ -80,6 +80,9 @@ async function subscribeNewsletter() {
     }
 }
 
+// Global state
+let allLoadedArticles = [];
+
 // ── 4. Dynamic Supabase Data Fetching ──
 async function loadEditorialArticles() {
     if (typeof supabaseClient === 'undefined') {
@@ -97,9 +100,12 @@ async function loadEditorialArticles() {
         if (error) throw error;
 
         if (articles && articles.length > 0) {
+            allLoadedArticles = articles;
             renderLeadHero(articles.slice(0, 8));
+            renderVisualStories(articles);
             renderPunjabGrid(articles.slice(8, 12).length > 0 ? articles.slice(8, 12) : articles.slice(0, 4));
             renderStreamList(articles.slice(12).length > 0 ? articles.slice(12) : articles.slice(4));
+            renderTrendingList(articles);
             renderTicker(articles.slice(0, 8));
         }
 
@@ -246,13 +252,56 @@ function renderPunjabGrid(articles) {
     container.innerHTML = html;
 }
 
+// ── 6B. Render Visual Stories Reel (Aaj Tak / NDTV Shorts Style) ──
+function renderVisualStories(articles) {
+    const container = document.getElementById('dynamicVisualStories');
+    if (!container) return;
+
+    let html = '';
+    // Show top 6 stories as visual cards
+    articles.slice(0, 6).forEach(art => {
+        html += `
+            <div class="story-card-reel" onclick="window.location.href='article.html?id=${art.id}'">
+                <img class="story-bg-media" src="${resolveMediaUrl(art.image_url)}" alt="${escapeHtml(art.title)}" onerror="this.src='INPUNJABNEWSLOGO.png'">
+                <div class="story-scrim">
+                    <div class="story-top-row">
+                        <span class="story-tag">${escapeHtml(art.tag || 'Punjab')}</span>
+                        <div class="story-play-icon">▶</div>
+                    </div>
+                    <div class="story-bottom-content">
+                        <h4 class="story-headline">${escapeHtml(art.title)}</h4>
+                        <div class="story-meta">
+                            <span>⏱️ 1m read</span>
+                            <span>• ${timeAgo(art.created_at)}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+    });
+
+    container.innerHTML = html;
+}
+
 // ── 7. Render Stream Feed (Left Column in 2-Col Layout) ──
 function renderStreamList(articles) {
     const container = document.getElementById('dynamicStreamList');
     if (!container) return;
 
+    if (articles.length === 0) {
+        container.innerHTML = `
+            <div style="padding: 40px; text-align: center; color: var(--text-muted); background: var(--bg-card); border-radius: var(--radius-md); border: 1px solid var(--border-color);">
+                No articles found in this category. Showing all news shortly.
+            </div>
+        `;
+        return;
+    }
+
     let html = '';
     articles.forEach(art => {
+        const shareUrl = encodeURIComponent(`${window.location.origin}/article.html?id=${art.id}`);
+        const shareText = encodeURIComponent(`${art.title} - InPunjab News\n`);
+
         html += `
             <article class="stream-card" onclick="window.location.href='article.html?id=${art.id}'">
                 <div class="stream-thumb">
@@ -262,12 +311,16 @@ function renderStreamList(articles) {
                     <div class="stream-tag-row">
                         <span class="stream-tag">${escapeHtml(art.tag || 'Punjab')}</span>
                         <span class="stream-date">• ${timeAgo(art.created_at)}</span>
+                        <span class="stream-date">• ⏱️ 2 min read</span>
                     </div>
                     <h3 class="stream-title">${escapeHtml(art.title)}</h3>
                     <p class="stream-brief">${escapeHtml(art.brief || art.title)}</p>
                     <div class="stream-meta">
-                        <span>✍️ ${escapeHtml(art.author || 'vicky suri')}</span>
+                        <span>✍️ By ${escapeHtml(art.author || 'vicky suri')}</span>
                         <span>👁️ ${art.view_count || 150} views</span>
+                        <button type="button" class="stream-share-btn" onclick="shareWhatsApp(event, '${escapeHtml(art.title)}', '${art.id}')" title="Share on WhatsApp">
+                            <span>📲 WhatsApp</span>
+                        </button>
                     </div>
                 </div>
             </article>
@@ -275,6 +328,116 @@ function renderStreamList(articles) {
     });
 
     container.innerHTML = html;
+}
+
+// ── 7B. Render Trending / Most Read Widget ──
+function renderTrendingList(articles) {
+    const container = document.getElementById('dynamicTrendingList');
+    if (!container) return;
+
+    let html = '';
+    // Show top 5 sorted by views
+    const trending = [...articles].sort((a, b) => (b.view_count || 0) - (a.view_count || 0)).slice(0, 5);
+    trending.forEach((art, idx) => {
+        html += `
+            <div class="trending-item" onclick="window.location.href='article.html?id=${art.id}'">
+                <div class="trending-rank">0${idx + 1}</div>
+                <div class="trending-content">
+                    <h5 class="trending-title">${escapeHtml(art.title)}</h5>
+                    <div class="trending-meta">${timeAgo(art.created_at)} • 👁️ ${art.view_count || 240} reads</div>
+                </div>
+            </div>
+        `;
+    });
+
+    container.innerHTML = html;
+}
+
+// ── 7C. Category & District Filtering ──
+function filterCategory(category, btnElement) {
+    // Update active pill UI
+    if (btnElement) {
+        document.querySelectorAll('.cat-pill').forEach(btn => btn.classList.remove('active'));
+        btnElement.classList.add('active');
+    }
+
+    const heading = document.getElementById('streamHeading');
+    const badge = document.getElementById('activeFilterBadge');
+
+    if (category === 'All') {
+        if (heading) heading.textContent = '📰 Latest Updates • ਤਾਜ਼ਾ ਰਿਪੋਰਟਾਂ';
+        if (badge) badge.style.display = 'none';
+        renderStreamList(allLoadedArticles.slice(4));
+        return;
+    }
+
+    if (heading) heading.textContent = `📰 ${category} News`;
+    if (badge) {
+        badge.textContent = `Filtered: ${category}`;
+        badge.style.display = 'inline-block';
+    }
+
+    const filtered = allLoadedArticles.filter(art => {
+        const tag = (art.tag || '').toLowerCase();
+        const title = (art.title || '').toLowerCase();
+        const content = (art.content || '').toLowerCase();
+        const cat = category.toLowerCase();
+        return tag.includes(cat) || title.includes(cat) || content.includes(cat);
+    });
+
+    renderStreamList(filtered.length > 0 ? filtered : allLoadedArticles.slice(0, 3));
+    
+    // Smooth scroll down to stream section
+    const streamSection = document.getElementById('latest-stream');
+    if (streamSection) {
+        streamSection.scrollIntoView({ behavior: 'smooth' });
+    }
+}
+
+function filterDistrict(district) {
+    document.querySelectorAll('.district-chip').forEach(c => c.classList.remove('active'));
+    if (event && event.target) {
+        event.target.classList.add('active');
+    }
+
+    const heading = document.getElementById('streamHeading');
+    const badge = document.getElementById('activeFilterBadge');
+
+    if (district === 'All') {
+        if (heading) heading.textContent = '📰 Latest Updates • ਤਾਜ਼ਾ ਰਿਪੋਰਟਾਂ';
+        if (badge) badge.style.display = 'none';
+        renderStreamList(allLoadedArticles.slice(4));
+        return;
+    }
+
+    if (heading) heading.textContent = `📍 ${district} Regional News`;
+    if (badge) {
+        badge.textContent = `City: ${district}`;
+        badge.style.display = 'inline-block';
+    }
+
+    const filtered = allLoadedArticles.filter(art => {
+        const title = (art.title || '').toLowerCase();
+        const content = (art.content || '').toLowerCase();
+        const dist = district.toLowerCase();
+        return title.includes(dist) || content.includes(dist);
+    });
+
+    renderStreamList(filtered.length > 0 ? filtered : allLoadedArticles.slice(0, 3));
+
+    const streamSection = document.getElementById('latest-stream');
+    if (streamSection) {
+        streamSection.scrollIntoView({ behavior: 'smooth' });
+    }
+}
+
+// ── 7D. WhatsApp 1-Tap Share ──
+function shareWhatsApp(e, title, id) {
+    if (e && e.stopPropagation) e.stopPropagation();
+    const url = `${window.location.origin}/article.html?id=${id}`;
+    const text = `📰 *${title}*\n\nRead full news on InPunjab News:\n${url}`;
+    const waUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`;
+    window.open(waUrl, '_blank');
 }
 
 // ── 8. Render Breaking News Ticker ──
@@ -303,3 +466,4 @@ function escapeHtml(str) {
         }
     });
 }
+

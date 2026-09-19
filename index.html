@@ -43,7 +43,6 @@
                     <a href="#" onclick="changeLanguage('pa'); return false;">ਪੰਜਾਬੀ</a>
                     <a href="#" onclick="changeLanguage('hi'); return false;">हिन्दी</a>
                     <a href="#" onclick="changeLanguage('en'); return false;">English</a>
-                    <a href="admin.html" class="admin-link-btn" title="Admin Portal">Admin Panel</a>
                 </div>
             </div>
         </div>
@@ -80,14 +79,14 @@
             <div class="nav-links-scroll">
                 <a href="index.html" class="nav-link active">Home</a>
                 <a href="#lead-hero" class="nav-link breaking-link">🔴 Breaking News</a>
+                <a href="#visual-stories" class="nav-link">⚡ Web Stories</a>
                 <a href="#punjab-section" class="nav-link">🌾 Punjab</a>
                 <a href="panchaang.html" class="nav-link panchaang-link">🕉️ Daily Panchaang</a>
-                <a href="#latest-stream" class="nav-link">Politics</a>
-                <a href="#latest-stream" class="nav-link">National</a>
-                <a href="#latest-stream" class="nav-link">Sports</a>
-                <a href="#latest-stream" class="nav-link">Business</a>
-                <a href="#latest-stream" class="nav-link">Entertainment</a>
-                <a href="#latest-stream" class="nav-link">NRI Desk</a>
+                <a href="#latest-stream" class="nav-link" onclick="filterCategory('Politics')">Politics</a>
+                <a href="#latest-stream" class="nav-link" onclick="filterCategory('National')">National</a>
+                <a href="#latest-stream" class="nav-link" onclick="filterCategory('Agriculture')">Kisaan</a>
+                <a href="#latest-stream" class="nav-link" onclick="filterCategory('Sports')">Sports</a>
+                <a href="#latest-stream" class="nav-link" onclick="filterCategory('NRI')">NRI Desk</a>
             </div>
         </div>
     </nav>
@@ -116,6 +115,57 @@
         </div>
     </section>
 
+    <!-- ── 5B. Interactive Category Filter Ribbon & District Desk Bar ── -->
+    <section class="portal-mid-bar-section">
+        <div class="container">
+            <!-- Punjab District Desk Bar -->
+            <div class="district-desk-bar">
+                <span class="district-title">📍 ਜ਼ਿਲ੍ਹਾ ਡੈਸਕ:</span>
+                <div class="district-chips-scroll">
+                    <button type="button" class="district-chip active" onclick="filterDistrict('All')">All Punjab</button>
+                    <button type="button" class="district-chip" onclick="filterDistrict('Jalandhar')">ਜਲੰਧਰ (Jalandhar)</button>
+                    <button type="button" class="district-chip" onclick="filterDistrict('Amritsar')">ਅੰਮ੍ਰਿਤਸਰ (Amritsar)</button>
+                    <button type="button" class="district-chip" onclick="filterDistrict('Ludhiana')">ਲੁਧਿਆਣਾ (Ludhiana)</button>
+                    <button type="button" class="district-chip" onclick="filterDistrict('Patiala')">ਪਟਿਆਲਾ (Patiala)</button>
+                    <button type="button" class="district-chip" onclick="filterDistrict('Bathinda')">ਬਠਿੰਡਾ (Bathinda)</button>
+                    <button type="button" class="district-chip" onclick="filterDistrict('Mohali')">ਮੋਹਾਲੀ / Chandigarh</button>
+                    <button type="button" class="district-chip" onclick="filterDistrict('Gurdaspur')">ਗੁਰਦਾਸਪੁਰ (Gurdaspur)</button>
+                </div>
+            </div>
+
+            <!-- Dynamic Category Filter Pills -->
+            <div class="category-pills-bar">
+                <button type="button" class="cat-pill active" onclick="filterCategory('All', this)">
+                    <span class="cat-dot"></span> All Stories
+                </button>
+                <button type="button" class="cat-pill" onclick="filterCategory('Punjab', this)">🌾 Punjab Special</button>
+                <button type="button" class="cat-pill" onclick="filterCategory('Politics', this)">⚖️ Politics</button>
+                <button type="button" class="cat-pill" onclick="filterCategory('Breaking', this)">🚨 Breaking Alerts</button>
+                <button type="button" class="cat-pill" onclick="filterCategory('Agriculture', this)">🚜 Kisaan & Agri</button>
+                <button type="button" class="cat-pill" onclick="filterCategory('Local News', this)">🏙️ Ground Reports</button>
+                <button type="button" class="cat-pill" onclick="filterCategory('Religion', this)">🕉️ Religion & Culture</button>
+                <button type="button" class="cat-pill" onclick="filterCategory('Sports', this)">🤼 Sports & Kabaddi</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- ── 5C. Visual Web Stories Reel (Aaj Tak / NDTV Shorts Style) ── -->
+    <section class="visual-stories-section" id="visual-stories">
+        <div class="container">
+            <div class="section-heading-bar">
+                <h2>
+                    <span class="stories-pulse-icon">⚡</span> 
+                    Visual Stories • ਵੈੱਬ ਸਟੋਰੀਜ਼
+                </h2>
+                <span class="stories-badge-pill">Bite-sized News</span>
+            </div>
+            
+            <div class="visual-stories-scroll" id="dynamicVisualStories">
+                <!-- Dynamically populated by index.js -->
+            </div>
+        </div>
+    </section>
+
     <!-- ── 6. Regional Spotlight: 🌾 Punjab News (4-Card Uniform Grid) ── -->
     <section class="punjab-news-section" id="punjab-section">
         <div class="container">
@@ -136,7 +186,8 @@
                 <!-- Left: News Stream List -->
                 <div class="news-stream-col">
                     <div class="section-heading-bar">
-                        <h2>📰 Latest Updates • ਤਾਜ਼ਾ ਰਿਪੋਰਟਾਂ</h2>
+                        <h2 id="streamHeading">📰 Latest Updates • ਤਾਜ਼ਾ ਰਿਪੋਰਟਾਂ</h2>
+                        <span id="activeFilterBadge" class="active-filter-badge" style="display:none;">Filtered</span>
                     </div>
                     <div class="news-stream-list" id="dynamicStreamList">
                         <!-- Dynamically populated by index.js -->
@@ -145,6 +196,30 @@
 
                 <!-- Right: Clean Minimal Sidebar -->
                 <aside class="editorial-sidebar">
+                    <!-- 🔥 Trending / Most Read Widget -->
+                    <div class="trending-widget-card">
+                        <div class="trending-header">
+                            <h4>🔥 Trending • ਸਭ ਤੋਂ ਵੱਧ ਪੜ੍ਹੀਆਂ</h4>
+                            <span class="trending-tag-live">24H HOT</span>
+                        </div>
+                        <div class="trending-list" id="dynamicTrendingList">
+                            <!-- Dynamically populated by index.js -->
+                        </div>
+                    </div>
+
+                    <!-- 🟢 Official WhatsApp Community Alert Box -->
+                    <div class="whatsapp-alert-card">
+                        <div class="whatsapp-icon-circle">📱</div>
+                        <div class="whatsapp-info">
+                            <h5>Join InPunjab News on WhatsApp</h5>
+                            <p>Get fastest verified breaking news alerts directly on your phone.</p>
+                            <a href="https://whatsapp.com" target="_blank" rel="noopener" class="whatsapp-join-btn">
+                                <span>Join WhatsApp Channel</span>
+                                <span>➔</span>
+                            </a>
+                        </div>
+                    </div>
+
                     <!-- Daily Panchaang Widget -->
                     <div class="panchaang-widget-card">
                         <div class="panchaang-header">
@@ -211,7 +286,6 @@
                 <div class="footer-col">
                     <h5>Quick Links</h5>
                     <ul class="footer-links">
-                        <li><a href="admin.html">Admin Portal</a></li>
                         <li><a href="index.html">Home</a></li>
                         <li><a href="panchaang.html">Panchaang Calendar</a></li>
                         <li><a href="#">Privacy Policy</a></li>
@@ -224,7 +298,7 @@
                         Jalandhar, Punjab, India<br>
                         <strong>Editor & Owner:</strong> Vicky Suri
                     </p>
-                    <a href="admin.html" class="admin-link-btn" style="display: inline-block; margin-top: 6px;">Manage Articles (Admin)</a>
+                    <p style="color: #64748B; font-size: 12px;">Punjab's Most Trusted Digital Newsroom</p>
                 </div>
             </div>
 
