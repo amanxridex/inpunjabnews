@@ -90,7 +90,7 @@ function initImageUploader() {
 }
 
 async function processFiles(files) {
-    showToast('Processing & optimizing image(s)...');
+    showToast('Processing photo(s)...');
     for (const file of files) {
         try {
             const compressed = await compressImage(file, 1200, 0.82);
@@ -273,7 +273,7 @@ async function publishNews() {
         // Switch to News tab to show the published article
         setTimeout(() => {
             switchTab('news');
-        }, 600);
+        }, 500);
 
     } catch (err) {
         console.error('Publish error:', err);
@@ -285,6 +285,18 @@ async function publishNews() {
 }
 
 // ── Fetch & Display News List ──
+function resolveImageUrl(url) {
+    const fallback = window.location.pathname.includes('/admin') && !window.location.pathname.endsWith('admin.html') ? '../INPUNJABNEWSLOGO.png' : 'INPUNJABNEWSLOGO.png';
+    if (!url) return fallback;
+    if (url.startsWith('data:') || url.startsWith('http://') || url.startsWith('https://')) {
+        return url;
+    }
+    if (window.location.pathname.includes('/admin') && !window.location.pathname.endsWith('admin.html')) {
+        return '../' + url;
+    }
+    return url;
+}
+
 async function loadArticles() {
     const listContainer = document.getElementById('newsListContainer');
     const countBadge = document.getElementById('newsNavBadge');
@@ -292,8 +304,8 @@ async function loadArticles() {
 
     listContainer.innerHTML = `
         <div class="empty-state">
-            <div class="spinner" style="border-top-color: var(--brand-primary); margin: 0 auto 12px;"></div>
-            <p>Loading published news...</p>
+            <div class="spinner" style="border-top-color: var(--brand-primary); margin: 0 auto 10px;"></div>
+            <p>Loading stories...</p>
         </div>
     `;
 
@@ -304,7 +316,7 @@ async function loadArticles() {
 
         const { data, error } = await supabaseClient
             .from('articles')
-            .select('id, title, author, image_url, tag, created_at, view_count')
+            .select('id, title, brief, content, author, image_url, tag, created_at, view_count')
             .order('created_at', { ascending: false });
 
         if (error) throw error;
@@ -319,24 +331,11 @@ async function loadArticles() {
         console.error('Error loading articles:', err);
         listContainer.innerHTML = `
             <div class="empty-state">
-                <div class="empty-icon">⚠️</div>
                 <p>Failed to load news: ${err.message}</p>
-                <button class="modal-btn-cancel" style="margin-top: 12px; display: inline-block; width: auto; padding: 8px 16px;" onclick="loadArticles()">Retry</button>
+                <button class="modal-btn-cancel" style="margin-top: 10px; display: inline-block; width: auto; padding: 6px 14px;" onclick="loadArticles()">Retry</button>
             </div>
         `;
     }
-}
-
-function resolveImageUrl(url) {
-    const fallback = window.location.pathname.includes('/admin') && !window.location.pathname.endsWith('admin.html') ? '../INPUNJABNEWSLOGO.png' : 'INPUNJABNEWSLOGO.png';
-    if (!url) return fallback;
-    if (url.startsWith('data:') || url.startsWith('http://') || url.startsWith('https://')) {
-        return url;
-    }
-    if (window.location.pathname.includes('/admin') && !window.location.pathname.endsWith('admin.html')) {
-        return '../' + url;
-    }
-    return url;
 }
 
 function renderArticles(articles) {
@@ -344,7 +343,6 @@ function renderArticles(articles) {
     if (!articles || articles.length === 0) {
         listContainer.innerHTML = `
             <div class="empty-state">
-                <div class="empty-icon">📰</div>
                 <p>No news articles found.</p>
             </div>
         `;
@@ -359,7 +357,7 @@ function renderArticles(articles) {
         const tag = item.tag || 'Punjab';
 
         html += `
-            <div class="news-item-card" id="art-${item.id}">
+            <div class="news-item-card" id="art-${item.id}" onclick="openArticleModal('${item.id}')">
                 <div class="news-thumb">
                     <img src="${imageSrc}" alt="Thumbnail" onerror="this.src='${fallbackLogo}'">
                 </div>
@@ -374,7 +372,7 @@ function renderArticles(articles) {
                         <span>👁️ ${item.view_count || 0}</span>
                     </div>
                 </div>
-                <button class="news-delete-btn" title="Delete News" onclick="promptDelete('${item.id}', '${escapeHtml(item.title).replace(/'/g, "\\'")}')">
+                <button type="button" class="news-delete-btn" title="Delete News" onclick="event.stopPropagation(); promptDelete('${item.id}', '${escapeHtml(item.title).replace(/'/g, "\\'")}')">
                     🗑️
                 </button>
             </div>
@@ -384,21 +382,45 @@ function renderArticles(articles) {
     listContainer.innerHTML = html;
 }
 
-// ── Search Filter ──
-function filterNews() {
-    const query = document.getElementById('newsSearchInput').value.toLowerCase().trim();
-    if (!query) {
-        renderArticles(allArticles);
-        return;
+// ── Open News Article Preview Modal ──
+function openArticleModal(id) {
+    const article = allArticles.find(a => a.id === id);
+    if (!article) return;
+
+    const modal = document.getElementById('articleDetailModal');
+    const modalImg = document.getElementById('modalArticleImg');
+    const modalBadge = document.getElementById('modalArticleBadge');
+    const modalTitle = document.getElementById('modalArticleTitle');
+    const modalMeta = document.getElementById('modalArticleMeta');
+    const modalBody = document.getElementById('modalArticleBody');
+
+    const imageSrc = resolveImageUrl(article.image_url);
+    const dateStr = article.created_at ? new Date(article.created_at).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }) : 'Recent';
+
+    modalImg.src = imageSrc;
+    modalBadge.textContent = article.tag || 'Punjab';
+    modalTitle.textContent = article.title;
+    modalMeta.innerHTML = `
+        <span>✍️ ${escapeHtml(article.author || 'vicky suri')}</span>
+        <span>📅 ${dateStr}</span>
+        <span>👁️ ${article.view_count || 0} views</span>
+    `;
+
+    // Format content if not wrapped in paragraphs
+    let contentHtml = article.content || `<p>${article.brief || ''}</p>`;
+    if (!contentHtml.includes('<p>')) {
+        contentHtml = contentHtml.split('\n').filter(p => p.trim()).map(p => `<p>${p}</p>`).join('');
     }
+    modalBody.innerHTML = contentHtml;
 
-    const filtered = allArticles.filter(a => 
-        (a.title && a.title.toLowerCase().includes(query)) ||
-        (a.author && a.author.toLowerCase().includes(query)) ||
-        (a.tag && a.tag.toLowerCase().includes(query))
-    );
+    modal.classList.add('open');
+    document.body.style.overflow = 'hidden';
+}
 
-    renderArticles(filtered);
+function closeArticleModal() {
+    const modal = document.getElementById('articleDetailModal');
+    if (modal) modal.classList.remove('open');
+    document.body.style.overflow = '';
 }
 
 // ── Delete Article Modal Confirmation ──
@@ -406,7 +428,7 @@ function promptDelete(id, title) {
     pendingDeleteId = id;
     const modal = document.getElementById('deleteModal');
     const msg = document.getElementById('deleteModalMsg');
-    msg.innerHTML = `Are you sure you want to permanently delete: <br><strong>"${title}"</strong>? <br><br>This will remove it from the database and portal immediately.`;
+    msg.innerHTML = `Are you sure you want to permanently delete: <br><strong>"${title}"</strong>?`;
     modal.classList.add('open');
 }
 
@@ -434,13 +456,16 @@ async function confirmDelete() {
 
         if (error) throw error;
 
+        // If open in preview modal, close it
+        closeArticleModal();
+
         // Remove card from UI with smooth transition
         const card = document.getElementById(`art-${id}`);
         if (card) {
-            card.style.transition = 'all 0.3s ease';
+            card.style.transition = 'all 0.2s ease';
             card.style.opacity = '0';
             card.style.transform = 'scale(0.9)';
-            setTimeout(() => card.remove(), 300);
+            setTimeout(() => card.remove(), 200);
         }
 
         allArticles = allArticles.filter(a => a.id !== id);
@@ -467,7 +492,7 @@ function showToast(message) {
     clearTimeout(toastTimeout);
     toastTimeout = setTimeout(() => {
         toast.classList.remove('show');
-    }, 3500);
+    }, 3000);
 }
 
 function escapeHtml(str) {

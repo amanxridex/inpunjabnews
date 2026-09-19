@@ -4,12 +4,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <meta name="theme-color" content="#FFFFFF">
+    
+    <!-- PWA Fullscreen & Standalone Meta -->
+    <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
-    <meta name="apple-mobile-web-app-title" content="InPunjab Admin">
-    <link rel="icon" type="image/png" href="../OFFICIAL LOGO.png">
-    <link rel="apple-touch-icon" href="../OFFICIAL LOGO.png">
-    <title>InPunjab News Admin - Vicky Suri</title>
+    <meta name="apple-mobile-web-app-title" content="InPunjab News">
+    
+    <!-- PWA Icons & Manifest -->
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" type="image/png" sizes="192x192" href="app-icon-192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="app-icon-512.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+    
+    <title>InPunjab News Admin</title>
 
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -25,11 +33,11 @@
 </head>
 <body>
     <div class="app-container">
-        <!-- ── Top Mobile Header ── -->
+        <!-- ── Top App Header (Pure Native App Style) ── -->
         <header class="app-header">
             <div class="header-row">
                 <div class="brand-wrapper">
-                    <img src="../OFFICIAL LOGO.png" alt="InPunjab News App Icon" class="portal-avatar" onerror="this.src='../INPUNJABNEWSLOGO.png'">
+                    <img src="app-icon-192.png" alt="InPunjab News App Icon" class="portal-avatar">
                     <div class="brand-info">
                         <span class="brand-title">InPunjab News</span>
                         <span class="brand-owner">
@@ -38,9 +46,7 @@
                         </span>
                     </div>
                 </div>
-                <a href="../index.html" class="header-action-btn" title="View Live Portal" target="_blank">
-                    🌐
-                </a>
+                <span class="header-badge-live">LIVE APP</span>
             </div>
         </header>
 
@@ -48,7 +54,7 @@
         <main id="tab-new-post" class="tab-content active">
             <div class="section-intro">
                 <h2>Create News Post</h2>
-                <p>Upload photos, write your story, and publish instantly.</p>
+                <p>Upload photos, write headline, and publish instantly.</p>
             </div>
 
             <form id="newPostForm" class="form-card" autocomplete="off">
@@ -56,14 +62,14 @@
                 <div class="form-group">
                     <label class="form-label">
                         Photos / Images
-                        <span class="hint">Upload 1 or more images</span>
+                        <span class="hint">Tap to select or take photo</span>
                     </label>
 
                     <div class="image-upload-zone" id="uploadZone">
                         <input type="file" id="imageFileInput" accept="image/*" multiple>
                         <div class="upload-icon-circle">📷</div>
-                        <div class="upload-prompt">Tap to choose photos or take picture</div>
-                        <div class="upload-subprompt">Supports JPG, PNG, WebP • Auto-compressed</div>
+                        <div class="upload-prompt">Upload Photo(s) or Take Picture</div>
+                        <div class="upload-subprompt">JPG, PNG, WebP • Auto-compressed</div>
                     </div>
 
                     <!-- Live Image Previews -->
@@ -89,15 +95,14 @@
                         type="text" 
                         id="postTitle" 
                         class="form-input headline-input" 
-                        placeholder="ਪ੍ਰਧਾਨ ਮੰਤਰੀ ਮੋਦੀ ਦੇ ਜਨਮ ਦਿਵਸ ਮੌਕੇ... / Breaking Headline" 
+                        placeholder="Write headline here..." 
                         required>
                 </div>
 
-                <!-- 3. Category / Tag Selector -->
+                <!-- 3. Category Tag Selector -->
                 <div class="form-group">
                     <label class="form-label">
                         Category Tag
-                        <span class="hint">Tap to select</span>
                     </label>
                     <input type="hidden" id="selectedTag" value="Punjab">
                     <div class="tags-scroll-container">
@@ -115,12 +120,11 @@
                 <div class="form-group">
                     <label class="form-label" for="postContent">
                         Full Description / Content *
-                        <span class="hint">Paragraphs supported</span>
                     </label>
                     <textarea 
                         id="postContent" 
                         class="form-textarea" 
-                        placeholder="Write or paste full article description here... Additional uploaded photos will be automatically embedded in the story." 
+                        placeholder="Write full article description here..." 
                         required></textarea>
                 </div>
 
@@ -149,32 +153,22 @@
         <!-- ── TAB 2: NEWS MANAGEMENT ── -->
         <section id="tab-news" class="tab-content">
             <div class="section-intro">
-                <h2>Published News</h2>
-                <p>Manage all live articles published on InPunjab News.</p>
-            </div>
-
-            <!-- Search Bar -->
-            <div class="news-search-bar">
-                <span class="search-icon">🔍</span>
-                <input 
-                    type="text" 
-                    id="newsSearchInput" 
-                    placeholder="Search by title, author, or tag..." 
-                    oninput="filterNews()">
+                <h2>All News Articles</h2>
+                <p>Tap any article to preview full story • Delete button to remove.</p>
             </div>
 
             <!-- Stats & Refresh Row -->
-            <div class="news-stats-row">
+            <div class="news-header-meta">
                 <span id="newsCountDisplay">Loading stories...</span>
                 <button 
                     type="button" 
                     onclick="loadArticles()" 
                     style="background: none; border: none; font-size: 12px; font-weight: 700; color: var(--brand-primary); cursor: pointer;">
-                    🔄 Refresh
+                    🔄 Refresh Feed
                 </button>
             </div>
 
-            <!-- News List -->
+            <!-- News List (Tap card to open full preview modal) -->
             <div id="newsListContainer" class="news-list">
                 <!-- Dynamically populated via admin.js -->
             </div>
@@ -193,7 +187,33 @@
             </button>
         </nav>
 
-        <!-- ── Delete Confirmation Modal Bottom Sheet ── -->
+        <!-- ── Full Article Preview Modal Sheet ── -->
+        <div id="articleDetailModal" class="article-modal-overlay">
+            <div class="article-modal-container">
+                <!-- Sticky Top Header with Cross Button -->
+                <div class="article-modal-header">
+                    <span class="article-modal-title-bar">📰 Article Preview</span>
+                    <button type="button" class="modal-close-cross-btn" title="Close" onclick="closeArticleModal()">✕</button>
+                </div>
+
+                <!-- Modal Body -->
+                <div class="article-modal-body">
+                    <div class="article-modal-image-wrap">
+                        <img id="modalArticleImg" src="" alt="Article Image">
+                    </div>
+                    <span id="modalArticleBadge" class="news-badge" style="align-self: flex-start; font-size: 11px; padding: 4px 10px;">Punjab</span>
+                    <h2 id="modalArticleTitle" class="article-modal-headline">Article Title</h2>
+                    <div id="modalArticleMeta" class="article-modal-meta-row">
+                        <!-- Author, Date, Views -->
+                    </div>
+                    <div id="modalArticleBody" class="article-modal-text">
+                        <!-- Full article body paragraphs and images -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ── Delete Confirmation Modal ── -->
         <div id="deleteModal" class="modal-overlay">
             <div class="modal-sheet">
                 <div class="modal-icon-danger">🗑️</div>
