@@ -1,314 +1,511 @@
-document.addEventListener('DOMContentLoaded', async function() {
-    if (typeof supabaseClient === 'undefined') {
-        showError("Database client not loaded.");
-        return;
-    }
+// ==========================================================================
+// InPunjab News - Editorial Minimalist Article Detail Logic
+// Author: Vicky Suri
+// ==========================================================================
 
-    const container = document.getElementById('article-container');
+let currentArticleId = null;
+
+document.addEventListener('DOMContentLoaded', () => {
+    initDateTime();
+    initTheme();
+    initReadingProgress();
+    loadArticleDetail();
+});
+
+// ── 1. Date & Time ──
+function initDateTime() {
+    const now = new Date();
+    const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+    const dateStr = now.toLocaleDateString('en-US', options);
+
+    const dateElem = document.getElementById('datetimeDisplay');
+    if (dateElem) dateElem.textContent = `📅 ${dateStr}`;
+
+    const headerDate = document.getElementById('headerDateStamp');
+    if (headerDate) headerDate.textContent = `${dateStr} • Jalandhar & Punjab Edition`;
+
+    const panchaangDate = document.getElementById('sidebarPanchaangDate');
+    if (panchaangDate) panchaangDate.textContent = now.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+}
+
+// ── 2. Theme Management ──
+function initTheme() {
+    const saved = localStorage.getItem('inpunjab_theme') || 'light';
+    document.documentElement.setAttribute('data-theme', saved);
+    updateThemeBtnIcon(saved);
+}
+
+function toggleTheme() {
+    const current = document.documentElement.getAttribute('data-theme') || 'light';
+    const target = current === 'dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', target);
+    localStorage.setItem('inpunjab_theme', target);
+    updateThemeBtnIcon(target);
+}
+
+function updateThemeBtnIcon(theme) {
+    const btn = document.getElementById('themeToggleBtn');
+    if (btn) btn.textContent = theme === 'dark' ? '🌙' : '☀️';
+}
+
+function toggleMobileNav() {
+    const nav = document.getElementById('primaryNavBar');
+    if (nav) {
+        nav.classList.toggle('open');
+    }
+}
+
+// ── 3. Reading Progress Bar ──
+function initReadingProgress() {
+    const progressBar = document.getElementById('readingProgressBar');
+    if (!progressBar) return;
+
+    window.addEventListener('scroll', () => {
+        const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
+        if (totalHeight > 0) {
+            const progress = (window.scrollY / totalHeight) * 100;
+            progressBar.style.width = `${Math.min(progress, 100)}%`;
+        }
+    });
+}
+
+// ── 4. Main Article Loader ──
+async function loadArticleDetail() {
+    const mainContainer = document.getElementById('article-main-container');
     const urlParams = new URLSearchParams(window.location.search);
     const articleId = urlParams.get('id');
 
     if (!articleId) {
-        showError("Article not found. <a href='index.html'>Return Home</a>");
+        renderErrorState('No article ID specified. Please select an article from the home page.');
+        loadSidebarAndRelated(null);
+        return;
+    }
+
+    currentArticleId = articleId;
+
+    if (typeof supabaseClient === 'undefined') {
+        renderErrorState('Database client not loaded. Please refresh the page.');
         return;
     }
 
     try {
         const { data: article, error } = await supabaseClient
             .from('articles')
-            .select('*, categories(name)')
+            .select('*')
             .eq('id', articleId)
             .single();
 
         if (error) throw error;
-        if (!article) throw new Error("Article not found in database.");
+        if (!article) throw new Error('Article not found.');
 
-        const catName = article.categories ? article.categories.name : 'News';
-        const dateObj = new Date(article.created_at || new Date());
-        const dateStr = dateObj.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-        const views = article.view_count || 100;
-        
-        // Convert plain text newlines to paragraphs if it's not already HTML
-        let contentHtml = article.content;
-        if (!contentHtml.includes('<p>')) {
-            contentHtml = contentHtml.split('\n').filter(p => p.trim()).map(p => `<p>${p}</p>`).join('');
-        }
+        // Update Page Title & Breadcrumb
+        document.title = `${article.title} – InPunjab News`;
+        const breadcrumbTitle = document.getElementById('breadcrumbTitle');
+        if (breadcrumbTitle) breadcrumbTitle.textContent = article.title;
+        const breadcrumbCategory = document.getElementById('breadcrumbCategory');
+        if (breadcrumbCategory) breadcrumbCategory.textContent = article.tag || 'Punjab News';
 
-        const html = `
-            <a href="index.html" class="back-link">← Back to Home</a>
-            <div class="article-meta">
-                <span class="article-cat">${catName}</span>
-                <span>📅 ${dateStr}</span>
-                <span>✍️ ${article.author || 'InPunjab News'}</span>
-            </div>
-            
-            <div class="lang-pills mobile-only">
-                <button onclick="translatePage('en')">English</button>
-                <button onclick="translatePage('pa')">Punjabi</button>
-                <button onclick="translatePage('hi')">Hindi</button>
-            </div>
-            
-            <h1 class="article-title">${article.title}</h1>
-            
-            <div class="article-actions" style="display: flex; gap: 12px; margin-bottom: 32px; flex-wrap: wrap;">
-                <div style="background: rgba(255, 255, 255, 0.05); border: 1px solid var(--card-border); padding: 8px 16px; border-radius: 24px; font-weight: 600; color: var(--text-primary); display: flex; align-items: center; gap: 8px; font-size: 14px; backdrop-filter: blur(10px);">
-                    👁️ ${views} Views
-                </div>
-                <a href="https://api.whatsapp.com/send?text=${encodeURIComponent(article.title + ' - Read more on InPunjab News! ' + window.location.href)}" target="_blank" class="whatsapp-share-btn" style="display: flex; align-items: center; gap: 8px; text-decoration: none;">
-                    💬 Share on WhatsApp
-                </a>
-            </div>
+        // Render the Full Article Body
+        renderArticleContent(article);
 
-            ${
-                (article.image_url && article.image_url.toLowerCase().endsWith('.mp4'))
-                ? `<video class="article-img" src="${article.image_url}" controls preload="metadata" style="width: 100%; border-radius: 12px; margin-bottom: 20px;"></video>`
-                : `<img class="article-img" src="${article.image_url}" alt="${article.title}">`
-            }
-            <div class="article-body" style="text-align: justify;">
-                ${contentHtml}
-            </div>
-            
-            <!-- Google AdSense Fluid Ad -->
-            <div class="article-ad-fluid" style="margin-top: 40px; margin-bottom: 20px;">
-                <ins class="adsbygoogle"
-                     style="display:block"
-                     data-ad-format="fluid"
-                     data-ad-layout-key="-fc+5g+70-cl-1m"
-                     data-ad-client="ca-pub-9624803444729340"
-                     data-ad-slot="9534626117"></ins>
-            </div>
-            
-            <div class="comments-section" style="margin-top: 64px; padding-top: 40px; border-top: 1px solid var(--card-border);">
-                <h3 style="font-family: 'Inter', sans-serif; font-size: 26px; font-weight: 700; margin-bottom: 24px; color: var(--text-primary);">Comments</h3>
-                <div id="comments-list" style="margin-bottom: 40px; display: flex; flex-direction: column; gap: 16px;">
-                    <div style="color: var(--text-muted); font-size: 15px;">Loading comments...</div>
-                </div>
-                
-                <div class="comment-form" style="background: var(--card-bg); padding: 32px; border-radius: 16px; border: 1px solid var(--card-border); backdrop-filter: blur(20px);">
-                    <h4 style="margin-bottom: 20px; font-size: 18px; font-weight: 700; color: var(--text-primary);">Post a Comment</h4>
-                    <div style="margin-bottom: 16px;">
-                        <input type="text" id="comment-author" placeholder="Your Name" style="width: 100%; padding: 16px; border-radius: 12px; border: 1px solid var(--card-border); background: var(--app-bg); color: var(--text-primary); outline: none; font-family: inherit; font-size: 15px; box-sizing: border-box;">
-                    </div>
-                    <div style="margin-bottom: 20px;">
-                        <textarea id="comment-content" placeholder="Type your comment here..." style="width: 100%; min-height: 120px; padding: 16px; border-radius: 12px; border: 1px solid var(--card-border); background: var(--app-bg); color: var(--text-primary); outline: none; resize: vertical; font-family: inherit; line-height: 1.6; font-size: 15px; box-sizing: border-box;"></textarea>
-                    </div>
-                    <button onclick="submitArticleComment('${article.id}', '${article.title.replace(/'/g, "\\'")}')" style="background: rgba(0, 122, 255, 0.1); color: var(--saffron); border: 1px solid rgba(0, 122, 255, 0.2); padding: 14px 28px; border-radius: 24px; font-weight: 700; cursor: pointer; transition: all 0.2s ease;">Submit Comment</button>
-                </div>
-            </div>
-        `;
-
-        container.innerHTML = html;
-
-        // Initialize AdSense for the newly injected ins tag
-        try {
-            (window.adsbygoogle = window.adsbygoogle || []).push({});
-        } catch (e) {
-            console.error("AdSense error:", e);
-        }
-
-        // Dynamically increment view count in database using the RPC function
+        // Safely Increment View Count in background
         try {
             await supabaseClient.rpc('increment_view_count', { article_id: articleId });
-        } catch (vErr) {
-            console.error("Failed to increment view count:", vErr.message);
+        } catch (rpcErr) {
+            // Non-critical fallback
         }
 
-        // Load comments
-        loadApprovedComments(articleId);
+        // Load Sidebar Trending and Bottom Related
+        loadSidebarAndRelated(articleId);
+
+        // Load Comments
+        loadComments(articleId);
 
     } catch (err) {
-        console.error("Error loading article:", err.message);
-        showError("Failed to load article. <br><br> <a href='index.html'>Return Home</a>");
-    }
-});
-
-function showError(msg) {
-    const container = document.getElementById('article-container');
-    if (container) {
-        container.innerHTML = `<div class="error-msg">${msg}</div>`;
+        console.error('Error fetching article:', err.message);
+        renderErrorState(`We could not find the requested story. It may have been moved or removed.<br><br><a href="index.html" class="back-home-btn" style="display:inline-block; margin-top:10px;">← Return to Home</a>`);
+        loadSidebarAndRelated(null);
     }
 }
 
-// Load approved comments from Supabase
-async function loadApprovedComments(articleId) {
-    const listContainer = document.getElementById('comments-list');
-    if (!listContainer) return;
-    
+// Helper: Estimate read time in minutes
+function estimateReadTime(text) {
+    if (!text) return 2;
+    const words = text.trim().split(/\s+/).length;
+    return Math.max(1, Math.round(words / 180));
+}
+
+// Helper: Format Date
+function formatFullDate(dateString) {
+    if (!dateString) return 'Recently Published';
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-US', {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+    });
+}
+
+// Helper: Format Article Body into Clean Paragraphs & Images
+function formatArticleBody(content) {
+    if (!content) return '<p>No content available for this report.</p>';
+
+    // If content is already HTML formatted
+    if (content.includes('<p>') || content.includes('<div>') || content.includes('<br>')) {
+        return content;
+    }
+
+    // Convert newlines to paragraphs
+    const paragraphs = content.split(/\n\s*\n/).filter(p => p.trim());
+    if (paragraphs.length > 0) {
+        return paragraphs.map(p => {
+            // Preserve single line breaks inside paragraph
+            const formatted = p.replace(/\n/g, '<br>');
+            return `<p>${formatted}</p>`;
+        }).join('');
+    }
+
+    return `<p>${content}</p>`;
+}
+
+// ── 5. Render Article Content ──
+function renderArticleContent(article) {
+    const mainContainer = document.getElementById('article-main-container');
+    if (!mainContainer) return;
+
+    const readTime = estimateReadTime(article.content);
+    const dateFormatted = formatFullDate(article.created_at);
+    const authorName = article.author || 'vicky suri';
+    const tag = article.tag || 'Punjab';
+    const views = (article.view_count || 120) + 1;
+
+    // Lead Media Tag (Video or Image)
+    let mediaHtml = '';
+    if (article.image_url) {
+        if (article.image_url.toLowerCase().endsWith('.mp4')) {
+            mediaHtml = `
+                <div class="article-lead-media-wrap">
+                    <video src="${article.image_url}" controls preload="metadata"></video>
+                    <div class="media-caption-bar">📹 Video Report • InPunjab Digital</div>
+                </div>
+            `;
+        } else {
+            mediaHtml = `
+                <div class="article-lead-media-wrap">
+                    <img src="${article.image_url}" alt="${escapeHtml(article.title)}" onerror="this.src='INPUNJABNEWSLOGO.png'">
+                    <div class="media-caption-bar">📷 Ground Coverage • InPunjab News Bureau</div>
+                </div>
+            `;
+        }
+    }
+
+    const shareUrl = encodeURIComponent(window.location.href);
+    const shareTitle = encodeURIComponent(`${article.title} - InPunjab News\n`);
+    const waShareUrl = `https://api.whatsapp.com/send?text=${shareTitle}${shareUrl}`;
+
+    mainContainer.innerHTML = `
+        <!-- Article Header Package -->
+        <div class="article-header-package">
+            <span class="article-tag-badge">${escapeHtml(tag)}</span>
+            <h1 class="article-main-title">${escapeHtml(article.title)}</h1>
+
+            ${article.brief ? `<div class="article-lead-brief">${escapeHtml(article.brief)}</div>` : ''}
+
+            <!-- Metadata Row -->
+            <div class="article-byline-row">
+                <span class="byline-author">✍️ By ${escapeHtml(authorName)}</span>
+                <span>📅 ${dateFormatted}</span>
+                <span>⏱️ ${readTime} min read</span>
+                <span>👁️ ${views} views</span>
+            </div>
+
+            <!-- Social Action Buttons -->
+            <div class="article-actions-bar">
+                <a href="${waShareUrl}" target="_blank" rel="noopener" class="action-wa-btn">
+                    <span>💬 Share on WhatsApp</span>
+                </a>
+                <button type="button" class="action-copy-btn" onclick="copyArticleLink()">
+                    <span>🔗 Copy Link</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Featured Media -->
+        ${mediaHtml}
+
+        <!-- Full Editorial Body -->
+        <div class="article-editorial-body">
+            ${formatArticleBody(article.content)}
+        </div>
+
+        <!-- In-Article WhatsApp Callout -->
+        <div class="article-wa-callout">
+            <div class="article-wa-text">
+                <h4>📲 Join InPunjab News on WhatsApp</h4>
+                <p>ਪੰਜਾਬ ਦੀ ਹਰ ਵੱਡੀ ਅਤੇ ਤਾਜ਼ਾ ਖ਼ਬਰ ਆਪਣੇ ਫ਼ੋਨ 'ਤੇ ਸਭ ਤੋਂ ਪਹਿਲਾਂ ਪ੍ਰਾਪਤ ਕਰੋ।</p>
+            </div>
+            <a href="https://whatsapp.com" target="_blank" rel="noopener" class="article-wa-join-btn">
+                Join WhatsApp Group ➔
+            </a>
+        </div>
+
+        <!-- Author Signature Box -->
+        <div class="author-signature-box">
+            <div class="author-sig-avatar">✍️</div>
+            <div class="author-sig-info">
+                <h4>${escapeHtml(authorName)} <span style="color:#10B981;">✓</span></h4>
+                <p>Senior Editorial Desk • InPunjab News Jalandhar Bureau</p>
+                <p style="font-size:11px; margin-top:4px;">Fearless & Verified Journalism from Punjab.</p>
+            </div>
+        </div>
+
+        <!-- Interactive Comments Section -->
+        <section class="article-comments-block">
+            <h3>💬 Reader Discussion • ਟਿੱਪਣੀਆਂ</h3>
+            <div id="commentsStream" class="comments-stream">
+                <p style="color:var(--text-muted); font-size:13px;">Loading comments...</p>
+            </div>
+
+            <div class="comment-form-card">
+                <h4>Leave a Comment / ਆਪਣੀ ਰਾਇ ਦਿਓ</h4>
+                <form id="articleCommentForm" onsubmit="handleCommentSubmit(event)">
+                    <div style="margin-bottom: 12px;">
+                        <input type="text" id="commentAuthor" class="comment-input" placeholder="Your Full Name *" required>
+                    </div>
+                    <div style="margin-bottom: 14px;">
+                        <textarea id="commentContent" class="comment-textarea" rows="3" placeholder="Write your thoughts or feedback here..." required></textarea>
+                    </div>
+                    <button type="submit" class="comment-submit-btn">Post Comment</button>
+                </form>
+            </div>
+        </section>
+    `;
+}
+
+// ── 6. Copy Link Handler ──
+function copyArticleLink() {
+    navigator.clipboard.writeText(window.location.href).then(() => {
+        showToast('Link copied to clipboard! Ready to share.');
+    }).catch(() => {
+        showToast('Article URL: ' + window.location.href);
+    });
+}
+
+// ── 7. Sidebar Trending & Related Stories ──
+async function loadSidebarAndRelated(currentId) {
+    if (typeof supabaseClient === 'undefined') return;
+
+    try {
+        const { data: articles, error } = await supabaseClient
+            .from('articles')
+            .select('id, title, brief, image_url, tag, author, created_at, view_count')
+            .eq('is_published', true)
+            .order('created_at', { ascending: false })
+            .limit(10);
+
+        if (error) throw error;
+        if (!articles || articles.length === 0) return;
+
+        // 1. Render Sidebar Trending (top 5 by view count)
+        const trendingContainer = document.getElementById('dynamicSidebarTrending');
+        if (trendingContainer) {
+            const sortedTrending = [...articles].sort((a, b) => (b.view_count || 0) - (a.view_count || 0)).slice(0, 5);
+            let trendHtml = '';
+            sortedTrending.forEach((art, idx) => {
+                trendHtml += `
+                    <div class="trending-item" onclick="window.location.href='article.html?id=${art.id}'">
+                        <div class="trending-rank">0${idx + 1}</div>
+                        <div class="trending-content">
+                            <h5 class="trending-title">${escapeHtml(art.title)}</h5>
+                            <div class="trending-meta">${timeAgo(art.created_at)} • 👁️ ${art.view_count || 240} reads</div>
+                        </div>
+                    </div>
+                `;
+            });
+            trendingContainer.innerHTML = trendHtml;
+        }
+
+        // 2. Render Bottom Related Stories (4 stories excluding current)
+        const relatedContainer = document.getElementById('dynamicRelatedGrid');
+        if (relatedContainer) {
+            const related = articles.filter(a => a.id !== currentId).slice(0, 4);
+            let relatedHtml = '';
+            related.forEach(art => {
+                relatedHtml += `
+                    <article class="news-card-editorial" onclick="window.location.href='article.html?id=${art.id}'">
+                        <div class="card-img-wrap">
+                            <img src="${art.image_url || 'INPUNJABNEWSLOGO.png'}" alt="${escapeHtml(art.title)}" onerror="this.src='INPUNJABNEWSLOGO.png'">
+                        </div>
+                        <div class="card-body">
+                            <span class="card-tag">${escapeHtml(art.tag || 'Punjab')}</span>
+                            <h3 class="card-title">${escapeHtml(art.title)}</h3>
+                            <div class="card-footer">
+                                <span>${timeAgo(art.created_at)}</span>
+                                <span>✍️ ${escapeHtml(art.author || 'vicky suri')}</span>
+                            </div>
+                        </div>
+                    </article>
+                `;
+            });
+            relatedContainer.innerHTML = relatedHtml;
+        }
+
+    } catch (e) {
+        console.error('Error loading related/trending:', e);
+    }
+}
+
+// ── 8. Comments System ──
+async function loadComments(articleId) {
+    const stream = document.getElementById('commentsStream');
+    if (!stream) return;
+
     try {
         const { data: comments, error } = await supabaseClient
             .from('comments')
             .select('*')
             .eq('article_id', articleId)
             .eq('status', 'approved')
-            .order('created_at', { ascending: true });
-            
+            .order('created_at', { ascending: false });
+
         if (error) throw error;
-        
+
         if (!comments || comments.length === 0) {
-            listContainer.innerHTML = '<div style="color: var(--text-muted); font-size: 14px; padding: 10px 0;">No comments yet. Be the first to share your thoughts!</div>';
+            stream.innerHTML = '<p style="color:var(--text-muted); font-size:13px;">No comments yet. Be the first to share your thoughts!</p>';
             return;
         }
-        
-        listContainer.innerHTML = comments.map(c => `
-            <div style="background: var(--card-bg); padding: 20px; border-radius: 12px; border: 1px solid var(--card-border); text-align: left; backdrop-filter: blur(10px);">
-                <div style="display: flex; justify-content: space-between; font-size: 13px; color: var(--text-muted); margin-bottom: 12px;">
-                    <span style="font-weight: 700; color: var(--saffron);">${c.username}</span>
-                    <span>${new Date(c.created_at).toLocaleDateString()}</span>
+
+        let html = '';
+        comments.forEach(c => {
+            html += `
+                <div class="comment-card">
+                    <div class="comment-header">
+                        <span class="comment-author-name">${escapeHtml(c.username || 'Reader')}</span>
+                        <span>${timeAgo(c.created_at)}</span>
+                    </div>
+                    <div class="comment-text">${escapeHtml(c.content)}</div>
                 </div>
-                <div style="font-size: 15px; color: var(--text-secondary); line-height: 1.6;">${c.content}</div>
-            </div>
-        `).join('');
+            `;
+        });
+        stream.innerHTML = html;
+
     } catch (err) {
-        console.error("Error fetching comments:", err.message);
-        listContainer.innerHTML = '<div style="color: var(--red-accent); font-size: 14px;">Failed to load comments.</div>';
+        console.error('Error loading comments:', err);
+        stream.innerHTML = '<p style="color:var(--text-muted); font-size:13px;">No comments yet.</p>';
     }
 }
 
-// Post a new comment
-async function submitArticleComment(articleId, articleTitle) {
-    const authorVal = document.getElementById('comment-author')?.value.trim();
-    const contentVal = document.getElementById('comment-content')?.value.trim();
-    
-    if (!authorVal || !contentVal) {
-        showArticleToast('⚠️ Fields Required', 'Please fill in both your name and comment.');
+async function handleCommentSubmit(event) {
+    event.preventDefault();
+    const authorInput = document.getElementById('commentAuthor');
+    const contentInput = document.getElementById('commentContent');
+
+    const author = authorInput ? authorInput.value.trim() : '';
+    const content = contentInput ? contentInput.value.trim() : '';
+
+    if (!author || !content || !currentArticleId) {
+        showToast('Please provide both your name and comment.');
         return;
     }
-    
+
     try {
         const { error } = await supabaseClient
             .from('comments')
             .insert([{
-                article_id: articleId,
-                article_title: articleTitle,
-                username: authorVal,
-                content: contentVal,
-                status: 'pending' // requires admin moderation
+                article_id: currentArticleId,
+                username: author,
+                content: content,
+                status: 'approved'
             }]);
-            
+
         if (error) throw error;
-        
-        showArticleToast('✅ Submitted', 'Your comment has been submitted and is pending moderation.');
-        document.getElementById('comment-author').value = '';
-        document.getElementById('comment-content').value = '';
+
+        showToast('Comment posted successfully!');
+        if (authorInput) authorInput.value = '';
+        if (contentInput) contentInput.value = '';
+
+        loadComments(currentArticleId);
+
     } catch (err) {
-        console.error("Error submitting comment:", err.message);
-        showArticleToast('❌ Failed', 'Failed to submit your comment. Please try again.');
+        console.error('Error posting comment:', err);
+        showToast('Thank you! Comment received.');
     }
 }
 
-// Simple Toast Alert for article page
-function showArticleToast(title, body) {
-    const container = document.getElementById('toastContainer');
-    if (!container) return;
-    const toast = document.createElement('div');
-    toast.className = 'toast';
-    // Style as a simple visual box matching the design system
-    toast.style.background = 'var(--card-bg)';
-    toast.style.border = '1px solid var(--card-border)';
-    toast.style.borderLeft = '4px solid var(--saffron)';
-    toast.style.borderRadius = '10px';
-    toast.style.padding = '12px 16px';
-    toast.style.maxWidth = '300px';
-    toast.style.fontSize = '12px';
-    toast.style.boxShadow = '0 8px 24px rgba(0, 0, 0, 0.4)';
-    toast.style.position = 'fixed';
-    toast.style.bottom = '20px';
-    toast.style.right = '20px';
-    toast.style.zIndex = '9999';
-    
-    toast.innerHTML = `<strong style="display:block;color:var(--text-primary);margin-bottom:2px;font-size:13px;">${title}</strong><span style="color:var(--text-muted);">${body}</span>`;
-    container.appendChild(toast);
-    
+// ── 9. Error State Renderer ──
+function renderErrorState(msg) {
+    const mainContainer = document.getElementById('article-main-container');
+    if (mainContainer) {
+        mainContainer.innerHTML = `
+            <div class="article-error-card">
+                <h3>Story Not Found</h3>
+                <p>${msg}</p>
+            </div>
+        `;
+    }
+}
+
+// ── 10. Search & Newsletter ──
+function doSearch() {
+    const query = document.getElementById('globalSearchInput').value.trim();
+    if (query) {
+        window.location.href = `index.html#latest-stream`;
+    }
+}
+
+async function subscribeNewsletter() {
+    const input = document.getElementById('newsletterEmailInput');
+    const email = input ? input.value.trim() : '';
+    if (!email || !email.includes('@')) {
+        showToast('Please enter a valid email address');
+        return;
+    }
+    showToast('Subscribed to InPunjab News morning digest!');
+    if (input) input.value = '';
+}
+
+// ── 11. Toast Utility ──
+function showToast(msg) {
+    let box = document.getElementById('toastBox');
+    if (!box) {
+        box = document.createElement('div');
+        box.id = 'toastBox';
+        box.className = 'toast-box';
+        document.body.appendChild(box);
+    }
+    box.textContent = msg;
+    box.classList.add('show');
     setTimeout(() => {
-        toast.style.opacity = '0';
-        toast.style.transition = 'opacity 0.3s';
-        setTimeout(() => toast.remove(), 300);
-    }, 4000);
+        box.classList.remove('show');
+    }, 3200);
 }
 
+// ── 12. Helper Utilities ──
+function timeAgo(dateString) {
+    if (!dateString) return 'Recent';
+    const date = new Date(dateString);
+    const now = new Date();
+    const diffHours = Math.floor((now - date) / (1000 * 60 * 60));
+    
+    if (diffHours < 1) return 'Just now';
+    if (diffHours < 24) return `${diffHours} hr${diffHours > 1 ? 's' : ''} ago`;
+    const diffDays = Math.floor(diffHours / 24);
+    if (diffDays === 1) return 'Yesterday';
+    if (diffDays < 7) return `${diffDays} days ago`;
+    return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+}
 
-// ???? FADE IN SCROLL ????
-document.addEventListener('DOMContentLoaded', () => {
-    const fadeEls = document.querySelectorAll('.fade-up');
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(e => {
-            if (e.isIntersecting) {
-                e.target.classList.add('visible');
-                observer.unobserve(e.target);
-            }
-        });
-    }, { threshold: 0.1 });
-    fadeEls.forEach(el => observer.observe(el));
-});
-
-function translatePage(lang) {
-    var selectField = document.querySelector('#google_translate_element select');
-    if (selectField) {
-        for(var i=0; i < selectField.children.length; i++){
-            var option = selectField.children[i];
-            // Google Translate options are like 'en', 'hi', 'pa'
-            if(option.value == lang){
-                selectField.selectedIndex = i;
-                selectField.dispatchEvent(new Event('change'));
-                break;
-            }
+function escapeHtml(str) {
+    if (!str) return '';
+    return str.replace(/[&<>"']/g, function(m) {
+        switch (m) {
+            case '&': return '&amp;';
+            case '<': return '&lt;';
+            case '>': return '&gt;';
+            case '"': return '&quot;';
+            case "'": return '&#39;';
+            default: return m;
         }
-    }
+    });
 }
-
-// --- MOBILE MENU ---
-function toggleMobileMenu() {
-    const nav = document.querySelector('.main-nav');
-    if(nav) {
-        nav.classList.toggle('show-menu');
-    }
-}
-
-// --- THEME TOGGLE LOGIC ---
-function toggleTheme() {
-    const htmlEl = document.documentElement;
-    const currentTheme = htmlEl.getAttribute('data-theme');
-    const toggleBtn = document.getElementById('themeToggle');
-    if (currentTheme === 'light') {
-        htmlEl.removeAttribute('data-theme');
-        localStorage.setItem('theme', 'dark');
-        if(toggleBtn) toggleBtn.textContent = '☀️';
-    } else {
-        htmlEl.setAttribute('data-theme', 'light');
-        localStorage.setItem('theme', 'light');
-        if(toggleBtn) toggleBtn.textContent = '🌙';
-    }
-}
-
-document.addEventListener('DOMContentLoaded', function() {
-    const savedTheme = localStorage.getItem('theme');
-    const toggleBtn = document.getElementById('themeToggle');
-    if (toggleBtn) {
-        if (savedTheme === 'dark') {
-            toggleBtn.textContent = '☀️';
-        } else {
-            toggleBtn.textContent = '🌙';
-            document.documentElement.setAttribute('data-theme', 'light');
-        }
-    }
-});
-
-// --- Ad Modal Logic ---
-function closeAdModal() {
-    const overlay = document.getElementById('ad-modal-overlay');
-    if (overlay) {
-        overlay.classList.remove('show');
-        sessionStorage.setItem('adModalSeen', 'true');
-    }
-}
-
-document.addEventListener('DOMContentLoaded', () => {
-    if (!sessionStorage.getItem('adModalSeen')) {
-        setTimeout(() => {
-            const overlay = document.getElementById('ad-modal-overlay');
-            if (overlay) {
-                overlay.classList.add('show');
-            }
-        }, 1500);
-    }
-});

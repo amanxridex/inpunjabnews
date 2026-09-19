@@ -1,1094 +1,271 @@
 <!DOCTYPE html>
-
-<html lang="en">
+<html lang="pa">
 <head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>InPunjab News – ਪੰਜਾਬ ਦੀ ਆਵਾਜ਼</title>
-<meta property="og:title" content="InPunjab News – ਪੰਜਾਬ ਦੀ ਆਵਾਜ਼" />
-<meta property="og:description" content="Latest News from Punjab" />
-<meta property="og:image" content="https://raw.githubusercontent.com/amanxridex/inpunjabnews/main/OFFICIAL%20LOGO.png" />
-<meta property="og:type" content="article" />
-<meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:title" content="InPunjab News – ਪੰਜਾਬ ਦੀ ਆਵਾਜ਼" />
-<meta name="twitter:image" content="https://raw.githubusercontent.com/amanxridex/inpunjabnews/main/OFFICIAL%20LOGO.png" />
-<link href="https://fonts.googleapis.com" rel="preconnect"/>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&amp;family=Inter:wght@300;400;500;600;700&amp;family=Noto+Sans+Gurmukhi:wght@400;700&amp;display=swap" rel="stylesheet"/>
-<link href="index.css?v=1.3" rel="stylesheet"/>
-<script>
-        // Prevent FOUC: Apply theme immediately before rendering
-        const savedTheme = localStorage.getItem('theme');
-        // Default to light theme if no preference is saved
-        if (savedTheme !== 'dark') {
-            document.documentElement.setAttribute('data-theme', 'light');
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>InPunjab News – ਪੰਜਾਬ ਦੀ ਆਵਾਜ਼</title>
+    <meta name="description" content="Leading digital news platform bringing breaking news from Punjab."/>
+    
+    <!-- Open Graph / Meta -->
+    <meta property="og:title" content="InPunjab News – ਪੰਜਾਬ ਦੀ ਆਵਾਜ਼" id="ogTitle" />
+    <meta property="og:description" content="Latest news coverage from Punjab." id="ogDesc" />
+    <meta property="og:image" content="OFFICIAL LOGO.png" id="ogImage" />
+    <meta property="og:type" content="article" />
+    <meta name="twitter:card" content="summary_large_image" />
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com"/>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@700;800;900&family=Noto+Sans+Gurmukhi:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+    
+    <!-- Editorial Minimalist Stylesheet -->
+    <link href="index.css?v=2.1" rel="stylesheet"/>
+    
+    <!-- Google AdSense -->
+    <meta name="google-adsense-account" content="ca-pub-9624803444729340">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9624803444729340" crossorigin="anonymous"></script>
+
+    <!-- Supabase CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+    <!-- ── 0. Reading Progress Bar ── -->
+    <div class="reading-progress-bar" id="readingProgressBar"></div>
+
+    <!-- ── 1. Top Utility Bar ── -->
+    <div class="top-bar">
+        <div class="container">
+            <div class="top-bar-inner">
+                <div class="top-bar-left">
+                    <span class="live-pill"><span class="live-dot"></span> LIVE</span>
+                    <span id="datetimeDisplay">Loading date...</span>
+                    <span class="weather-chip" id="weatherChandigarh">🌤️ Chandigarh 29°C</span>
+                    <span class="weather-chip" id="weatherJalandhar">🌤️ Jalandhar 30°C</span>
+                </div>
+                <div class="top-bar-right">
+                    <a href="#" onclick="changeLanguage('pa'); return false;">ਪੰਜਾਬੀ</a>
+                    <a href="#" onclick="changeLanguage('hi'); return false;">हिन्दी</a>
+                    <a href="#" onclick="changeLanguage('en'); return false;">English</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── 2. Main Editorial Header ── -->
+    <header class="main-header">
+        <div class="container">
+            <div class="header-row">
+                <a href="index.html" class="logo-link" title="InPunjab News Home">
+                    <img src="OFFICIAL LOGO.png" alt="InPunjab News Logo" class="portal-logo" onerror="this.src='INPUNJABNEWSLOGO.png'"/>
+                </a>
+                
+                <div class="header-center-info">
+                    <span class="portal-tagline">ਪੰਜਾਬ ਦੀ ਨਿਰਪੱਖ ਤੇ ਬੇਬਾਕ ਆਵਾਜ਼</span>
+                    <span class="portal-date-stamp" id="headerDateStamp">Punjab's Most Trusted Digital News</span>
+                </div>
+
+                <div class="header-right-actions">
+                    <div class="header-search-form">
+                        <input type="text" id="globalSearchInput" placeholder="Search news, topics..." onkeydown="if(event.key==='Enter') doSearch()"/>
+                        <button type="button" onclick="doSearch()" title="Search">🔍</button>
+                    </div>
+                    <button class="theme-toggle-btn" id="themeToggleBtn" onclick="toggleTheme()" title="Toggle Dark/Light Mode">☀️</button>
+                    <button class="mobile-nav-toggle" id="mobileNavToggle" onclick="toggleMobileNav()" title="Menu">☰</button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- ── 3. Primary Navigation Bar ── -->
+    <nav class="primary-nav-bar" id="primaryNavBar">
+        <div class="container">
+            <div class="nav-links-scroll">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="index.html#lead-hero" class="nav-link breaking-link">🔴 Breaking News</a>
+                <a href="index.html#visual-stories" class="nav-link">⚡ Web Stories</a>
+                <a href="index.html#punjab-section" class="nav-link active">🌾 Punjab</a>
+                <a href="panchaang.html" class="nav-link panchaang-link">🕉️ Daily Panchaang</a>
+                <a href="index.html#latest-stream" class="nav-link">Politics</a>
+                <a href="index.html#latest-stream" class="nav-link">National</a>
+                <a href="index.html#latest-stream" class="nav-link">Kisaan</a>
+                <a href="index.html#latest-stream" class="nav-link">Sports</a>
+                <a href="index.html#latest-stream" class="nav-link">NRI Desk</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ── 4. Article Breadcrumbs & Navigation Bar ── -->
+    <div class="container article-container-wrap">
+        <div class="article-breadcrumb-bar">
+            <a href="index.html" class="back-home-btn">
+                <span>← ਮੁੱਖ ਪੰਨਾ</span>
+                <span style="opacity: 0.8;">• Back to All News</span>
+            </a>
+            <div class="breadcrumb-trail">
+                <a href="index.html">Home</a>
+                <span>/</span>
+                <span id="breadcrumbCategory">Punjab News</span>
+                <span>/</span>
+                <span id="breadcrumbTitle">Loading Story...</span>
+            </div>
+        </div>
+
+        <!-- ── 5. Main Two-Column Editorial Reading Layout ── -->
+        <div class="article-layout-grid">
+            <!-- Left: Main Article Reading Container (70%) -->
+            <main class="article-main-col" id="article-main-container">
+                <div class="article-loading-box">
+                    <div class="article-spinner"></div>
+                    <p>Loading full story from InPunjab Newsroom...</p>
+                </div>
+            </main>
+
+            <!-- Right: Clean Minimal Sidebar (30%) -->
+            <aside class="editorial-sidebar">
+                <!-- 🔥 Trending Stories Widget -->
+                <div class="trending-widget-card">
+                    <div class="trending-header">
+                        <h4>🔥 Trending • ਸਭ ਤੋਂ ਵੱਧ ਪੜ੍ਹੀਆਂ</h4>
+                        <span class="trending-tag-live">24H HOT</span>
+                    </div>
+                    <div class="trending-list" id="dynamicSidebarTrending">
+                        <!-- Dynamically populated by article.js -->
+                    </div>
+                </div>
+
+                <!-- 🟢 Official WhatsApp Community Alert Box -->
+                <div class="whatsapp-alert-card">
+                    <div class="whatsapp-icon-circle">📱</div>
+                    <div class="whatsapp-info">
+                        <h5>Join InPunjab News on WhatsApp</h5>
+                        <p>Get fastest verified breaking news alerts directly on your phone.</p>
+                        <a href="https://whatsapp.com" target="_blank" rel="noopener" class="whatsapp-join-btn">
+                            <span>Join WhatsApp Channel</span>
+                            <span>➔</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- 🕉️ Daily Panchaang Widget -->
+                <div class="panchaang-widget-card">
+                    <div class="panchaang-header">
+                        <h4>🕉️ Daily Panchaang</h4>
+                        <span style="font-size: 11px; opacity: 0.9;">Punjab Edition</span>
+                    </div>
+                    <div class="panchaang-body">
+                        <div class="panchaang-row">
+                            <strong>Date / ਤਿਥੀ:</strong>
+                            <span id="sidebarPanchaangDate">Today's Auspicious Tithi</span>
+                        </div>
+                        <div class="panchaang-row">
+                            <strong>Nakshatra / ਨਕਸ਼ਤਰ:</strong>
+                            <span>Auspicious Muhurat</span>
+                        </div>
+                        <div class="panchaang-row">
+                            <strong>Rahu Kaal / ਰਾਹੂ ਕਾਲ:</strong>
+                            <span style="color: #DC2626;">Check Full Calendar</span>
+                        </div>
+                        <a href="panchaang.html" class="panchaang-btn">View Full Daily Panchaang ➔</a>
+                    </div>
+                </div>
+
+                <!-- Clean Single Ad Unit -->
+                <div class="clean-ad-card">
+                    <div class="ad-disclaimer">Advertisement</div>
+                    <img src="ad5.jpeg" alt="Featured Advertisement" onerror="this.src='AD1.jpeg'">
+                </div>
+
+                <!-- Newsletter Subscription Card -->
+                <div class="newsletter-card">
+                    <h4>Stay Updated with Punjab</h4>
+                    <p>Receive morning headlines and breaking news alerts directly to your inbox.</p>
+                    <div class="newsletter-input-group">
+                        <input type="email" id="newsletterEmailInput" placeholder="Enter your email">
+                        <button type="button" onclick="subscribeNewsletter()">Subscribe</button>
+                    </div>
+                </div>
+            </aside>
+        </div>
+
+        <!-- ── 6. Bottom: Related Stories Grid ── -->
+        <section class="related-stories-section">
+            <div class="section-heading-bar">
+                <h2>🌾 More Stories from Punjab • ਹੋਰ ਖ਼ਾਸ ਖ਼ਬਰਾਂ</h2>
+                <a href="index.html#latest-stream" class="section-view-all">View All News →</a>
+            </div>
+            <div class="punjab-cards-grid" id="dynamicRelatedGrid">
+                <!-- Dynamically populated by article.js -->
+            </div>
+        </section>
+    </div>
+
+    <!-- ── 7. Minimalist Editorial Footer ── -->
+    <footer class="site-footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <img src="OFFICIAL LOGO.png" alt="InPunjab News" style="height: 44px; margin-bottom: 12px;" onerror="this.src='INPUNJABNEWSLOGO.png'">
+                    <p style="line-height: 1.6; color: #94A3B8;">
+                        InPunjab News brings fearless journalism, ground reality, and verified news covering politics, agriculture, culture, and community developments across Punjab and North India.
+                    </p>
+                </div>
+                <div class="footer-col">
+                    <h5>Categories</h5>
+                    <ul class="footer-links">
+                        <li><a href="index.html#punjab-section">Punjab Politics</a></li>
+                        <li><a href="index.html#latest-stream">Crime & Law</a></li>
+                        <li><a href="index.html#latest-stream">Agriculture & Farmers</a></li>
+                        <li><a href="panchaang.html">Daily Panchaang</a></li>
+                        <li><a href="index.html#latest-stream">Sports & Kabaddi</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h5>Quick Links</h5>
+                    <ul class="footer-links">
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="panchaang.html">Panchaang Calendar</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Contact Editorial Desk</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h5>Editorial Desk</h5>
+                    <p style="color: #94A3B8; margin-bottom: 8px;">
+                        Jalandhar, Punjab, India<br>
+                        <strong>Editor & Owner:</strong> Vicky Suri
+                    </p>
+                    <p style="color: #64748B; font-size: 12px;">Punjab's Most Trusted Digital Newsroom</p>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <span>© 2026 InPunjab News. All Rights Reserved. • Designed with Minimal Editorial Precision.</span>
+                <span>🇮🇳 ਸਤਿ ਸ੍ਰੀ ਅਕਾਲ • Jai Punjab</span>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Toast Notification Box -->
+    <div id="toastBox" class="toast-box">Notification</div>
+
+    <!-- ── 8. Scripts ── -->
+    <script src="supabaseClient.js"></script>
+    <script src="article.js?v=2.1"></script>
+
+    <!-- Google Translate Support -->
+    <div id="google_translate_element" style="display:none;"></div>
+    <script type="text/javascript">
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement({pageLanguage: 'pa', includedLanguages: 'en,hi,pa', autoDisplay: false}, 'google_translate_element');
+        }
+        function changeLanguage(langCode) {
+            var selectField = document.querySelector("select.goog-te-combo");
+            if (selectField) {
+                selectField.value = langCode;
+                selectField.dispatchEvent(new Event('change'));
+            }
         }
     </script>
-<meta name="google-adsense-account" content="ca-pub-9624803444729340">
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9624803444729340" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script></head>
-<body>
-<!-- Splash Screen -->
-
-<!-- Reading Progress -->
-<div class="reading-progress" id="readingProgress"></div>
-<!-- Breaking News Ticker -->
-
-<!-- Top Bar -->
-<div class="top-bar">
-<div class="top-bar-inner">
-<div class="top-bar-left">
-<span><span class="live-dot"></span> LIVE</span>
-<span>📅 Tuesday, June 23, 2026</span>
-<span class="weather-badge">🌤️ Chandigarh 34°C</span>
-<span class="currency-badge" id="rate-usd">💵 USD: ₹83.45</span>
-<span class="currency-badge" id="rate-gbp">💷 GBP: ₹105.60</span>
-</div>
-<div class="top-bar-right">
-<a href="#" onclick="changeLanguage('pa'); return false;">ਪੰਜਾਬੀ</a>
-<a href="#" onclick="changeLanguage('hi'); return false;">हिन्दी</a>
-<a href="#" onclick="changeLanguage('en'); return false;">English</a>
-<a href="#">Subscribe</a>
-</div>
-</div>
-</div>
-<!-- Main Header -->
-<header class="main-header">
-    <div class="header-inner">
-        <div class="header-top">
-            <a href="index.html" class="logo-block" style="text-decoration: none;">
-                <img alt="InPunjab News Logo" src="OFFICIAL LOGO.png"/>
-            </a>
-            
-            <div class="header-ad-banner">
-                <div class="ad-label">Sponsored</div>
-                <div class="ad-content">✦ Punjab Kesari Expo 2026 ✦</div>
-            </div>
-            
-            <div class="header-search">
-                <div class="nav-search" style="position: relative;">
-                    <input class="search-box" id="searchBox" placeholder="Search news, topics…" type="text"/>
-                    <button class="search-btn" onclick="doSearch()">🔍</button>
-                </div>
-                <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()" title="Toggle Light/Dark Mode">☀️</button>
-                <button class="mobile-menu-btn" id="mobileMenuBtn" onclick="toggleMobileMenu()">☰</button>
-            </div>
-        </div>
-        
-        <nav class="main-nav">
-            <a class="nav-item breaking" onclick="scrollToSection('breaking')">🔴 Breaking</a>
-            <a class="nav-item active" onclick="scrollToSection('hero')">Home</a>
-            <a class="nav-item" href="panchaang.html" style="color: var(--primary-color);">🕉️ Daily Panchaang</a>
-            <div class="dropdown">
-                <a class="nav-item">Punjab ▾</a>
-                <div class="dropdown-content">
-                    <a href="#">Chandigarh</a>
-                    <a href="#">Amritsar</a>
-                    <a href="#">Ludhiana</a>
-                    <a href="#">Jalandhar</a>
-                </div>
-            </div>
-            <a class="nav-item">National</a>
-            <a class="nav-item">World</a>
-            <a class="nav-item">Sports</a>
-            <a class="nav-item">Entertainment</a>
-            <a class="nav-item">Business</a>
-            <a class="nav-item">Education</a>
-            <a class="nav-item">NRI</a>
-        </nav>
-    </div>
-</header>
-<!-- HERO SECTION -->
-<section class="hero-section" id="hero">
-<div class="container">
-<div class="article-layout">
-    <!-- LEFT AD -->
-    <aside class="article-ad">
-        <div class="ad-label-sm">Advertisement</div>
-        <div class="article-ad-stack">
-            <div class="article-ad-card">
-                <img src="AD1.jpeg" class="article-ad-img" alt="Advertisement 1" />
-            </div>
-            <div class="article-ad-card">
-                <img src="AD2.jpeg" class="article-ad-img" alt="Advertisement 2" />
-            </div>
-        </div>
-    </aside>
-
-    <!-- ARTICLE CONTENT -->
-    <div class="article-content" id="article-container">
-        <div class="article-loading">
-            <div class="loading-spinner"></div>
-            <p>Loading article...</p>
-        </div>
-    </div>
-
-    <!-- RIGHT AD -->
-    <aside class="article-ad">
-        <div class="ad-label-sm">Advertisement</div>
-        <div class="article-ad-stack">
-            <div class="article-ad-card">
-                <img src="AD3.jpeg" class="article-ad-img" alt="Advertisement 3" />
-            </div>
-            <div class="article-ad-card">
-                <img src="ad4.jpeg" class="article-ad-img" alt="Advertisement 4" />
-            </div>
-        </div>
-    </aside>
-</div>
-</section>
-<!-- AD STRIP -->
-<div class="ad-strip">
-<div class="container">
-<div class="ad-strip-inner">
-<div class="ad-strip-badge">Advertisement</div>
-<div class="ad-strip-content">
-<div class="ad-item">
-<div class="ad-item-icon">🏡</div>
-<div>
-<div class="ad-item-text">DLF Punjab — Luxury Homes from ₹45 Lakh</div>
-<div class="ad-item-sub">Mohali · Ludhiana · Amritsar</div>
-</div>
-</div>
-<div class="ad-item">
-<div class="ad-item-icon">🎓</div>
-<div>
-<div class="ad-item-text">Chandigarh University MBA 2026 Admissions Open</div>
-<div class="ad-item-sub">World Ranking #551 | Apply Now</div>
-</div>
-</div>
-<div class="ad-item">
-<div class="ad-item-icon">💊</div>
-<div>
-<div class="ad-item-text">PGI Chandigarh Health Check Camps This Weekend</div>
-<div class="ad-item-sub">Free for Senior Citizens</div>
-</div>
-</div>
-<div class="ad-item">
-<div class="ad-item-icon">🚗</div>
-<div>
-<div class="ad-item-text">Tata Motors Punjab — Drive Home a New Nexon</div>
-<div class="ad-item-sub">0% Finance Till July 31</div>
-</div>
-</div>
-</div>
-<div class="ad-strip-badge">Sponsored</div>
-</div>
-</div>
-</div>
-<!-- MAIN CONTENT + SIDEBAR -->
-<div class="container">
-<div class="main-content">
-<!-- LEFT COLUMN -->
-<div class="left-col">
-<!-- BREAKING NEWS -->
-<div class="section-pad" id="breaking">
-<div class="section-header">
-<div class="section-title">🔴 Breaking News</div>
-<a class="section-more" href="#">All Breaking →</a>
-</div>
-<div class="card-grid-3 fade-up">
-<div class="news-card">
-<div class="breaking-badge">Breaking</div>
-<img alt="" class="news-card-img" src="https://images.unsplash.com/photo-1529107386315-e1a2ed48a620?w=500&amp;q=75"/>
-<div class="news-card-body">
-<div class="news-card-cat">🔴 Punjab • Law &amp; Order</div>
-<div class="news-card-title">High Alert in Amritsar After Intelligence Report; Security
-                                    Forces Deploy at Key Border Points</div>
-<div class="news-card-excerpt">Security forces placed on high alert after credible
-                                    intelligence inputs were shared with state agencies this morning, officials confirm.
-                                </div>
-<div class="news-card-footer">
-<span class="time">🕐 35 min ago</span>
-<div class="news-card-actions">
-<button class="action-btn" onclick="likeCard(this)">🤍</button>
-<button class="action-btn">🔗</button>
-<button class="action-btn">💬 42</button>
-</div>
-</div>
-</div>
-</div>
-<div class="news-card">
-<div class="breaking-badge">Breaking</div>
-<img alt="" class="news-card-img" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=500&amp;q=75"/>
-<div class="news-card-body">
-<div class="news-card-cat">🔴 National • Politics</div>
-<div class="news-card-title">PM Modi Calls Emergency Meeting Over Indus Waters Treaty
-                                    Dispute; Punjab Delegation Invited</div>
-<div class="news-card-excerpt">A critical inter-ministerial meeting scheduled for
-                                    Thursday will address Punjab's concerns on water sharing agreements.</div>
-<div class="news-card-footer">
-<span class="time">🕐 1 hr ago</span>
-<div class="news-card-actions">
-<button class="action-btn" onclick="likeCard(this)">🤍</button>
-<button class="action-btn">🔗</button>
-<button class="action-btn">💬 187</button>
-</div>
-</div>
-</div>
-</div>
-<div class="news-card">
-<img alt="" class="news-card-img" src="https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=500&amp;q=75"/>
-<div class="news-card-body">
-<div class="news-card-cat">Punjab • Economy</div>
-<div class="news-card-title">Punjab's Textile Export Surges 22% — Ludhiana Hosiery Hub
-                                    Leads With ₹3,200 Crore Deals</div>
-<div class="news-card-excerpt">State's textile sector posts strongest quarterly
-                                    performance in a decade, government credits new export facilitation policy.</div>
-<div class="news-card-footer">
-<span class="time">🕐 2 hrs ago</span>
-<div class="news-card-actions">
-<button class="action-btn" onclick="likeCard(this)">🤍</button>
-<button class="action-btn">🔗</button>
-<button class="action-btn">💬 63</button>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-<!-- PUNJAB NEWS -->
-<div class="section-pad" id="punjab">
-<div class="section-header">
-<div class="section-title">🌾 Punjab News</div>
-<a class="section-more" href="#">More Punjab →</a>
-</div>
-<div class="card-grid-2 fade-up">
-<div class="news-card featured">
-<img alt="Farming" class="news-card-img" src="https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=600&amp;q=75"/>
-<div class="news-card-body">
-<span class="cat-pill cat-punjab">Punjab</span>
-<div class="news-card-title">Stubble Burning Down 67%: Punjab's Satellite-Monitored
-                                    Farming Revolution Shows Real Results for Third Consecutive Season</div>
-<div class="news-card-excerpt">The state government's combined strategy of incentives,
-                                    penalties, and alternative crop support has yielded significant results in reducing
-                                    air pollution. Farmer cooperatives say the shift is economically viable now.</div>
-<div class="news-card-footer">
-<span class="time">🕐 5 hrs ago • By Jaswant Kaur</span>
-<div class="news-card-actions">
-<button class="action-btn" onclick="likeCard(this)">🤍</button>
-<button class="action-btn">💬 94</button>
-</div>
-</div>
-</div>
-</div>
-<div class="news-card">
-<img alt="Business" class="news-card-img" src="https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=600&amp;q=75"/>
-<div class="news-card-body">
-<span class="cat-pill cat-business">Business</span>
-<div class="news-card-title">Startup Punjab 2026: 847 New Tech Startups Registered in
-                                    Mohali This Year as Silicon Valley of North India Vision Takes Shape</div>
-<div class="news-card-excerpt">Mohali's IT City has attracted ₹2,100 crore in venture
-                                    capital this year alone. Young entrepreneurs from across North India are choosing
-                                    Punjab over Bengaluru, citing better living costs.</div>
-<div class="news-card-footer">
-<span class="time">🕐 6 hrs ago • By Ravi Sharma</span>
-<div class="news-card-actions">
-<button class="action-btn" onclick="likeCard(this)">🤍</button>
-<button class="action-btn">💬 71</button>
-</div>
-</div>
-</div>
-</div>
-</div>
-<!-- List format -->
-<div class="fade-up">
-<div class="list-card">
-<img alt="" class="list-card-img" src="https://images.unsplash.com/photo-1565843708714-52ecf69ab81f?w=200&amp;q=70"/>
-<div class="list-card-body">
-<div class="list-card-cat">Education • Punjab</div>
-<div class="list-card-title">Punjab Government to Open 500 New Smart Classrooms in Rural
-                                    Government Schools Before Year-End</div>
-<div class="list-card-meta">7 hrs ago • 3.1K views</div>
-</div>
-</div>
-<div class="list-card">
-<img alt="" class="list-card-img" src="https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=200&amp;q=70"/>
-<div class="list-card-body">
-<div class="list-card-cat">Health • Punjab</div>
-<div class="list-card-title">AAP's Free Mohalla Clinic Model Reaches 1 Crore
-                                    Consultations Milestone in Punjab — Health Minister Hails Success</div>
-<div class="list-card-meta">8 hrs ago • 5.6K views</div>
-</div>
-</div>
-<div class="list-card">
-<img alt="" class="list-card-img" src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=200&amp;q=70"/>
-<div class="list-card-body">
-<div class="list-card-cat">Crime • Punjab</div>
-<div class="list-card-title">Punjab Police Cracks Down on Organized Cyber Fraud Network;
-                                    23 Arrested Across Jalandhar, Moga and Hoshiarpur</div>
-<div class="list-card-meta">9 hrs ago • 4.8K views</div>
-</div>
-</div>
-<div class="list-card">
-<img alt="" class="list-card-img" src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=200&amp;q=70"/>
-<div class="list-card-body">
-<div class="list-card-cat">Infrastructure • Punjab</div>
-<div class="list-card-title">Amritsar-Delhi Expressway Phase 2: Work Resumes After 8-Month Delay; Completion Now Targeted for December 2026</div>
-<div class="list-card-meta">10 hrs ago • 2.9K views</div>
-</div>
-</div>
-</div>
-</div>
-<!-- AD LEADERBOARD -->
-<div class="leaderboard-ad fade-up" style="text-align: center; padding: 20px 0; background: transparent; border: none; box-shadow: none; overflow: hidden; max-width: 100%;">
-    <div class="container" style="text-align: center; max-width: 100%;">
-        <div class="ad-label" style="text-align: left; margin-bottom: 10px;">Advertisement</div>
-        <img src="AD1.jpeg" alt="Advertisement 1" style="width: 100%; max-width: 728px; height: auto; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); margin: 0 auto; display: block;">
-    </div>
-</div>
-<!-- REGIONS -->
-<div class="section-pad" id="regions">
-<div class="section-header">
-<div class="section-title">📍 Regions of Punjab</div>
-<a class="section-more" href="#">All Regions →</a>
-</div>
-<div class="region-tabs" id="regionTabs">
-<div class="region-tab active" onclick="switchRegion('amritsar', this)">🏯 Amritsar</div>
-<div class="region-tab" onclick="switchRegion('ludhiana', this)">🏭 Ludhiana</div>
-<div class="region-tab" onclick="switchRegion('chandigarh', this)">🏛 Chandigarh</div>
-<div class="region-tab" onclick="switchRegion('jalandhar', this)">📻 Jalandhar</div>
-<div class="region-tab" onclick="switchRegion('patiala', this)">👑 Patiala</div>
-<div class="region-tab" onclick="switchRegion('mohali', this)">💻 Mohali</div>
-<div class="region-tab" onclick="switchRegion('firozpur', this)">⚔ Firozpur</div>
-<div class="region-tab" onclick="switchRegion('bathinda', this)">⚗ Bathinda</div>
-<div class="region-tab" onclick="switchRegion('hoshiarpur', this)">🌿 Hoshiarpur</div>
-<div class="region-tab" onclick="switchRegion('gurdaspur', this)">🏔 Gurdaspur</div>
-<div class="region-tab" onclick="switchRegion('moga', this)">🌾 Moga</div>
-<div class="region-tab" onclick="switchRegion('ferozepur', this)">🛡 Ferozepur</div>
-</div>
-<div class="card-grid-3 fade-up" id="dynamic-grid-regions-0">
-        <div class="news-card">
-            <img src="https://images.unsplash.com/photo-1540910419892-4a36d2c3266c?w=500&q=75" class="news-card-img" alt="">
-            <div class="news-card-body">
-                <div class="news-card-cat">Regions</div>
-                <div class="news-card-title">Latest Updates in Regions - Breaking News Story 1</div>
-                <div class="news-card-footer">
-                    <span class="time">Just now</span>
-                </div>
-            </div>
-        </div>
-        
-        <div class="news-card">
-            <img src="https://images.unsplash.com/photo-1529107386315-e1a2ed48a620?w=500&q=75" class="news-card-img" alt="">
-            <div class="news-card-body">
-                <div class="news-card-cat">Regions</div>
-                <div class="news-card-title">Latest Updates in Regions - Breaking News Story 2</div>
-                <div class="news-card-footer">
-                    <span class="time">Just now</span>
-                </div>
-            </div>
-        </div>
-        
-        <div class="news-card">
-            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=500&q=75" class="news-card-img" alt="">
-            <div class="news-card-body">
-                <div class="news-card-cat">Regions</div>
-                <div class="news-card-title">Latest Updates in Regions - Breaking News Story 3</div>
-                <div class="news-card-footer">
-                    <span class="time">Just now</span>
-                </div>
-            </div>
-        </div>
-        </div>
-</div>
-<!-- NATIONAL NEWS -->
-<div class="section-pad" id="national">
-<div class="section-header">
-<div class="section-title">🇮🇳 National News</div>
-<a class="section-more" href="#">More National →</a>
-</div>
-<div class="national-section">
-<div class="national-grid">
-<div class="national-featured">
-<img alt="India" src="https://images.unsplash.com/photo-1532375810709-75b1da00537c?w=600&amp;q=75"/>
-<div class="national-featured-overlay">
-<span class="cat-pill cat-national">National • Politics</span>
-<div style="font-family:'Playfair Display',serif;font-size:20px;font-weight:700;margin-bottom:8px;">
-                                        India Unveils ₹28 Lakh Crore Infrastructure Plan; Punjab to Receive ₹1.8 Lakh
-                                        Crore for Highways and Railways</div>
-<div style="font-size:11px;color:rgba(255,255,255,0.55);">2 hrs ago • By Deepak
-                                        Anand</div>
-</div>
-</div>
-<div>
-<div class="list-card">
-<img alt="" class="list-card-img" src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=200&amp;q=70"/>
-<div class="list-card-body">
-<div class="list-card-cat">Economy • National</div>
-<div class="list-card-title">India's GDP Grows 7.4% in Q1 2026 — Third Fastest
-                                            Among G20 Nations; Agriculture Sector Leads</div>
-<div class="list-card-meta">3 hrs ago • 14.2K views</div>
-</div>
-</div>
-<div class="list-card">
-<img alt="" class="list-card-img" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200&amp;q=70"/>
-<div class="list-card-body">
-<div class="list-card-cat">Politics • Delhi</div>
-<div class="list-card-title">Opposition Calls Emergency Parliament Session Over
-                                            Water Sharing Dispute; Rajya Sabha Expected to See Heated Debate</div>
-<div class="list-card-meta">4 hrs ago • 9.8K views</div>
-</div>
-</div>
-<div class="list-card">
-<img alt="" class="list-card-img" src="https://images.unsplash.com/photo-1529107386315-e1a2ed48a620?w=200&amp;q=70"/>
-<div class="list-card-body">
-<div class="list-card-cat">Security • National</div>
-<div class="list-card-title">India-China Border Talks Enter 22nd Round; Army
-                                            Chief Confirms No Tension at Disputed Points</div>
-<div class="list-card-meta">5 hrs ago • 7.3K views</div>
-</div>
-</div>
-<div class="list-card">
-<img alt="" class="list-card-img" src="https://images.unsplash.com/photo-1496347646636-ea47f7d6b37b?w=200&amp;q=70"/>
-<div class="list-card-body">
-<div class="list-card-cat">Environment • National</div>
-<div class="list-card-title">India to Plant 3 Billion Trees by 2030 Under Green
-                                            Shield Mission — Punjab to Contribute 85 Million</div>
-<div class="list-card-meta">6 hrs ago • 4.1K views</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-<!-- POLITICS -->
-<div class="section-pad" id="politics">
-<div class="section-header">
-<div class="section-title">🏛 Politics</div>
-<a class="section-more" href="#">More Politics →</a>
-</div>
-<div class="card-grid-4 fade-up" id="dynamic-grid-politics-0">
-        <div class="news-card">
-            <img src="https://images.unsplash.com/photo-1540910419892-4a36d2c3266c?w=500&q=75" class="news-card-img" alt="">
-            <div class="news-card-body">
-                <div class="news-card-cat">Politics</div>
-                <div class="news-card-title">Latest Updates in Politics - Breaking News Story 1</div>
-                <div class="news-card-footer">
-                    <span class="time">Just now</span>
-                </div>
-            </div>
-        </div>
-        
-        <div class="news-card">
-            <img src="https://images.unsplash.com/photo-1529107386315-e1a2ed48a620?w=500&q=75" class="news-card-img" alt="">
-            <div class="news-card-body">
-                <div class="news-card-cat">Politics</div>
-                <div class="news-card-title">Latest Updates in Politics - Breaking News Story 2</div>
-                <div class="news-card-footer">
-                    <span class="time">Just now</span>
-                </div>
-            </div>
-        </div>
-        
-        <div class="news-card">
-            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=500&q=75" class="news-card-img" alt="">
-            <div class="news-card-body">
-                <div class="news-card-cat">Politics</div>
-                <div class="news-card-title">Latest Updates in Politics - Breaking News Story 3</div>
-                <div class="news-card-footer">
-                    <span class="time">Just now</span>
-                </div>
-            </div>
-        </div>
-        
-        <div class="news-card">
-            <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=500&q=75" class="news-card-img" alt="">
-            <div class="news-card-body">
-                <div class="news-card-cat">Politics</div>
-                <div class="news-card-title">Latest Updates in Politics - Breaking News Story 4</div>
-                <div class="news-card-footer">
-                    <span class="time">Just now</span>
-                </div>
-            </div>
-        </div>
-        </div>
-</div>
-<!-- SPORTS -->
-<div class="section-pad" id="sports">
-<div class="section-header">
-<div class="section-title">🏆 Sports</div>
-<a class="section-more" href="#">More Sports →</a>
-</div>
-<!-- Match Cards -->
-<div class="sports-row fade-up" id="dynamic-grid-sports-0" style="margin-bottom:18px;">
-        <div class="news-card">
-            <img src="https://images.unsplash.com/photo-1540910419892-4a36d2c3266c?w=500&q=75" class="news-card-img" alt="">
-            <div class="news-card-body">
-                <div class="news-card-cat">Sports</div>
-                <div class="news-card-title">Latest Updates in Sports - Breaking News Story 1</div>
-                <div class="news-card-footer">
-                    <span class="time">Just now</span>
-                </div>
-            </div>
-        </div>
-        
-        <div class="news-card">
-            <img src="https://images.unsplash.com/photo-1529107386315-e1a2ed48a620?w=500&q=75" class="news-card-img" alt="">
-            <div class="news-card-body">
-                <div class="news-card-cat">Sports</div>
-                <div class="news-card-title">Latest Updates in Sports - Breaking News Story 2</div>
-                <div class="news-card-footer">
-                    <span class="time">Just now</span>
-                </div>
-            </div>
-        </div>
-        </div>
-<div class="card-grid-3 fade-up" id="dynamic-grid-sports-1">
-        <div class="news-card">
-            <img src="https://images.unsplash.com/photo-1540910419892-4a36d2c3266c?w=500&q=75" class="news-card-img" alt="">
-            <div class="news-card-body">
-                <div class="news-card-cat">Sports</div>
-                <div class="news-card-title">Latest Updates in Sports - Breaking News Story 1</div>
-                <div class="news-card-footer">
-                    <span class="time">Just now</span>
-                </div>
-            </div>
-        </div>
-        
-        <div class="news-card">
-            <img src="https://images.unsplash.com/photo-1529107386315-e1a2ed48a620?w=500&q=75" class="news-card-img" alt="">
-            <div class="news-card-body">
-                <div class="news-card-cat">Sports</div>
-                <div class="news-card-title">Latest Updates in Sports - Breaking News Story 2</div>
-                <div class="news-card-footer">
-                    <span class="time">Just now</span>
-                </div>
-            </div>
-        </div>
-        
-        <div class="news-card">
-            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=500&q=75" class="news-card-img" alt="">
-            <div class="news-card-body">
-                <div class="news-card-cat">Sports</div>
-                <div class="news-card-title">Latest Updates in Sports - Breaking News Story 3</div>
-                <div class="news-card-footer">
-                    <span class="time">Just now</span>
-                </div>
-            </div>
-        </div>
-        </div>
-</div>
-<!-- LEADERBOARD AD 2 -->
-<div class="leaderboard-ad fade-up" style="text-align: center; padding: 20px 0; background: transparent; border: none; box-shadow: none; overflow: hidden; max-width: 100%;">
-    <div class="container" style="text-align: center; max-width: 100%;">
-        <div class="ad-label" style="text-align: left; margin-bottom: 10px;">Advertisement</div>
-        <img src="AD2.jpeg" alt="Advertisement 2" style="width: 100%; max-width: 728px; height: auto; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); margin: 0 auto; display: block;">
-    </div>
-</div>
-<!-- ENTERTAINMENT -->
-<div class="section-pad" id="entertainment">
-<div class="section-header">
-<div class="section-title">🎬 Entertainment</div>
-<a class="section-more" href="#">More →</a>
-</div>
-<div class="card-grid-4 fade-up" id="dynamic-grid-entertainment-0">
-        <div class="news-card">
-            <img src="https://images.unsplash.com/photo-1540910419892-4a36d2c3266c?w=500&q=75" class="news-card-img" alt="">
-            <div class="news-card-body">
-                <div class="news-card-cat">Entertainment</div>
-                <div class="news-card-title">Latest Updates in Entertainment - Breaking News Story 1</div>
-                <div class="news-card-footer">
-                    <span class="time">Just now</span>
-                </div>
-            </div>
-        </div>
-        
-        <div class="news-card">
-            <img src="https://images.unsplash.com/photo-1529107386315-e1a2ed48a620?w=500&q=75" class="news-card-img" alt="">
-            <div class="news-card-body">
-                <div class="news-card-cat">Entertainment</div>
-                <div class="news-card-title">Latest Updates in Entertainment - Breaking News Story 2</div>
-                <div class="news-card-footer">
-                    <span class="time">Just now</span>
-                </div>
-            </div>
-        </div>
-        
-        <div class="news-card">
-            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=500&q=75" class="news-card-img" alt="">
-            <div class="news-card-body">
-                <div class="news-card-cat">Entertainment</div>
-                <div class="news-card-title">Latest Updates in Entertainment - Breaking News Story 3</div>
-                <div class="news-card-footer">
-                    <span class="time">Just now</span>
-                </div>
-            </div>
-        </div>
-        
-        <div class="news-card">
-            <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=500&q=75" class="news-card-img" alt="">
-            <div class="news-card-body">
-                <div class="news-card-cat">Entertainment</div>
-                <div class="news-card-title">Latest Updates in Entertainment - Breaking News Story 4</div>
-                <div class="news-card-footer">
-                    <span class="time">Just now</span>
-                </div>
-            </div>
-        </div>
-        </div>
-</div>
-<!-- BUSINESS -->
-<div class="section-pad" id="business">
-<div class="section-header">
-<div class="section-title">💼 Business &amp; Economy</div>
-<a class="section-more" href="#">More Business →</a>
-</div>
-<div class="card-grid-3 fade-up" id="dynamic-grid-business-0">
-        <div class="news-card">
-            <img src="https://images.unsplash.com/photo-1540910419892-4a36d2c3266c?w=500&q=75" class="news-card-img" alt="">
-            <div class="news-card-body">
-                <div class="news-card-cat">Business</div>
-                <div class="news-card-title">Latest Updates in Business - Breaking News Story 1</div>
-                <div class="news-card-footer">
-                    <span class="time">Just now</span>
-                </div>
-            </div>
-        </div>
-        
-        <div class="news-card">
-            <img src="https://images.unsplash.com/photo-1529107386315-e1a2ed48a620?w=500&q=75" class="news-card-img" alt="">
-            <div class="news-card-body">
-                <div class="news-card-cat">Business</div>
-                <div class="news-card-title">Latest Updates in Business - Breaking News Story 2</div>
-                <div class="news-card-footer">
-                    <span class="time">Just now</span>
-                </div>
-            </div>
-        </div>
-        
-        <div class="news-card">
-            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=500&q=75" class="news-card-img" alt="">
-            <div class="news-card-body">
-                <div class="news-card-cat">Business</div>
-                <div class="news-card-title">Latest Updates in Business - Breaking News Story 3</div>
-                <div class="news-card-footer">
-                    <span class="time">Just now</span>
-                </div>
-            </div>
-        </div>
-        </div>
-</div>
-<!-- VIDEOS -->
-<div class="section-pad" id="videos">
-<div class="section-header">
-<div class="section-title">📹 Video News</div>
-<a class="section-more" href="#">All Videos →</a>
-</div>
-<div class="video-grid fade-up">
-<div class="video-card">
-<div class="video-thumb">
-<img alt="" src="https://images.unsplash.com/photo-1605000797499-95a51c5269ae?w=400&amp;q=70"/>
-<div class="play-btn">▶</div>
-<div class="video-duration">4:32</div>
-</div>
-<div class="video-card-body">
-<div class="video-title">Ground Report: Farmers in Sangrur Explain Why They Switched
-                                    from Wheat to Maize</div>
-<div class="video-meta"><span>InPunjab News</span><span>2 hrs ago</span><span>👁
-                                        18K</span></div>
-</div>
-</div>
-<div class="video-card">
-<div class="video-thumb">
-<img alt="" src="https://images.unsplash.com/photo-1477281765962-ef34e8bb0967?w=400&amp;q=70"/>
-<div class="play-btn">▶</div>
-<div class="video-duration">7:15</div>
-</div>
-<div class="video-card-body">
-<div class="video-title">Exclusive: Inside the Golden Temple's New Environmental
-                                    Protection Initiative</div>
-<div class="video-meta"><span>InPunjab News</span><span>5 hrs ago</span><span>👁
-                                        31K</span></div>
-</div>
-</div>
-<div class="video-card">
-<div class="video-thumb">
-<img alt="" src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=400&amp;q=70"/>
-<div class="play-btn">▶</div>
-<div class="video-duration">2:48</div>
-</div>
-<div class="video-card-body">
-<div class="video-title">Kabaddi World Cup 2026: India's Punjab Players Train Hard for
-                                    Gold</div>
-<div class="video-meta"><span>Sports Desk</span><span>Yesterday</span><span>👁
-                                        44K</span></div>
-</div>
-</div>
-</div>
-</div>
-<!-- OPINION -->
-<div class="section-pad" id="opinion">
-<div class="section-header">
-<div class="section-title">✍️ Opinion &amp; Analysis</div>
-<a class="section-more" href="#">More Opinion →</a>
-</div>
-<div class="card-grid-3 fade-up">
-<div class="opinion-card">
-<div class="opinion-author">
-<div class="author-avatar">HS</div>
-<div>
-<div class="author-name">Harbhajan Singh Sondhi</div>
-<div class="author-role">Senior Political Analyst</div>
-</div>
-</div>
-<div class="opinion-title">Why Punjab's 2027 Elections Will Be the Most Consequential in
-                                Three Decades — And What's Really at Stake</div>
-<div class="opinion-excerpt">The three-way battle between AAP, Congress, and SAD-BJP
-                                alliance is no longer just about governance — it's about the soul of Punjab's democratic
-                                identity...</div>
-</div>
-<div class="opinion-card">
-<div class="opinion-author">
-<div class="author-avatar" style="background:linear-gradient(135deg,#00C87A,#0080FF);">
-                                    PK</div>
-<div>
-<div class="author-name">Priya Khanna</div>
-<div class="author-role">Economic Correspondent</div>
-</div>
-</div>
-<div class="opinion-title">The Real Cost of Punjab's Drug Crisis: Why Economic Intervention
-                                Matters More Than Police Crackdowns</div>
-<div class="opinion-excerpt">Data shows that districts with robust employment generation see
-                                40% lower addiction rates. The state needs a comprehensive economic rehabilitation
-                                strategy...</div>
-</div>
-<div class="opinion-card">
-<div class="opinion-author">
-<div class="author-avatar" style="background:linear-gradient(135deg,#B464FF,#FF3A5E);">
-                                    JS</div>
-<div>
-<div class="author-name">Jagjit Singh Balveer</div>
-<div class="author-role">Agricultural Expert</div>
-</div>
-</div>
-<div class="opinion-title">Diversification or Crisis: Punjab's Farmers Face an Impossible
-                                Choice Between Tradition and Survival</div>
-<div class="opinion-excerpt">The paddy-wheat cycle has served Punjab for 60 years, but
-                                groundwater depletion is making it unsustainable. What should replace it? No one has a
-                                clear answer...</div>
-</div>
-</div>
-</div>
-<!-- PHOTOS -->
-<div class="section-pad" id="photos">
-<div class="section-header">
-<div class="section-title">📸 Photo Gallery</div>
-<a class="section-more" href="#">Full Gallery →</a>
-</div>
-<div class="gallery-grid fade-up">
-<div class="gallery-item">
-<img alt="" src="https://images.unsplash.com/photo-1477281765962-ef34e8bb0967?w=400&amp;q=70"/>
-<div class="gallery-overlay">Golden Temple at Dawn</div>
-</div>
-<div class="gallery-item">
-<img alt="" src="https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=400&amp;q=70"/>
-<div class="gallery-overlay">Punjab Wheat Fields</div>
-</div>
-<div class="gallery-item">
-<img alt="" src="https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?w=400&amp;q=70"/>
-<div class="gallery-overlay">Baisakhi Celebrations</div>
-</div>
-<div class="gallery-item">
-<img alt="" src="https://images.unsplash.com/photo-1543466835-00a7907e9de1?w=400&amp;q=70"/>
-<div class="gallery-overlay">Punjab Wildlife</div>
-</div>
-<div class="gallery-item">
-<img alt="" src="https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=400&amp;q=70"/>
-<div class="gallery-overlay">Chandigarh Skyline</div>
-</div>
-<div class="gallery-item">
-<img alt="" src="https://images.unsplash.com/photo-1531415074968-036ba1b575da?w=400&amp;q=70"/>
-<div class="gallery-overlay">Sports Day Punjab</div>
-</div>
-<div class="gallery-item">
-<img alt="" src="https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=400&amp;q=70"/>
-<div class="gallery-overlay">Punjab Tech Summit</div>
-</div>
-<div class="gallery-item">
-<img alt="" src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=400&amp;q=70"/>
-<div class="gallery-overlay">Cultural Festival</div>
-</div>
-</div>
-</div>
-<!-- SUBSCRIBE -->
-<div class="subscribe-band fade-up">
-<div class="subscribe-text">
-<h3>📰 Stay Ahead — Get Punjab First</h3>
-<p>Breaking news, exclusive stories, and morning briefings straight to your inbox.</p>
-</div>
-<div class="subscribe-form">
-<input class="subscribe-input" placeholder="Enter your email address" type="email"/>
-<button class="subscribe-btn" onclick="subscribeEmail()">Subscribe Free →</button>
-</div>
-</div>
-</div><!-- /left-col -->
-<!-- SIDEBAR -->
-<aside class="sidebar">
-<!-- Trending -->
-<div class="sidebar-widget">
-<div class="widget-title"><span>🔥</span> Trending Now</div>
-<div class="trending-list" id="trendingList">
-<div class="trending-item">
-<div class="trending-num">01</div>
-<div>
-<div class="trending-cat">Politics</div>
-<div class="trending-text">Bhagwant Mann's 100-Day Report Card — What Punjab Got and
-                                    What It Missed</div>
-</div>
-</div>
-<div class="trending-item">
-<div class="trending-num">02</div>
-<div>
-<div class="trending-cat">Crime</div>
-<div class="trending-text">Drug Menace: Exclusive Ground Report from Tarn Taran's
-                                    Frontline Villages</div>
-</div>
-</div>
-<div class="trending-item">
-<div class="trending-num">03</div>
-<div>
-<div class="trending-cat">Entertainment</div>
-<div class="trending-text">Diljit Dosanjh Breaks India's Concert Attendance Record in
-                                    Chandigarh Show</div>
-</div>
-</div>
-<div class="trending-item">
-<div class="trending-num">04</div>
-<div>
-<div class="trending-cat">Sports</div>
-<div class="trending-text">Shubman Gill Hits 3rd Consecutive Century — Sets New Indian
-                                    Batting Record</div>
-</div>
-</div>
-<div class="trending-item">
-<div class="trending-num">05</div>
-<div>
-<div class="trending-cat">Economy</div>
-<div class="trending-text">Punjab's NRI Investment Up 34% — Diaspora Bets Big on Home
-                                    State</div>
-</div>
-</div>
-<div class="trending-item">
-<div class="trending-num">06</div>
-<div>
-<div class="trending-cat">Agriculture</div>
-<div class="trending-text">Solar Farming Revolution: Kishan Earns More from Sun Than
-                                    from Soil in Bathinda</div>
-</div>
-</div>
-</div>
-</div>
-<!-- Sidebar Ad -->
-<div class="sidebar-ad">
-<div class="ad-label">Advertisement</div>
-<div class="sidebar-ad-icon">🏠</div>
-<div class="sidebar-ad-title">Omaxe Chandigarh Extension</div>
-<div class="sidebar-ad-text">Premium 3BHK apartments starting ₹68 Lakh. RERA approved. Just 15 min
-                        from Chandigarh airport. Ready to move.</div>
-<button class="sidebar-ad-btn">Book a Site Visit</button>
-</div>
-<!-- Poll Widget -->
-<div class="sidebar-widget">
-<div class="widget-title"><span>🗳</span> Today's Poll</div>
-<p style="font-size:12px;color:var(--text-secondary);margin-bottom:14px;line-height:1.5;">Who should
-                        lead Punjab's agricultural reform agenda?</p>
-<div class="poll-options" id="pollOptions">
-<div class="poll-option" onclick="vote(this, 42)">
-<div class="poll-bar" style="width:0%"></div>
-<div class="poll-option-text">State Government <span class="poll-percent">42%</span></div>
-</div>
-<div class="poll-option" onclick="vote(this, 28)">
-<div class="poll-bar" style="width:0%"></div>
-<div class="poll-option-text">Farmer Unions <span class="poll-percent">28%</span></div>
-</div>
-<div class="poll-option" onclick="vote(this, 19)">
-<div class="poll-bar" style="width:0%"></div>
-<div class="poll-option-text">Central Government <span class="poll-percent">19%</span></div>
-</div>
-<div class="poll-option" onclick="vote(this, 11)">
-<div class="poll-bar" style="width:0%"></div>
-<div class="poll-option-text">Agricultural Universities <span class="poll-percent">11%</span></div>
-</div>
-</div>
-<div class="poll-total" id="pollTotal">4,821 votes cast • Tap to vote</div>
-</div>
-<!-- Weather Widget -->
-<div class="sidebar-widget">
-<div class="widget-title"><span>🌤</span> Punjab Weather</div>
-<div style="display:flex;flex-direction:column;gap:10px;">
-<div style="display:flex;justify-content:space-between;align-items:center;padding:8px;background:var(--ad-bg);border-radius:8px;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);">
-<span style="font-size:12px;font-weight:600;">🏛 Chandigarh</span>
-<span style="font-size:14px;font-weight:700;color:var(--saffron);">34°C ⛅</span>
-</div>
-<div style="display:flex;justify-content:space-between;align-items:center;padding:8px;background:var(--ad-bg);border-radius:8px;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);">
-<span style="font-size:12px;font-weight:600;">🏯 Amritsar</span>
-<span style="font-size:14px;font-weight:700;color:var(--saffron);">37°C ☀️</span>
-</div>
-<div style="display:flex;justify-content:space-between;align-items:center;padding:8px;background:var(--ad-bg);border-radius:8px;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);">
-<span style="font-size:12px;font-weight:600;">🏭 Ludhiana</span>
-<span style="font-size:14px;font-weight:700;color:var(--saffron);">36°C 🌩</span>
-</div>
-<div style="display:flex;justify-content:space-between;align-items:center;padding:8px;background:var(--ad-bg);border-radius:8px;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);">
-<span style="font-size:12px;font-weight:600;">📻 Jalandhar</span>
-<span style="font-size:14px;font-weight:700;color:var(--saffron);">35°C ⛅</span>
-</div>
-<div style="display:flex;justify-content:space-between;align-items:center;padding:8px;background:var(--ad-bg);border-radius:8px;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);">
-<span style="font-size:12px;font-weight:600;">👑 Patiala</span>
-<span style="font-size:14px;font-weight:700;color:var(--saffron);">38°C ☀️</span>
-</div>
-</div>
-</div>
-<!-- Sidebar Ad 2 -->
-<div class="sidebar-ad" style="background:var(--card-bg);border-color:var(--card-border);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);box-shadow:0 4px 24px rgba(0,0,0,0.04);">
-<div class="ad-label">Advertisement</div>
-<div class="sidebar-ad-icon">🎓</div>
-<div class="sidebar-ad-title" style="color:var(--text-primary);">Chandigarh University</div>
-<div class="sidebar-ad-text">MBA, BCA, Engineering 2026 Admissions. Ranked #1 in Punjab. 95%
-                        Placement Record.</div>
-<button class="sidebar-ad-btn" style="background:var(--gold);color:var(--deep-navy);">Apply
-                        Now</button>
-</div>
-<!-- Latest Updates -->
-<div class="sidebar-widget">
-<div class="widget-title"><span>⚡</span> Latest Updates</div>
-<div id="latestUpdates" style="display:flex;flex-direction:column;gap:12px;">
-<div style="font-size:11px;color:var(--text-muted);padding:8px;background:var(--ad-bg);border-radius:8px;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-left:3px solid var(--red-accent);cursor:pointer;">
-<div style="font-weight:700;color:var(--text-secondary);margin-bottom:3px;">BSF seizes
-                                heroin worth ₹12 cr near Attari border</div>
-<div>20 min ago</div>
-</div>
-<div style="font-size:11px;color:var(--text-muted);padding:8px;background:var(--ad-bg);border-radius:8px;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-left:3px solid var(--saffron);cursor:pointer;">
-<div style="font-weight:700;color:var(--text-secondary);margin-bottom:3px;">Punjab CM to
-                                address farmers at Kisan Mela in Ludhiana tomorrow</div>
-<div>45 min ago</div>
-</div>
-<div style="font-size:11px;color:var(--text-muted);padding:8px;background:var(--ad-bg);border-radius:8px;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-left:3px solid var(--green-accent);cursor:pointer;">
-<div style="font-weight:700;color:var(--text-secondary);margin-bottom:3px;">India's GDP data
-                                release expected at 5:30 PM today</div>
-<div>1 hr ago</div>
-</div>
-<div style="font-size:11px;color:var(--text-muted);padding:8px;background:var(--ad-bg);border-radius:8px;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-left:3px solid var(--saffron);cursor:pointer;">
-<div style="font-weight:700;color:var(--text-secondary);margin-bottom:3px;">PBKS vs CSK:
-                                Punjab Kings need 46 off 24 balls</div>
-<div>Live</div>
-</div>
-<div style="font-size:11px;color:var(--text-muted);padding:8px;background:var(--ad-bg);border-radius:8px;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-left:3px solid var(--text-muted);cursor:pointer;">
-<div style="font-weight:700;color:var(--text-secondary);margin-bottom:3px;">Flood alert
-                                issued for 3 districts ahead of heavy rain tonight</div>
-<div>2 hrs ago</div>
-</div>
-</div>
-</div>
-</aside>
-</div><!-- /main-content -->
-</div><!-- /container -->
-<!-- FOOTER -->
-<footer class="main-footer">
-<div class="container">
-<div class="footer-grid">
-<div class="footer-about">
-<img src="OFFICIAL LOGO.png" alt="InPunjab News" style="height: 100px; object-fit: contain; margin-bottom: 15px;">
-<p>Punjab's most trusted independent news platform — delivering accurate, unbiased journalism to 4
-                        million readers daily across Chandigarh, Amritsar, Ludhiana, Jalandhar, and beyond. We cover
-                        Punjab like no one else.</p>
-<div class="social-links">
-<div class="social-btn">𝕏</div>
-<div class="social-btn">f</div>
-<div class="social-btn">in</div>
-<div class="social-btn">▶</div>
-<div class="social-btn">📷</div>
-</div>
-</div>
-<div class="footer-col">
-<h4>Punjab Regions</h4>
-<ul class="footer-links">
-<li><a href="#">Amritsar</a></li>
-<li><a href="#">Ludhiana</a></li>
-<li><a href="#">Chandigarh</a></li>
-<li><a href="#">Jalandhar</a></li>
-<li><a href="#">Patiala</a></li>
-<li><a href="#">Mohali</a></li>
-<li><a href="#">Bathinda</a></li>
-<li><a href="#">Firozpur</a></li>
-<li><a href="#">Hoshiarpur</a></li>
-<li><a href="#">Gurdaspur</a></li>
-</ul>
-</div>
-<div class="footer-col">
-<h4>Categories</h4>
-<ul class="footer-links">
-<li><a href="#">Breaking News</a></li>
-<li><a href="#">Politics</a></li>
-<li><a href="#">Agriculture</a></li>
-<li><a href="#">Business</a></li>
-<li><a href="#">Sports</a></li>
-<li><a href="#">Entertainment</a></li>
-<li><a href="#">Crime</a></li>
-<li><a href="#">Education</a></li>
-<li><a href="#">Health</a></li>
-<li><a href="#">Opinion</a></li>
-</ul>
-</div>
-<div class="footer-col">
-<h4>Company</h4>
-<ul class="footer-links">
-<li><a href="#">About Us</a></li>
-<li><a href="#">Editorial Team</a></li>
-<li><a href="#">Advertise With Us</a></li>
-<li><a href="#">Careers</a></li>
-<li><a href="#">Contact Us</a></li>
-<li><a href="#">Privacy Policy</a></li>
-<li><a href="#">Terms of Use</a></li>
-<li><a href="#">Corrections Policy</a></li>
-<li><a href="#">RSS Feed</a></li>
-<li><a href="#">App Download</a></li>
-</ul>
-</div>
-</div>
-<div class="footer-bottom">
-<span>© 2026 InPunjab News. All rights reserved. | Made with ❤️ in Punjab</span>
-<span>🇮🇳 ਸਤਿ ਸ੍ਰੀ ਅਕਾਲ • Jai Punjab</span>
-</div>
-</div>
-</footer>
-<!-- Toast Container -->
-<div class="toast-container" id="toastContainer"></div>
-<!-- Back to Top -->
-<button id="back-top" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
-<!-- Shorts Floating Action Button -->
-<button class="shorts-fab" id="shorts-fab" onclick="openShorts()">
-<img alt="Shorts" src="SHORTS.png"/>
-</button>
-<!-- Shorts Overlay Container -->
-<div class="shorts-container hidden" id="shorts-container">
-<button class="shorts-back-btn" onclick="closeShorts()">⬅ Back</button>
-<div class="shorts-wrapper" id="shortsWrapper">
-<!-- Dynamic shorts injected via JS -->
-</div>
-</div>
-<script src="supabaseClient.js"></script>
-<script src="article.js"></script>
-<div id="google_translate_element" style="position:absolute; top:-10000px; width:1px; height:1px; overflow:hidden;"></div>
-<script type="text/javascript">
-function googleTranslateElementInit() {
-  new google.translate.TranslateElement({pageLanguage: 'en', includedLanguages: 'en,hi,pa', autoDisplay: false}, 'google_translate_element');
-}
-function changeLanguage(langCode) {
-    var selectField = document.querySelector("select.goog-te-combo");
-    if (selectField) {
-        selectField.value = langCode;
-        selectField.dispatchEvent(new Event('change'));
-    }
-}
-</script>
-<script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
-<!-- Ad Modal -->
-<div class="ad-modal-overlay" id="ad-modal-overlay">
-    <div class="ad-modal" id="ad-modal">
-        <button class="ad-close-cross" onclick="closeAdModal()">✕</button>
-        <img src="ad6.jpeg" alt="Sponsored Ad" class="ad-modal-img">
-        <button class="ad-close-btn" onclick="closeAdModal()">Close Advertisement</button>
-    </div>
-</div>
+    <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 </body>
 </html>

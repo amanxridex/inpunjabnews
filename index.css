@@ -1461,6 +1461,484 @@ img {
     transform: translateY(-1px);
 }
 
+/* ── 9. Article Detail Page Styles (Editorial Minimalist Reading UI) ── */
+.reading-progress-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #DC2626 0%, #EA580C 100%);
+    z-index: 9999;
+    width: 0%;
+    transition: width 0.1s ease;
+}
+
+.article-container-wrap {
+    padding: 24px 20px 48px 20px;
+}
+
+.article-breadcrumb-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+    padding-bottom: 16px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid var(--border-color);
+    font-size: 13px;
+}
+
+.back-home-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: 700;
+    color: var(--brand-red);
+    background: #FEF2F2;
+    padding: 6px 14px;
+    border-radius: 20px;
+    transition: all 0.15s ease;
+}
+
+.back-home-btn:hover {
+    background: var(--brand-red);
+    color: #FFFFFF;
+}
+
+.breadcrumb-trail {
+    color: var(--text-muted);
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.breadcrumb-trail span:last-child {
+    color: var(--text-main);
+    font-weight: 600;
+    max-width: 320px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.article-layout-grid {
+    display: grid;
+    grid-template-columns: 2.5fr 1fr;
+    gap: 32px;
+}
+
+/* Article Reading Main Column */
+.article-main-col {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: 32px 36px;
+    box-shadow: var(--shadow-subtle);
+}
+
+.article-header-package {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin-bottom: 24px;
+}
+
+.article-tag-badge {
+    align-self: flex-start;
+    background: #FEF2F2;
+    color: var(--brand-red);
+    font-size: 12px;
+    font-weight: 800;
+    padding: 4px 12px;
+    border-radius: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.article-main-title {
+    font-size: 28px;
+    font-weight: 800;
+    line-height: 1.35;
+    color: var(--text-main);
+    letter-spacing: -0.3px;
+}
+
+.article-lead-brief {
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--text-body);
+    line-height: 1.6;
+    border-left: 3px solid var(--brand-red);
+    padding-left: 14px;
+    margin-top: 4px;
+    background: var(--bg-card-alt);
+    padding: 10px 14px;
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+}
+
+.article-byline-row {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+    font-size: 13px;
+    color: var(--text-muted);
+    padding: 14px 0;
+    border-top: 1px solid var(--border-color);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.byline-author {
+    font-weight: 700;
+    color: var(--text-main);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.article-actions-bar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 24px;
+}
+
+.action-wa-btn {
+    background: #25D366;
+    color: #FFFFFF;
+    font-size: 13px;
+    font-weight: 700;
+    padding: 8px 16px;
+    border-radius: 20px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    box-shadow: 0 2px 8px rgba(37, 211, 102, 0.25);
+    transition: transform 0.15s ease, background 0.15s ease;
+}
+
+.action-wa-btn:hover {
+    background: #1EBE5D;
+    color: #FFFFFF;
+    transform: translateY(-1px);
+}
+
+.action-copy-btn {
+    background: var(--bg-card-alt);
+    color: var(--text-body);
+    border: 1px solid var(--border-color);
+    font-size: 13px;
+    font-weight: 600;
+    padding: 8px 14px;
+    border-radius: 20px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.15s ease;
+}
+
+.action-copy-btn:hover {
+    background: #E2E8F0;
+    color: var(--text-main);
+}
+
+.article-lead-media-wrap {
+    width: 100%;
+    margin-bottom: 28px;
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    background: #0F172A;
+    box-shadow: var(--shadow-card);
+}
+
+.article-lead-media-wrap img {
+    width: 100%;
+    height: auto;
+    max-height: 540px;
+    object-fit: cover;
+    display: block;
+}
+
+.article-lead-media-wrap video {
+    width: 100%;
+    display: block;
+}
+
+.media-caption-bar {
+    padding: 8px 14px;
+    font-size: 12px;
+    color: #94A3B8;
+    background: #0B0F19;
+    text-align: right;
+}
+
+/* Article Body Typography */
+.article-editorial-body {
+    font-size: 17px;
+    line-height: 1.8;
+    color: var(--text-main);
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.article-editorial-body p {
+    margin: 0;
+    word-break: break-word;
+}
+
+.article-editorial-body p strong {
+    font-weight: 700;
+    color: var(--text-main);
+}
+
+.article-editorial-body img {
+    border-radius: var(--radius-md);
+    margin: 16px 0;
+    box-shadow: var(--shadow-card);
+    width: 100%;
+}
+
+/* In-Article WhatsApp Callout Banner */
+.article-wa-callout {
+    background: linear-gradient(135deg, #065F46 0%, #047857 100%);
+    color: #FFFFFF;
+    border-radius: var(--radius-md);
+    padding: 20px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin: 28px 0;
+    box-shadow: 0 4px 14px rgba(4, 120, 87, 0.2);
+}
+
+.article-wa-text h4 {
+    font-size: 16px;
+    font-weight: 800;
+    color: #FFFFFF;
+    margin-bottom: 4px;
+}
+
+.article-wa-text p {
+    font-size: 13px;
+    color: #D1FAE5;
+}
+
+.article-wa-join-btn {
+    background: #22C55E;
+    color: #064E3B;
+    font-size: 13px;
+    font-weight: 800;
+    padding: 9px 18px;
+    border-radius: 8px;
+    white-space: nowrap;
+    transition: all 0.15s ease;
+}
+
+.article-wa-join-btn:hover {
+    background: #16A34A;
+    color: #FFFFFF;
+}
+
+/* Author Signature Box */
+.author-signature-box {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 20px;
+    background: var(--bg-card-alt);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-color);
+    margin-top: 32px;
+}
+
+.author-sig-avatar {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: var(--brand-red);
+    color: #FFFFFF;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    font-weight: 800;
+    flex-shrink: 0;
+}
+
+.author-sig-info h4 {
+    font-size: 15px;
+    font-weight: 800;
+    color: var(--text-main);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.author-sig-info p {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-top: 2px;
+}
+
+/* Article Comments Section */
+.article-comments-block {
+    margin-top: 36px;
+    padding-top: 28px;
+    border-top: 2px solid var(--border-color);
+}
+
+.article-comments-block h3 {
+    font-size: 20px;
+    font-weight: 800;
+    color: var(--text-main);
+    margin-bottom: 20px;
+}
+
+.comments-stream {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin-bottom: 28px;
+}
+
+.comment-card {
+    background: var(--bg-card-alt);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    padding: 14px 18px;
+}
+
+.comment-header {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-bottom: 8px;
+}
+
+.comment-author-name {
+    font-weight: 700;
+    color: var(--brand-red);
+}
+
+.comment-text {
+    font-size: 14px;
+    color: var(--text-body);
+    line-height: 1.5;
+}
+
+.comment-form-card {
+    background: var(--bg-card-alt);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.comment-form-card h4 {
+    font-size: 16px;
+    font-weight: 800;
+    color: var(--text-main);
+}
+
+.comment-input, .comment-textarea {
+    width: 100%;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    padding: 12px 14px;
+    font-family: inherit;
+    font-size: 14px;
+    color: var(--text-main);
+    outline: none;
+    transition: border 0.15s ease;
+}
+
+.comment-input:focus, .comment-textarea:focus {
+    border-color: var(--brand-red);
+}
+
+.comment-submit-btn {
+    background: var(--brand-red);
+    color: #FFFFFF;
+    font-size: 13px;
+    font-weight: 700;
+    padding: 10px 20px;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    align-self: flex-start;
+    transition: background 0.15s ease;
+}
+
+.comment-submit-btn:hover {
+    background: var(--brand-red-hover);
+}
+
+/* Related Stories Section at Bottom of Article */
+.related-stories-section {
+    margin-top: 48px;
+    padding-top: 32px;
+    border-top: 2px solid var(--border-color);
+}
+
+/* Loading & Error States */
+.article-loading-box {
+    text-align: center;
+    padding: 80px 20px;
+    color: var(--text-muted);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+}
+
+.article-spinner {
+    width: 36px;
+    height: 36px;
+    border: 3px solid var(--border-color);
+    border-top-color: var(--brand-red);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+.article-error-card {
+    text-align: center;
+    padding: 60px 20px;
+    background: #FEF2F2;
+    border: 1px solid #FECACA;
+    border-radius: var(--radius-md);
+    color: #991B1B;
+}
+
+.article-error-card h3 {
+    font-size: 20px;
+    font-weight: 800;
+    margin-bottom: 8px;
+}
+
+/* Responsive Overrides */
+@media (max-width: 1024px) {
+    .article-layout-grid {
+        grid-template-columns: 1fr;
+    }
+    .article-main-col {
+        padding: 24px 20px;
+    }
+    .article-main-title {
+        font-size: 22px;
+    }
+}
+
 /* ── Mobile & Responsive Breakpoints ── */
 @media (max-width: 1024px) {
     .editorial-lead-grid {
