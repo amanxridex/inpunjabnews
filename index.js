@@ -189,6 +189,7 @@ function renderLeadHero(articles) {
     const leadHtml = `
         <article class="main-lead-card" onclick="window.location.href='article.html?id=${lead.id}'">
             <div class="lead-media-wrap">
+                <span class="lead-badge-overlay"><span class="badge-dot"></span> 🔴 ਬ੍ਰੇਕਿੰਗ EXCLUSIVE</span>
                 ${renderMediaTag(lead.image_url, lead.title)}
             </div>
             <div class="lead-content">
@@ -231,14 +232,17 @@ function renderLeadHero(articles) {
         </div>
     `;
 
-    // Top Updates Column ("बड़ी खबरें / ਤਾਜ਼ਾ ਖ਼ਬਰਾਂ" Aaj Tak Ordered List)
+    // Top Updates Column ("ਬੜੀਆਂ ਖ਼ਬਰਾਂ / ਤਾਜ਼ਾ ਖ਼ਬਰਾਂ" Aaj Tak Ordered List)
     let rankedItemsHtml = '';
     const updatesToShow = topUpdates.length > 0 ? topUpdates : articles.slice(0, 5);
     updatesToShow.forEach((art, idx) => {
         rankedItemsHtml += `
             <div class="ranked-news-item" onclick="window.location.href='article.html?id=${art.id}'">
                 <span class="rank-number">${idx + 1}</span>
-                <div class="ranked-news-title">${escapeHtml(art.title)}</div>
+                <div>
+                    <div class="ranked-news-title">${escapeHtml(art.title)}</div>
+                    <div style="font-size: 11px; color: var(--text-muted); margin-top: 2px;">🕒 ${timeAgo(art.created_at)}</div>
+                </div>
             </div>
         `;
     });
@@ -351,7 +355,7 @@ function renderStreamList(articles) {
                     <div class="stream-meta">
                         <span>✍️ By ${escapeHtml(art.author || 'vicky suri')}</span>
                         <span>👁️ ${art.view_count || 150} views</span>
-                        <button type="button" class="stream-share-btn" onclick="shareWhatsApp(event, '${escapeHtml(art.title)}', '${art.id}')" title="Share on WhatsApp">
+                        <button type="button" class="stream-share-btn" data-title="${encodeURIComponent(art.title)}" data-id="${art.id}" onclick="shareWhatsAppSafe(event, this)" title="Share on WhatsApp">
                             <span>📲 WhatsApp</span>
                         </button>
                     </div>
@@ -465,6 +469,16 @@ function filterDistrict(district) {
 }
 
 // ── 7D. WhatsApp 1-Tap Share ──
+function shareWhatsAppSafe(e, btn) {
+    if (e && e.stopPropagation) e.stopPropagation();
+    const title = decodeURIComponent(btn.getAttribute('data-title') || '');
+    const id = btn.getAttribute('data-id');
+    const url = `${window.location.origin}/article.html?id=${id}`;
+    const text = `📰 *${title}*\n\nRead full news on InPunjab News:\n${url}`;
+    const waUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`;
+    window.open(waUrl, '_blank');
+}
+
 function shareWhatsApp(e, title, id) {
     if (e && e.stopPropagation) e.stopPropagation();
     const url = `${window.location.origin}/article.html?id=${id}`;

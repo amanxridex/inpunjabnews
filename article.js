@@ -114,30 +114,49 @@ function initReadingProgress() {
 async function loadArticleDetail() {
     const mainContainer = document.getElementById('article-main-container');
     const urlParams = new URLSearchParams(window.location.search);
-    const articleId = urlParams.get('id');
-
-    if (!articleId) {
-        renderErrorState('No article ID specified. Please select an article from the home page.');
-        loadSidebarAndRelated(null);
-        return;
-    }
-
-    currentArticleId = articleId;
+    let articleId = urlParams.get('id');
 
     if (typeof supabaseClient === 'undefined') {
-        renderErrorState('Database client not loaded. Please refresh the page.');
+        console.error('Database client not loaded. Retrying in 1s...');
+        setTimeout(loadArticleDetail, 1000);
         return;
     }
 
     try {
-        const { data: article, error } = await supabaseClient
-            .from('articles')
-            .select('*')
-            .eq('id', articleId)
-            .single();
+        let article = null;
 
-        if (error) throw error;
-        if (!article) throw new Error('Article not found.');
+        if (articleId) {
+            // Fetch specific requested article
+            const { data, error } = await supabaseClient
+                .from('articles')
+                .select('*')
+                .eq('id', articleId)
+                .single();
+
+            if (!error && data) {
+                article = data;
+                currentArticleId = article.id;
+            }
+        }
+
+        // If no ID given or specific article not found, fetch the latest top article
+        if (!article) {
+            const { data: latestList, error: listErr } = await supabaseClient
+                .from('articles')
+                .select('*')
+                .eq('is_published', true)
+                .order('created_at', { ascending: false })
+                .limit(1);
+
+            if (listErr) throw listErr;
+            if (latestList && latestList.length > 0) {
+                article = latestList[0];
+                articleId = article.id;
+                currentArticleId = article.id;
+            } else {
+                throw new Error('No articles published yet.');
+            }
+        }
 
         // Update Page Title & Breadcrumb
         document.title = `${article.title} – InPunjab News`;
@@ -151,20 +170,19 @@ async function loadArticleDetail() {
 
         // Safely Increment View Count in background
         try {
-            await supabaseClient.rpc('increment_view_count', { article_id: articleId });
+            await supabaseClient.rpc('increment_view_count', { article_id: currentArticleId });
         } catch (rpcErr) {
             // Non-critical fallback
         }
 
         // Load Sidebar Trending and Bottom Related
-        loadSidebarAndRelated(articleId);
+        loadSidebarAndRelated(currentArticleId);
 
         // Load Comments
-        loadComments(articleId);
+        loadComments(currentArticleId);
 
     } catch (err) {
         console.error('Error fetching article:', err.message);
-        renderErrorState(`We could not find the requested story. It may have been moved or removed.<br><br><a href="index.html" class="back-home-btn" style="display:inline-block; margin-top:10px;">← Return to Home</a>`);
         loadSidebarAndRelated(null);
     }
 }
@@ -307,6 +325,13 @@ function renderArticleContent(article) {
                 <button type="button" class="action-copy-btn" onclick="copyArticleLink()">
                     <span>🔗 Copy Link</span>
                 </button>
+                <button type="button" class="action-tool-btn" id="listenArticleBtn" onclick="toggleAudioSpeech()" title="Listen to Story">
+                    <span>🔊 ਸੁਣੋ • Listen</span>
+                </button>
+                <div class="action-zoom-group" title="Adjust text size">
+                    <button type="button" class="action-zoom-btn" onclick="adjustTextSize(-1)" title="Smaller Text">A-</button>
+                    <button type="button" class="action-zoom-btn" onclick="adjustTextSize(1)" title="Larger Text">A+</button>
+                </div>
             </div>
         </div>
 
@@ -362,13 +387,63 @@ function renderArticleContent(article) {
     `;
 }
 
-// ── 6. Copy Link Handler ──
+// ── 6. Toolbar Handlers (Copy Link, Text Zoom, Audio Read) ──
 function copyArticleLink() {
     navigator.clipboard.writeText(window.location.href).then(() => {
-        showToast('Link copied to clipboard! Ready to share.');
+        showToast('✓ Link copied to clipboard!');
     }).catch(() => {
         showToast('Article URL: ' + window.location.href);
     });
+}
+
+let currentTextSize = 18;
+function adjustTextSize(delta) {
+    const body = document.querySelector('.article-editorial-body');
+    if (!body) return;
+    currentTextSize = Math.min(26, Math.max(14, currentTextSize + delta * 2));
+    body.style.fontSize = `${currentTextSize}px`;
+    showToast(`Text size: ${currentTextSize}px`);
+}
+
+let isSpeaking = false;
+function toggleAudioSpeech() {
+    if (!('speechSynthesis' in window)) {
+        showToast('Speech synthesis is not supported in this browser.');
+        return;
+    }
+    const btn = document.getElementById('listenArticleBtn');
+    if (isSpeaking) {
+        window.speechSynthesis.cancel();
+        isSpeaking = false;
+        if (btn) btn.innerHTML = '<span>🔊 ਸੁਣੋ • Listen</span>';
+        showToast('Audio paused.');
+        return;
+    }
+
+    const title = document.querySelector('.article-main-title')?.innerText || '';
+    const brief = document.querySelector('.article-highlights-box')?.innerText || '';
+    const body = document.querySelector('.article-editorial-body')?.innerText || '';
+    const fullText = `${title}. ${brief}. ${body.slice(0, 1000)}`;
+
+    const utterance = new SpeechSynthesisUtterance(fullText);
+    utterance.rate = 0.95;
+    utterance.onend = () => {
+        isSpeaking = false;
+        if (btn) btn.innerHTML = '<span>🔊 ਸੁਣੋ • Listen</span>';
+    };
+    utterance.onerror = () => {
+        isSpeaking = false;
+        if (btn) btn.innerHTML = '<span>🔊 ਸੁਣੋ • Listen</span>';
+    };
+
+    window.speechSynthesis.speak(utterance);
+    isSpeaking = true;
+    if (btn) btn.innerHTML = '<span>⏹️ ਰੋਕੋ • Stop</span>';
+    showToast('Reading news story...');
+}
+
+function scrollToTop() {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 // ── 7. Sidebar Trending & Related Stories ──

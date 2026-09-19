@@ -20,10 +20,10 @@
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com"/>
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@700;800;900&family=Noto+Sans+Gurmukhi:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Playfair+Display:wght@700;800;900&family=Noto+Sans+Gurmukhi:wght@400;500;600;700;800;900&family=Noto+Sans+Devanagari:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
     
     <!-- Editorial Minimalist Stylesheet -->
-    <link href="index.css?v=2.2" rel="stylesheet"/>
+    <link href="index.css?v=3.0" rel="stylesheet"/>
     
     <!-- Google AdSense -->
     <meta name="google-adsense-account" content="ca-pub-9624803444729340">
@@ -136,7 +136,9 @@
         </div>
         <div class="ticker-content">
             <div class="ticker-track" id="breakingTickerTrack">
-                <span>Loading latest breaking updates from Punjab...</span>
+                <span><span class="ticker-bolt">⚡</span><a href="article.html?id=946f70b4-09c4-45d4-9e08-e387caa6607d">ਆਮ ਆਦਮੀ ਪਾਰਟੀ ਨੇ ਪੰਜਾਬ ਨੂੰ ਹਰ ਪੱਖੋਂ ਬਰਬਾਦ ਕੀਤਾ: ਬੀ.ਐਲ. ਸੰਤੋਸ਼</a></span>
+                <span><span class="ticker-bolt">⚡</span><a href="article.html?id=8d3e17d2-751c-44e7-8e1c-99435175aea7">ਸਫ਼ਾਈ ਕਰਮਚਾਰੀਆਂ ਲਈ ਕਾਨੂੰਨ ਲਿਆਵੇਗੀ ਮੋਦੀ ਸਰਕਾਰ : ਹਰਦੀਪ ਗਿੱਲ</a></span>
+                <span><span class="ticker-bolt">⚡</span><a href="article.html?id=2da421fa-e2cf-413c-8ae8-43fa76ea0cc7">ਅਮਿਤ ਸ਼ਾਹ ਦੀ ਜਲੰਧਰ ਮਹਾਰੈਲੀ ਪੰਜਾਬ ਵਿੱਚ ਬਦਲਾਅ ਦਾ ਸ਼ੰਖਨਾਦ ਬਣੇਗੀ</a></span>
             </div>
         </div>
     </div>
@@ -145,9 +147,92 @@
     <section class="lead-hero-section" id="lead-hero">
         <div class="container">
             <div class="editorial-lead-grid" id="dynamicLeadHero">
-                <!-- Dynamically populated by index.js -->
-                <div style="grid-column: 1 / -1; padding: 40px; text-align: center; color: var(--text-muted);">
-                    Loading top editorial stories...
+                <!-- 1. Main Lead Cover Article -->
+                <article class="main-lead-card" onclick="window.location.href='article.html?id=946f70b4-09c4-45d4-9e08-e387caa6607d'">
+                    <div class="lead-media-wrap">
+                        <span class="lead-badge-overlay"><span class="badge-dot"></span> 🔴 ਬ੍ਰੇਕਿੰਗ EXCLUSIVE</span>
+                        <img src="main50.jpeg" alt="ਬੀ.ਐਲ. ਸੰਤੋਸ਼ ਦੀ ਜਲੰਧਰ ਫੇਰੀ" onerror="this.src='INPUNJABNEWSLOGO.png'">
+                    </div>
+                    <div class="lead-content">
+                        <span class="meta-category-badge">Punjab Special</span>
+                        <h1 class="lead-headline-title">ਆਮ ਆਦਮੀ ਪਾਰਟੀ ਨੇ ਪੰਜਾਬ ਨੂੰ ਹਰ ਪੱਖੋਂ ਬਰਬਾਦ ਕੀਤਾ, ਭਾਜਪਾ ਬਣੇਗੀ ਪੰਜਾਬ ਦੀ ਆਵਾਜ਼: ਬੀ.ਐਲ. ਸੰਤੋਸ਼</h1>
+                        <p class="lead-excerpt">ਕਾਂਗਰਸ ਵਿਰੋਧੀ ਧਿਰ ਦੀ ਭੂਮਿਕਾ ਨਿਭਾਉਣ ’ਚ ਨਾਕਾਮ, ਪੰਜਾਬ ਦੇ ਲੋਕਾਂ ਦਾ ਸਹਾਰਾ ਬਣੇਗੀ ਭਾਜਪਾ। ਪੰਜ ਮਹੀਨਿਆਂ ਵਿੱਚ ਮਜ਼ਬੂਤ ਟੀਮ ਤਿਆਰ ਕਰੋ, ਹਰ ਬੂਥ ’ਤੇ ਸਰਗਰਮ ਕਮੇਟੀਆਂ ਬਣਾਓ।</p>
+                        <div class="lead-meta-footer">
+                            <span>✍️ By Vicky Suri (Editor-in-Chief)</span>
+                            <span>• 2 hrs ago</span>
+                            <span>• 👁️ 1,420 views</span>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- 2. Sub-Featured Column (2 stacked cards) -->
+                <div class="sub-featured-stack">
+                    <article class="sub-lead-card" onclick="window.location.href='article.html?id=8d3e17d2-751c-44e7-8e1c-99435175aea7'">
+                        <div class="sub-media-wrap">
+                            <img src="main48.jpeg" alt="ਸਫ਼ਾਈ ਕਰਮਚਾਰੀ ਕਮਿਸ਼ਨ" onerror="this.src='INPUNJABNEWSLOGO.png'">
+                        </div>
+                        <div class="sub-lead-content">
+                            <span style="font-size: 10px; font-weight: 800; color: var(--brand-red); text-transform: uppercase;">Ground Report</span>
+                            <h2 class="sub-lead-title">ਰਾਸ਼ਟਰੀ ਸਫ਼ਾਈ ਕਰਮਚਾਰੀ ਕਮਿਸ਼ਨ ਦੇ ਹਰਦੀਪ ਗਿੱਲ ਨੇ ਜਲੰਧਰ ਨਗਰ ਨਿਗਮ ਦੀਆਂ ਯੂਨੀਅਨਾਂ ਨਾਲ ਕੀਤੀ ਮੀਟਿੰਗ</h2>
+                            <div class="sub-lead-meta">3 hrs ago • By Vicky Suri</div>
+                        </div>
+                    </article>
+
+                    <article class="sub-lead-card" onclick="window.location.href='article.html?id=2da421fa-e2cf-413c-8ae8-43fa76ea0cc7'">
+                        <div class="sub-media-wrap">
+                            <img src="main46.jpeg" alt="ਅਮਿਤ ਸ਼ਾਹ ਮਹਾਰੈਲੀ" onerror="this.src='INPUNJABNEWSLOGO.png'">
+                        </div>
+                        <div class="sub-lead-content">
+                            <span style="font-size: 10px; font-weight: 800; color: var(--brand-saffron); text-transform: uppercase;">Mega Rally</span>
+                            <h2 class="sub-lead-title">ਅਮਿਤ ਸ਼ਾਹ ਦੀ ਜਲੰਧਰ ਮਹਾਰੈਲੀ ਪੰਜਾਬ ਵਿੱਚ ਬਦਲਾਅ ਦਾ ਸ਼ੰਖਨਾਦ ਬਣੇਗੀ : ਅਸ਼ੋਕ ਸਰੀਨ ਹਿੱਕੀ</h2>
+                            <div class="sub-lead-meta">5 hrs ago • By Vicky Suri</div>
+                        </div>
+                    </article>
+                </div>
+
+                <!-- 3. Top Updates Column ("ਬੜੀਆਂ ਖ਼ਬਰਾਂ" Aaj Tak Ordered List) -->
+                <div class="top-updates-box">
+                    <div class="block-title-header">
+                        <h3><span class="accent-pill"></span> ਬੜੀਆਂ ਖ਼ਬਰਾਂ • Top Stories</h3>
+                        <span style="font-size: 10px; font-weight: 800; color: var(--brand-red);">LIVE</span>
+                    </div>
+                    <div class="top-updates-list">
+                        <div class="ranked-news-item" onclick="window.location.href='article.html?id=c7c9e388-8fe3-43ce-aafd-b23ab6b267b4'">
+                            <span class="rank-number">1</span>
+                            <div>
+                                <div class="ranked-news-title">ਪ੍ਰਧਾਨ ਮੰਤਰੀ ਮੋਦੀ ਦੇ ਜਨਮ ਦਿਵਸ ਮੌਕੇ ਭਾਜਪਾ ਦੇ 14 ਮੰਡਲਾਂ ਵਿੱਚ ਹੋਣਗੇ ਸੇਵਾ ਕਾਰਜ</div>
+                                <div style="font-size: 11px; color: var(--text-muted); margin-top: 2px;">🕒 1 hr ago</div>
+                            </div>
+                        </div>
+                        <div class="ranked-news-item" onclick="window.location.href='article.html?id=f5b4afe5-a2cb-4384-a4ce-7874bbd0aafb'">
+                            <span class="rank-number">2</span>
+                            <div>
+                                <div class="ranked-news-title">ਮਾਸਟਰ ਤਾਰਾ ਸਿੰਘ ਨਗਰ 'ਚ ਸਰਕਾਰੀ ਜ਼ਮੀਨ 'ਤੇ ਕਬਜ਼ੇ ਦੇ ਦੋਸ਼, ਨਿਗਮ 'ਤੇ ਸਵਾਲ</div>
+                                <div style="font-size: 11px; color: var(--text-muted); margin-top: 2px;">🕒 2 hrs ago</div>
+                            </div>
+                        </div>
+                        <div class="ranked-news-item" onclick="window.location.href='article.html?id=946f70b4-09c4-45d4-9e08-e387caa6607d'">
+                            <span class="rank-number">3</span>
+                            <div>
+                                <div class="ranked-news-title">ਆਮ ਆਦਮੀ ਪਾਰਟੀ ਨੇ ਪੰਜਾਬ ਨੂੰ ਹਰ ਪੱਖੋਂ ਬਰਬਾਦ ਕੀਤਾ: ਬੀ.ਐਲ. ਸੰਤੋਸ਼</div>
+                                <div style="font-size: 11px; color: var(--text-muted); margin-top: 2px;">🕒 3 hrs ago</div>
+                            </div>
+                        </div>
+                        <div class="ranked-news-item" onclick="window.location.href='article.html?id=8d3e17d2-751c-44e7-8e1c-99435175aea7'">
+                            <span class="rank-number">4</span>
+                            <div>
+                                <div class="ranked-news-title">ਸਫ਼ਾਈ ਕਰਮਚਾਰੀਆਂ ਦੇ ਹੱਕਾਂ ਲਈ ਕਾਨੂੰਨ ਲਿਆਵੇਗੀ ਮੋਦੀ ਸਰਕਾਰ : ਹਰਦੀਪ ਗਿੱਲ</div>
+                                <div style="font-size: 11px; color: var(--text-muted); margin-top: 2px;">🕒 4 hrs ago</div>
+                            </div>
+                        </div>
+                        <div class="ranked-news-item" onclick="window.location.href='article.html?id=2da421fa-e2cf-413c-8ae8-43fa76ea0cc7'">
+                            <span class="rank-number">5</span>
+                            <div>
+                                <div class="ranked-news-title">ਅਮਿਤ ਸ਼ਾਹ ਦੀ ਜਲੰਧਰ ਰੈਲੀ ਪੰਜਾਬ 'ਚ ਜੰਗਲਰਾਜ ਖ਼ਿਲਾਫ਼ ਨਿਰਣਾਇਕ ਬਿਗੁਲ</div>
+                                <div style="font-size: 11px; color: var(--text-muted); margin-top: 2px;">🕒 5 hrs ago</div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -199,7 +284,71 @@
             </div>
             
             <div class="visual-stories-scroll" id="dynamicVisualStories">
-                <!-- Dynamically populated by index.js -->
+                <div class="story-card-reel" onclick="window.location.href='article.html?id=946f70b4-09c4-45d4-9e08-e387caa6607d'">
+                    <img class="story-bg-media" src="main50.jpeg" alt="ਬੀ.ਐਲ. ਸੰਤੋਸ਼" onerror="this.src='INPUNJABNEWSLOGO.png'">
+                    <div class="story-scrim">
+                        <div class="story-top-row">
+                            <span class="story-tag">Punjab</span>
+                            <div class="story-play-icon">▶</div>
+                        </div>
+                        <div class="story-bottom-content">
+                            <h4 class="story-headline">ਆਮ ਆਦਮੀ ਪਾਰਟੀ ਨੇ ਪੰਜਾਬ ਨੂੰ ਹਰ ਪੱਖੋਂ ਬਰਬਾਦ ਕੀਤਾ: ਬੀ.ਐਲ. ਸੰਤੋਸ਼</h4>
+                            <div class="story-meta"><span>⏱️ 1m read</span><span>• Recent</span></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="story-card-reel" onclick="window.location.href='article.html?id=8d3e17d2-751c-44e7-8e1c-99435175aea7'">
+                    <img class="story-bg-media" src="main48.jpeg" alt="ਹਰਦੀਪ ਗਿੱਲ" onerror="this.src='INPUNJABNEWSLOGO.png'">
+                    <div class="story-scrim">
+                        <div class="story-top-row">
+                            <span class="story-tag">Exclusive</span>
+                            <div class="story-play-icon">▶</div>
+                        </div>
+                        <div class="story-bottom-content">
+                            <h4 class="story-headline">ਸਫ਼ਾਈ ਕਰਮਚਾਰੀਆਂ ਲਈ ਕਾਨੂੰਨ ਲਿਆਵੇਗੀ ਮੋਦੀ ਸਰਕਾਰ : ਹਰਦੀਪ ਗਿੱਲ</h4>
+                            <div class="story-meta"><span>⏱️ 1m read</span><span>• Recent</span></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="story-card-reel" onclick="window.location.href='article.html?id=2da421fa-e2cf-413c-8ae8-43fa76ea0cc7'">
+                    <img class="story-bg-media" src="main46.jpeg" alt="ਅਮਿਤ ਸ਼ਾਹ ਰੈਲੀ" onerror="this.src='INPUNJABNEWSLOGO.png'">
+                    <div class="story-scrim">
+                        <div class="story-top-row">
+                            <span class="story-tag">Rally</span>
+                            <div class="story-play-icon">▶</div>
+                        </div>
+                        <div class="story-bottom-content">
+                            <h4 class="story-headline">ਅਮਿਤ ਸ਼ਾਹ ਦੀ ਜਲੰਧਰ ਮਹਾਰੈਲੀ ਪੰਜਾਬ ਵਿੱਚ ਬਦਲਾਅ ਦਾ ਸ਼ੰਖਨਾਦ ਬਣੇਗੀ</h4>
+                            <div class="story-meta"><span>⏱️ 1m read</span><span>• Recent</span></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="story-card-reel" onclick="window.location.href='article.html?id=c7c9e388-8fe3-43ce-aafd-b23ab6b267b4'">
+                    <img class="story-bg-media" src="main45.jpeg" alt="ਸੇਵਾ ਕਾਰਜ" onerror="this.src='INPUNJABNEWSLOGO.png'">
+                    <div class="story-scrim">
+                        <div class="story-top-row">
+                            <span class="story-tag">Sewa</span>
+                            <div class="story-play-icon">▶</div>
+                        </div>
+                        <div class="story-bottom-content">
+                            <h4 class="story-headline">ਪ੍ਰਧਾਨ ਮੰਤਰੀ ਮੋਦੀ ਦੇ ਜਨਮ ਦਿਵਸ ਮੌਕੇ 14 ਮੰਡਲਾਂ ਵਿੱਚ ਹੋਣਗੇ ਸੇਵਾ ਕਾਰਜ</h4>
+                            <div class="story-meta"><span>⏱️ 1m read</span><span>• Recent</span></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="story-card-reel" onclick="window.location.href='article.html?id=f5b4afe5-a2cb-4384-a4ce-7874bbd0aafb'">
+                    <img class="story-bg-media" src="main41.jpeg" alt="ਮਾਸਟਰ ਤਾਰਾ ਸਿੰਘ ਨਗਰ" onerror="this.src='INPUNJABNEWSLOGO.png'">
+                    <div class="story-scrim">
+                        <div class="story-top-row">
+                            <span class="story-tag">Jalandhar</span>
+                            <div class="story-play-icon">▶</div>
+                        </div>
+                        <div class="story-bottom-content">
+                            <h4 class="story-headline">ਮਾਸਟਰ ਤਾਰਾ ਸਿੰਘ ਨਗਰ 'ਚ ਸਰਕਾਰੀ ਜ਼ਮੀਨ 'ਤੇ ਕਬਜ਼ੇ ਦੇ ਦੋਸ਼</h4>
+                            <div class="story-meta"><span>⏱️ 1m read</span><span>• Recent</span></div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
@@ -212,7 +361,58 @@
                 <a href="#latest-stream" class="section-view-all">View All →</a>
             </div>
             <div class="punjab-cards-grid" id="dynamicPunjabGrid">
-                <!-- Dynamically populated by index.js -->
+                <article class="news-card-editorial" onclick="window.location.href='article.html?id=8d3e17d2-751c-44e7-8e1c-99435175aea7'">
+                    <div class="card-img-wrap">
+                        <img src="main48.jpeg" alt="ਸਫ਼ਾਈ ਕਰਮਚਾਰੀ ਕਮਿਸ਼ਨ" onerror="this.src='INPUNJABNEWSLOGO.png'">
+                    </div>
+                    <div class="card-body">
+                        <span class="card-tag">Punjab</span>
+                        <h3 class="card-title">ਰਾਸ਼ਟਰੀ ਸਫ਼ਾਈ ਕਰਮਚਾਰੀ ਕਮਿਸ਼ਨ ਦੇ ਹਰਦੀਪ ਗਿੱਲ ਨੇ ਜਲੰਧਰ ਨਗਰ ਨਿਗਮ ਦੀਆਂ ਸਫ਼ਾਈ ਯੂਨੀਅਨਾਂ ਨਾਲ ਕੀਤੀ ਮੀਟਿੰਗ</h3>
+                        <div class="card-footer">
+                            <span>Recent</span>
+                            <span>✍️ Vicky Suri</span>
+                        </div>
+                    </div>
+                </article>
+                <article class="news-card-editorial" onclick="window.location.href='article.html?id=2da421fa-e2cf-413c-8ae8-43fa76ea0cc7'">
+                    <div class="card-img-wrap">
+                        <img src="main46.jpeg" alt="ਅਮਿਤ ਸ਼ਾਹ ਰੈਲੀ" onerror="this.src='INPUNJABNEWSLOGO.png'">
+                    </div>
+                    <div class="card-body">
+                        <span class="card-tag">Punjab</span>
+                        <h3 class="card-title">ਅਮਿਤ ਸ਼ਾਹ ਦੀ ਜਲੰਧਰ ਮਹਾਰੈਲੀ ਪੰਜਾਬ ਵਿੱਚ ਬਦਲਾਅ ਦਾ ਸ਼ੰਖਨਾਦ ਬਣੇਗੀ : ਅਸ਼ੋਕ ਸਰੀਨ ਹਿੱਕੀ</h3>
+                        <div class="card-footer">
+                            <span>Recent</span>
+                            <span>✍️ Vicky Suri</span>
+                        </div>
+                    </div>
+                </article>
+                <article class="news-card-editorial" onclick="window.location.href='article.html?id=c7c9e388-8fe3-43ce-aafd-b23ab6b267b4'">
+                    <div class="card-img-wrap">
+                        <img src="main45.jpeg" alt="ਮੋਦੀ ਜਨਮ ਦਿਵਸ" onerror="this.src='INPUNJABNEWSLOGO.png'">
+                    </div>
+                    <div class="card-body">
+                        <span class="card-tag">Punjab</span>
+                        <h3 class="card-title">ਪ੍ਰਧਾਨ ਮੰਤਰੀ ਮੋਦੀ ਦੇ ਜਨਮ ਦਿਵਸ ਮੌਕੇ ਭਾਜਪਾ ਦੇ 14 ਮੰਡਲਾਂ ਵਿੱਚ ਹੋਣਗੇ ਸੇਵਾ ਕਾਰਜ</h3>
+                        <div class="card-footer">
+                            <span>Recent</span>
+                            <span>✍️ Vicky Suri</span>
+                        </div>
+                    </div>
+                </article>
+                <article class="news-card-editorial" onclick="window.location.href='article.html?id=f5b4afe5-a2cb-4384-a4ce-7874bbd0aafb'">
+                    <div class="card-img-wrap">
+                        <img src="main41.jpeg" alt="ਮਾਸਟਰ ਤਾਰਾ ਸਿੰਘ ਨਗਰ" onerror="this.src='INPUNJABNEWSLOGO.png'">
+                    </div>
+                    <div class="card-body">
+                        <span class="card-tag">Punjab</span>
+                        <h3 class="card-title">ਮਾਸਟਰ ਤਾਰਾ ਸਿੰਘ ਨਗਰ 'ਚ ਸਰਕਾਰੀ ਜ਼ਮੀਨ 'ਤੇ ਕਬਜ਼ੇ ਦੇ ਦੋਸ਼, ਨਗਰ ਨਿਗਮ ਦੀ ਕਾਰਜਪ੍ਰਣਾਲੀ 'ਤੇ ਸਵਾਲ</h3>
+                        <div class="card-footer">
+                            <span>Recent</span>
+                            <span>✍️ Vicky Suri</span>
+                        </div>
+                    </div>
+                </article>
             </div>
         </div>
     </section>
@@ -228,7 +428,48 @@
                         <span id="activeFilterBadge" class="active-filter-badge" style="display:none;">Filtered</span>
                     </div>
                     <div class="news-stream-list" id="dynamicStreamList">
-                        <!-- Dynamically populated by index.js -->
+                        <article class="stream-card" onclick="window.location.href='article.html?id=946f70b4-09c4-45d4-9e08-e387caa6607d'">
+                            <div class="stream-thumb">
+                                <img src="main50.jpeg" alt="ਬੀ.ਐਲ. ਸੰਤੋਸ਼" onerror="this.src='INPUNJABNEWSLOGO.png'">
+                            </div>
+                            <div class="stream-info">
+                                <div class="stream-tag-row">
+                                    <span class="stream-tag">Punjab</span>
+                                    <span class="stream-date">• Recent</span>
+                                    <span class="stream-date">• ⏱️ 3 min read</span>
+                                </div>
+                                <h3 class="stream-title">ਆਮ ਆਦਮੀ ਪਾਰਟੀ ਨੇ ਪੰਜਾਬ ਨੂੰ ਹਰ ਪੱਖੋਂ ਬਰਬਾਦ ਕੀਤਾ, ਭਾਜਪਾ ਬਣੇਗੀ ਪੰਜਾਬ ਦੀ ਆਵਾਜ਼: ਬੀ.ਐਲ. ਸੰਤੋਸ਼</h3>
+                                <p class="stream-brief">ਕਾਂਗਰਸ ਵਿਰੋਧੀ ਧਿਰ ਦੀ ਭੂਮਿਕਾ ਨਿਭਾਉਣ ’ਚ ਨਾਕਾਮ, ਪੰਜਾਬ ਦੇ ਲੋਕਾਂ ਦਾ ਸਹਾਰਾ ਬਣੇਗੀ ਭਾਜਪਾ। ਪੰਜ ਮਹੀਨਿਆਂ ਵਿੱਚ ਮਜ਼ਬੂਤ ਟੀਮ ਤਿਆਰ ਕਰੋ।</p>
+                                <div class="stream-meta">
+                                    <span>✍️ By Vicky Suri</span>
+                                    <span>👁️ 1,420 views</span>
+                                    <button type="button" class="stream-share-btn" onclick="event.stopPropagation(); window.open('https://api.whatsapp.com/send?text=' + encodeURIComponent('ਆਮ ਆਦਮੀ ਪਾਰਟੀ ਨੇ ਪੰਜਾਬ ਨੂੰ ਹਰ ਪੱਖੋਂ ਬਰਬਾਦ ਕੀਤਾ - InPunjab News\n' + window.location.origin + '/article.html?id=946f70b4-09c4-45d4-9e08-e387caa6607d'), '_blank')" title="Share on WhatsApp">
+                                        <span>📲 WhatsApp</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </article>
+                        <article class="stream-card" onclick="window.location.href='article.html?id=8d3e17d2-751c-44e7-8e1c-99435175aea7'">
+                            <div class="stream-thumb">
+                                <img src="main48.jpeg" alt="ਹਰਦੀਪ ਗਿੱਲ" onerror="this.src='INPUNJABNEWSLOGO.png'">
+                            </div>
+                            <div class="stream-info">
+                                <div class="stream-tag-row">
+                                    <span class="stream-tag">Punjab</span>
+                                    <span class="stream-date">• Recent</span>
+                                    <span class="stream-date">• ⏱️ 2 min read</span>
+                                </div>
+                                <h3 class="stream-title">ਰਾਸ਼ਟਰੀ ਸਫ਼ਾਈ ਕਰਮਚਾਰੀ ਕਮਿਸ਼ਨ ਦੇ ਹਰਦੀਪ ਗਿੱਲ ਨੇ ਜਲੰਧਰ ਨਗਰ ਨਿਗਮ ਦੀਆਂ ਸਫ਼ਾਈ ਯੂਨੀਅਨਾਂ ਨਾਲ ਕੀਤੀ ਮੀਟਿੰਗ</h3>
+                                <p class="stream-brief">ਸਫ਼ਾਈ ਕਰਮਚਾਰੀਆਂ ਦੇ ਹੱਕਾਂ ਲਈ ਕਾਨੂੰਨ ਲਿਆਵੇਗੀ ਮੋਦੀ ਸਰਕਾਰ : ਗਿੱਲ | ਸਫ਼ਾਈ ਕਰਮਚਾਰੀਆਂ ਦੀਆਂ ਮੰਗਾਂ ਦੇ ਹੱਲ ਲਈ ਡਿਪਟੀ ਕਮਿਸ਼ਨਰ ਨੂੰ ਨਿਰਦੇਸ਼।</p>
+                                <div class="stream-meta">
+                                    <span>✍️ By Vicky Suri</span>
+                                    <span>👁️ 1,180 views</span>
+                                    <button type="button" class="stream-share-btn" onclick="event.stopPropagation(); window.open('https://api.whatsapp.com/send?text=' + encodeURIComponent('ਸਫ਼ਾਈ ਕਰਮਚਾਰੀ ਕਮਿਸ਼ਨ - InPunjab News\n' + window.location.origin + '/article.html?id=8d3e17d2-751c-44e7-8e1c-99435175aea7'), '_blank')" title="Share on WhatsApp">
+                                        <span>📲 WhatsApp</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </article>
                     </div>
                 </div>
 
@@ -241,7 +482,34 @@
                             <span class="trending-tag-live">24H HOT</span>
                         </div>
                         <div class="trending-list" id="dynamicTrendingList">
-                            <!-- Dynamically populated by index.js -->
+                            <div class="trending-item" onclick="window.location.href='article.html?id=946f70b4-09c4-45d4-9e08-e387caa6607d'">
+                                <div class="trending-rank">01</div>
+                                <div class="trending-content">
+                                    <h5 class="trending-title">ਆਮ ਆਦਮੀ ਪਾਰਟੀ ਨੇ ਪੰਜਾਬ ਨੂੰ ਹਰ ਪੱਖੋਂ ਬਰਬਾਦ ਕੀਤਾ: ਬੀ.ਐਲ. ਸੰਤੋਸ਼</h5>
+                                    <div class="trending-meta">Recent • 👁️ 1.4k reads</div>
+                                </div>
+                            </div>
+                            <div class="trending-item" onclick="window.location.href='article.html?id=8d3e17d2-751c-44e7-8e1c-99435175aea7'">
+                                <div class="trending-rank">02</div>
+                                <div class="trending-content">
+                                    <h5 class="trending-title">ਸਫ਼ਾਈ ਕਰਮਚਾਰੀਆਂ ਦੇ ਹੱਕਾਂ ਲਈ ਕਾਨੂੰਨ ਲਿਆਵੇਗੀ ਮੋਦੀ ਸਰਕਾਰ : ਹਰਦੀਪ ਗਿੱਲ</h5>
+                                    <div class="trending-meta">Recent • 👁️ 1.2k reads</div>
+                                </div>
+                            </div>
+                            <div class="trending-item" onclick="window.location.href='article.html?id=2da421fa-e2cf-413c-8ae8-43fa76ea0cc7'">
+                                <div class="trending-rank">03</div>
+                                <div class="trending-content">
+                                    <h5 class="trending-title">ਅਮਿਤ ਸ਼ਾਹ ਦੀ ਜਲੰਧਰ ਮਹਾਰੈਲੀ ਪੰਜਾਬ ਵਿੱਚ ਬਦਲਾਅ ਦਾ ਸ਼ੰਖਨਾਦ ਬਣੇਗੀ</h5>
+                                    <div class="trending-meta">Recent • 👁️ 980 reads</div>
+                                </div>
+                            </div>
+                            <div class="trending-item" onclick="window.location.href='article.html?id=c7c9e388-8fe3-43ce-aafd-b23ab6b267b4'">
+                                <div class="trending-rank">04</div>
+                                <div class="trending-content">
+                                    <h5 class="trending-title">ਪ੍ਰਧਾਨ ਮੰਤਰੀ ਮੋਦੀ ਦੇ ਜਨਮ ਦਿਵਸ ਮੌਕੇ ਭਾਜਪਾ ਦੇ 14 ਮੰਡਲਾਂ ਵਿੱਚ ਸੇਵਾ ਕਾਰਜ</h5>
+                                    <div class="trending-meta">Recent • 👁️ 840 reads</div>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
