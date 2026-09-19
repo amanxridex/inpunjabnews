@@ -4,10 +4,30 @@
 // ==========================================================================
 
 document.addEventListener('DOMContentLoaded', () => {
+    initViewportDetection();
     initDateTime();
     initTheme();
     loadEditorialArticles();
 });
+
+// ── Viewport Detection & Dynamic Adaptation ──
+function initViewportDetection() {
+    const handleViewport = () => {
+        const width = window.innerWidth;
+        const isMobile = width <= 768;
+        const isSmallMobile = width <= 480;
+
+        document.documentElement.setAttribute('data-viewport', isSmallMobile ? 'small-mobile' : isMobile ? 'mobile' : 'desktop');
+        document.body.classList.toggle('is-mobile-viewport', isMobile);
+        document.body.classList.toggle('is-small-mobile', isSmallMobile);
+    };
+
+    handleViewport();
+    window.addEventListener('resize', handleViewport, { passive: true });
+    window.addEventListener('orientationchange', () => {
+        setTimeout(handleViewport, 150);
+    }, { passive: true });
+}
 
 // ── 1. Date & Time Utility ──
 function initDateTime() {
@@ -46,9 +66,13 @@ function updateThemeBtnIcon(theme) {
 }
 
 function toggleMobileNav() {
-    const nav = document.getElementById('primaryNavBar');
-    if (nav) {
-        nav.classList.toggle('open');
+    const overlay = document.getElementById('mobileDrawerOverlay');
+    const panel = document.getElementById('mobileDrawerPanel');
+    if (overlay && panel) {
+        const isOpen = panel.classList.contains('open');
+        panel.classList.toggle('open', !isOpen);
+        overlay.classList.toggle('open', !isOpen);
+        document.body.style.overflow = !isOpen ? 'hidden' : '';
     }
 }
 
@@ -56,7 +80,16 @@ function toggleMobileNav() {
 function doSearch() {
     const query = document.getElementById('globalSearchInput').value.trim();
     if (query) {
-        window.location.href = `article.html?search=${encodeURIComponent(query)}`;
+        filterCategory(query);
+    }
+}
+
+function doDrawerSearch() {
+    const input = document.getElementById('drawerSearchInput');
+    const query = input ? input.value.trim() : '';
+    if (query) {
+        toggleMobileNav();
+        filterCategory(query);
     }
 }
 

@@ -6,11 +6,31 @@
 let currentArticleId = null;
 
 document.addEventListener('DOMContentLoaded', () => {
+    initViewportDetection();
     initDateTime();
     initTheme();
     initReadingProgress();
     loadArticleDetail();
 });
+
+// ── Viewport Detection & Dynamic Adaptation ──
+function initViewportDetection() {
+    const handleViewport = () => {
+        const width = window.innerWidth;
+        const isMobile = width <= 768;
+        const isSmallMobile = width <= 480;
+
+        document.documentElement.setAttribute('data-viewport', isSmallMobile ? 'small-mobile' : isMobile ? 'mobile' : 'desktop');
+        document.body.classList.toggle('is-mobile-viewport', isMobile);
+        document.body.classList.toggle('is-small-mobile', isSmallMobile);
+    };
+
+    handleViewport();
+    window.addEventListener('resize', handleViewport, { passive: true });
+    window.addEventListener('orientationchange', () => {
+        setTimeout(handleViewport, 150);
+    }, { passive: true });
+}
 
 // ── 1. Date & Time ──
 function initDateTime() {
@@ -49,10 +69,31 @@ function updateThemeBtnIcon(theme) {
 }
 
 function toggleMobileNav() {
-    const nav = document.getElementById('primaryNavBar');
-    if (nav) {
-        nav.classList.toggle('open');
+    const overlay = document.getElementById('mobileDrawerOverlay');
+    const panel = document.getElementById('mobileDrawerPanel');
+    if (overlay && panel) {
+        const isOpen = panel.classList.contains('open');
+        panel.classList.toggle('open', !isOpen);
+        overlay.classList.toggle('open', !isOpen);
+        document.body.style.overflow = !isOpen ? 'hidden' : '';
     }
+}
+
+function doDrawerSearch() {
+    const input = document.getElementById('drawerSearchInput');
+    const query = input ? input.value.trim() : '';
+    if (query) {
+        toggleMobileNav();
+        window.location.href = `index.html#latest-stream`;
+    }
+}
+
+function shareArticleWhatsApp() {
+    const title = document.title.replace(' – InPunjab News', '');
+    const url = window.location.href;
+    const text = `📰 *${title}*\n\nRead full report on InPunjab News:\n${url}`;
+    const waUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`;
+    window.open(waUrl, '_blank');
 }
 
 // ── 3. Reading Progress Bar ──

@@ -2,7 +2,11 @@
 <html lang="pa">
 <head>
     <meta charset="utf-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover"/>
+    <meta name="theme-color" content="#0F172A"/>
+    <meta name="mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
     <title>InPunjab News – ਪੰਜਾਬ ਦੀ ਆਵਾਜ਼</title>
     <meta name="description" content="Leading digital news platform bringing breaking news from Punjab."/>
     
@@ -19,7 +23,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@700;800;900&family=Noto+Sans+Gurmukhi:wght@400;500;600;700&display=swap" rel="stylesheet"/>
     
     <!-- Editorial Minimalist Stylesheet -->
-    <link href="index.css?v=2.1" rel="stylesheet"/>
+    <link href="index.css?v=2.2" rel="stylesheet"/>
     
     <!-- Google AdSense -->
     <meta name="google-adsense-account" content="ca-pub-9624803444729340">
@@ -29,6 +33,40 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
+    <!-- ── Mobile Drawer Navigation Menu ── -->
+    <div class="mobile-drawer-overlay" id="mobileDrawerOverlay" onclick="toggleMobileNav()"></div>
+    <div class="mobile-drawer-panel" id="mobileDrawerPanel">
+        <div class="drawer-header">
+            <img src="OFFICIAL LOGO.png" alt="InPunjab News" class="drawer-logo" onerror="this.src='INPUNJABNEWSLOGO.png'">
+            <button type="button" class="drawer-close-btn" onclick="toggleMobileNav()" title="Close Menu">✕</button>
+        </div>
+        <div class="drawer-search">
+            <input type="text" id="drawerSearchInput" placeholder="Search news, topics..." onkeydown="if(event.key==='Enter') doDrawerSearch()"/>
+            <button type="button" onclick="doDrawerSearch()">🔍</button>
+        </div>
+        <div class="drawer-nav-list">
+            <a href="index.html" class="drawer-link" onclick="toggleMobileNav()">🏠 Home</a>
+            <a href="index.html#lead-hero" class="drawer-link text-red" onclick="toggleMobileNav()">🔴 Breaking News</a>
+            <a href="index.html#visual-stories" class="drawer-link" onclick="toggleMobileNav()">⚡ Web Stories</a>
+            <a href="index.html#punjab-section" class="drawer-link active" onclick="toggleMobileNav()">🌾 Punjab News</a>
+            <a href="panchaang.html" class="drawer-link text-gold">🕉️ Daily Panchaang</a>
+            <a href="index.html#latest-stream" class="drawer-link" onclick="toggleMobileNav()">⚖️ Politics</a>
+            <a href="index.html#latest-stream" class="drawer-link" onclick="toggleMobileNav()">🇮🇳 National</a>
+            <a href="index.html#latest-stream" class="drawer-link" onclick="toggleMobileNav()">🚜 Kisaan & Agriculture</a>
+            <a href="index.html#latest-stream" class="drawer-link" onclick="toggleMobileNav()">🤼 Sports & Kabaddi</a>
+            <a href="index.html#latest-stream" class="drawer-link" onclick="toggleMobileNav()">✈️ NRI Desk</a>
+        </div>
+        <div class="drawer-footer">
+            <div class="drawer-lang-row">
+                <span>Language:</span>
+                <button type="button" onclick="changeLanguage('pa'); toggleMobileNav()">ਪੰਜਾਬੀ</button>
+                <button type="button" onclick="changeLanguage('hi'); toggleMobileNav()">हिन्दी</button>
+                <button type="button" onclick="changeLanguage('en'); toggleMobileNav()">Eng</button>
+            </div>
+            <p>© 2026 InPunjab News • Vicky Suri</p>
+        </div>
+    </div>
+
     <!-- ── 0. Reading Progress Bar ── -->
     <div class="reading-progress-bar" id="readingProgressBar"></div>
 
@@ -248,9 +286,33 @@
     <!-- Toast Notification Box -->
     <div id="toastBox" class="toast-box">Notification</div>
 
+    <!-- ── Mobile Sticky Bottom Reading Actions Bar ── -->
+    <div class="mobile-article-bottom-bar" id="mobileArticleBottomBar">
+        <a href="index.html" class="mob-bottom-btn" title="Home">
+            <span class="mob-btn-icon">🏠</span>
+            <span>Home</span>
+        </a>
+        <button type="button" class="mob-bottom-btn text-wa" onclick="shareArticleWhatsApp()" title="Share on WhatsApp">
+            <span class="mob-btn-icon">💬</span>
+            <span>Share</span>
+        </button>
+        <button type="button" class="mob-bottom-btn" onclick="copyArticleLink()" title="Copy Link">
+            <span class="mob-btn-icon">🔗</span>
+            <span>Copy</span>
+        </button>
+        <a href="panchaang.html" class="mob-bottom-btn" title="Daily Panchaang">
+            <span class="mob-btn-icon">🕉️</span>
+            <span>Panchaang</span>
+        </a>
+        <button type="button" class="mob-bottom-btn" onclick="window.scrollTo({top:0, behavior:'smooth'})" title="Back to Top">
+            <span class="mob-btn-icon">⬆️</span>
+            <span>Top</span>
+        </button>
+    </div>
+
     <!-- ── 8. Scripts ── -->
     <script src="supabaseClient.js"></script>
-    <script src="article.js?v=2.1"></script>
+    <script src="article.js?v=2.2"></script>
 
     <!-- Google Translate Support -->
     <div id="google_translate_element" style="display:none;"></div>
