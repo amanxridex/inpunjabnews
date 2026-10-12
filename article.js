@@ -11,6 +11,8 @@ document.addEventListener('DOMContentLoaded', () => {
     initTheme();
     initReadingProgress();
     loadArticleDetail();
+    loadDynamicAds();
+    loadDailyPanchangWidget();
 });
 
 // ── Viewport Detection & Dynamic Adaptation ──
@@ -88,10 +90,164 @@ function doDrawerSearch() {
     }
 }
 
-function shareArticleWhatsApp() {
+// Global cached image blob for native sharing
+window.currentArticleImageBlob = null;
+
+// Helper: Always fetch image blob with multi-tier CORS & Canvas fallback
+async function fetchArticleImageBlob(imageUrl) {
+    if (!imageUrl) return null;
+    if (imageUrl.startsWith('data:')) {
+        try {
+            const parts = imageUrl.split(',');
+            const mime = parts[0].match(/:(.*?);/)[1];
+            const bstr = atob(parts[1]);
+            let n = bstr.length;
+            const u8arr = new Uint8Array(n);
+            while (n--) u8arr[n] = bstr.charCodeAt(n);
+            return new Blob([u8arr], { type: mime });
+        } catch (e) {
+            console.warn('Error converting dataURI:', e);
+        }
+    }
+
+    try {
+        const response = await fetch(imageUrl, { mode: 'cors', cache: 'default' });
+        if (response.ok) {
+            const blob = await response.blob();
+            if (blob && blob.size > 0) return blob;
+        }
+    } catch (err) {
+        // Direct fetch failed, proceed to Canvas fallback
+    }
+
+    return new Promise((resolve) => {
+        const img = new Image();
+        img.crossOrigin = 'anonymous';
+        let resolved = false;
+
+        const done = (blob) => {
+            if (!resolved) {
+                resolved = true;
+                resolve(blob);
+            }
+        };
+
+        const timeout = setTimeout(() => done(null), 3500);
+
+        img.onload = () => {
+            clearTimeout(timeout);
+            try {
+                const canvas = document.createElement('canvas');
+                canvas.width = img.naturalWidth || img.width || 600;
+                canvas.height = img.naturalHeight || img.height || 400;
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(img, 0, 0);
+                canvas.toBlob((blob) => done(blob), 'image/jpeg', 0.92);
+            } catch (canvasErr) {
+                done(null);
+            }
+        };
+
+        img.onerror = () => {
+            clearTimeout(timeout);
+            const fallbackImg = new Image();
+            fallbackImg.onload = () => {
+                try {
+                    const canvas = document.createElement('canvas');
+                    canvas.width = fallbackImg.naturalWidth || 600;
+                    canvas.height = fallbackImg.naturalHeight || 400;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(fallbackImg, 0, 0);
+                    canvas.toBlob((blob) => done(blob), 'image/jpeg', 0.92);
+                } catch (e) {
+                    done(null);
+                }
+            };
+            fallbackImg.onerror = () => done(null);
+            fallbackImg.src = imageUrl;
+        };
+
+        img.src = imageUrl;
+    });
+}
+
+async function shareArticleNative() {
     const title = document.title.replace(' – InPunjab News', '');
     const url = window.location.href;
-    const text = `📰 *${title}*\n\nRead full report on InPunjab News:\n${url}`;
+    const ogImg = document.getElementById('ogImage');
+    const imgUrl = (ogImg && ogImg.content) ? ogImg.content : '';
+
+    showToast('Fetching article image for sharing... ⏳');
+
+    let blob = window.currentArticleImageBlob;
+    if (!blob && imgUrl) {
+        blob = await fetchArticleImageBlob(imgUrl);
+        window.currentArticleImageBlob = blob;
+    }
+
+    if (blob && navigator.canShare) {
+        try {
+            const ext = blob.type.includes('png') ? 'png' : blob.type.includes('webp') ? 'webp' : 'jpg';
+            const file = new File([blob], 'inpunjab-news.' + ext, { type: blob.type || 'image/jpeg' });
+            if (navigator.canShare({ files: [file] })) {
+                await navigator.share({
+                    title: title,
+                    text: `📰 *${title}*\n\nRead full report on InPunjab News:\n${url}`,
+                    url: url,
+                    files: [file]
+                });
+                showToast('Article shared successfully with image! 📤');
+                return;
+            }
+        } catch (e) {
+            if (e.name === 'AbortError') return;
+        }
+    }
+
+    if (navigator.share) {
+        try {
+            await navigator.share({
+                title: title,
+                text: `📰 *${title}*\n\nRead full report on InPunjab News:\n${url}`,
+                url: url
+            });
+            showToast('Article shared successfully! 📤');
+            return;
+        } catch (e) {
+            if (e.name === 'AbortError') return;
+        }
+    }
+
+    // Fallback to WhatsApp
+    shareArticleWhatsApp();
+}
+
+async function shareArticleWhatsApp() {
+    const title = document.title.replace(' – InPunjab News', '');
+    const url = window.location.href;
+    const ogImg = document.getElementById('ogImage');
+    const imgUrl = (ogImg && ogImg.content) ? ogImg.content : '';
+
+    // If native sharing with file is supported, try it directly
+    if (window.currentArticleImageBlob && navigator.canShare) {
+        try {
+            const ext = window.currentArticleImageBlob.type.includes('png') ? 'png' : 'jpg';
+            const file = new File([window.currentArticleImageBlob], 'news-image.' + ext, { type: window.currentArticleImageBlob.type || 'image/jpeg' });
+            if (navigator.canShare({ files: [file] })) {
+                await navigator.share({
+                    title: title,
+                    text: `📰 *${title}*\n\nRead full report on InPunjab News:\n${url}`,
+                    url: url,
+                    files: [file]
+                });
+                return;
+            }
+        } catch (e) {
+            if (e.name === 'AbortError') return;
+        }
+    }
+
+    const text = `📰 *${title}*\n\n${imgUrl ? '🖼️ *Image:* ' + imgUrl + '\n\n' : ''}Read full report on InPunjab News:\n${url}`;
     const waUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`;
     window.open(waUrl, '_blank');
 }
@@ -164,6 +320,33 @@ async function loadArticleDetail() {
         if (breadcrumbTitle) breadcrumbTitle.textContent = article.title;
         const breadcrumbCategory = document.getElementById('breadcrumbCategory');
         if (breadcrumbCategory) breadcrumbCategory.textContent = article.tag || 'Punjab News';
+
+        // Update Meta & Open Graph Tags for social sharing & WhatsApp preview
+        const ogTitle = document.getElementById('ogTitle');
+        if (ogTitle) ogTitle.content = `${article.title} – InPunjab News`;
+        const ogDesc = document.getElementById('ogDesc');
+        if (ogDesc) ogDesc.content = article.brief || article.title;
+        const ogImage = document.getElementById('ogImage');
+        let fullArticleImageUrl = '';
+        if (article.image_url) {
+            fullArticleImageUrl = article.image_url.startsWith('http') ? article.image_url : `${window.location.origin}/${article.image_url.replace(/^\/+/, '')}`;
+            if (ogImage) ogImage.content = fullArticleImageUrl;
+        }
+
+        let twImage = document.querySelector('meta[name="twitter:image"]');
+        if (!twImage) {
+            twImage = document.createElement('meta');
+            twImage.setAttribute('name', 'twitter:image');
+            document.head.appendChild(twImage);
+        }
+        if (fullArticleImageUrl) twImage.content = fullArticleImageUrl;
+
+        // Pre-fetch article image blob for instant native sharing
+        if (fullArticleImageUrl) {
+            fetchArticleImageBlob(fullArticleImageUrl).then(blob => {
+                window.currentArticleImageBlob = blob;
+            }).catch(() => {});
+        }
 
         // Render the Full Article Body
         renderArticleContent(article);
@@ -320,8 +503,11 @@ function renderArticleContent(article) {
             <!-- Social Action Buttons -->
             <div class="article-actions-bar">
                 <a href="${waShareUrl}" target="_blank" rel="noopener" class="action-wa-btn">
-                    <span>💬 Share on WhatsApp</span>
+                    <span>💬 WhatsApp</span>
                 </a>
+                <button type="button" class="action-share-native-btn" onclick="shareArticleNative()" title="Share Article & Image">
+                    <span>📤 Share with Image</span>
+                </button>
                 <button type="button" class="action-copy-btn" onclick="copyArticleLink()">
                     <span>🔗 Copy Link</span>
                 </button>
@@ -663,3 +849,105 @@ function escapeHtml(str) {
         }
     });
 }
+
+// ── 7. Dynamic Advertisements Sync from Database ──
+async function loadDynamicAds() {
+    if (typeof supabaseClient === 'undefined') return;
+    try {
+        const { data: ads, error } = await supabaseClient
+            .from('ads')
+            .select('*')
+            .order('created_at', { ascending: false });
+
+        if (error || !ads || ads.length === 0) return;
+
+        const liveAds = ads.filter(a => (a.status || 'Live').toLowerCase() === 'live');
+        if (liveAds.length === 0) return;
+
+        // Find sidebar ad or first live ad
+        const sidebarAd = liveAds.find(a => (a.slot_name || '').toLowerCase().includes('sidebar')) || liveAds[0];
+        if (sidebarAd) {
+            const adImg = document.getElementById('sidebarAdImg');
+            const adLink = document.getElementById('sidebarAdLink');
+
+            let link = sidebarAd.link || '#';
+            if (sidebarAd.advertiser && sidebarAd.advertiser.includes('|')) {
+                link = sidebarAd.advertiser.split('|')[1].trim();
+            }
+
+            const imgVal = sidebarAd.image_url || sidebarAd.image || sidebarAd.size || 'ad5.jpeg';
+            if (adImg) adImg.src = imgVal;
+            if (adLink && link && link !== '#') {
+                adLink.href = link;
+                adLink.title = sidebarAd.advertiser ? sidebarAd.advertiser.split('|')[0].trim() : 'Advertisement';
+            }
+        }
+    } catch (e) {
+        console.error('Error fetching dynamic ads in article:', e);
+    }
+}
+
+// ── 8. Daily Panchang Widget Sync from Database ──
+async function loadDailyPanchangWidget() {
+    if (typeof supabaseClient === 'undefined') return;
+
+    // Get IST today's date YYYY-MM-DD
+    const now = new Date();
+    const istOffset = 5.5 * 60 * 60 * 1000;
+    const istTime = new Date(now.getTime() + now.getTimezoneOffset() * 60000 + istOffset);
+    const todayStr = `${istTime.getFullYear()}-${String(istTime.getMonth() + 1).padStart(2, '0')}-${String(istTime.getDate()).padStart(2, '0')}`;
+
+    try {
+        let content = '';
+        let brief = '';
+
+        // 1. Try panchang table
+        try {
+            const { data: pData } = await supabaseClient
+                .from('panchang')
+                .select('*')
+                .eq('date', todayStr)
+                .limit(1);
+            if (pData && pData.length > 0) {
+                content = pData[0].content || '';
+                brief = pData[0].brief || '';
+            }
+        } catch (e) {}
+
+        // 2. Fallback to articles tag = Panchang
+        if (!content) {
+            const { data: artData } = await supabaseClient
+                .from('articles')
+                .select('*')
+                .eq('tag', 'Panchang')
+                .eq('slug', todayStr)
+                .limit(1);
+            if (artData && artData.length > 0) {
+                content = artData[0].content || '';
+                brief = artData[0].brief || '';
+            }
+        }
+
+        if (content || brief) {
+            const dateElem = document.getElementById('sidebarPanchaangDate');
+            const nakshatraElem = document.getElementById('sidebarPanchaangNakshatra');
+            const rahuElem = document.getElementById('sidebarPanchaangRahu');
+
+            if (dateElem) {
+                dateElem.textContent = `${istTime.toLocaleDateString('hi-IN', { day: 'numeric', month: 'long' })} • शुभ मुहूर्त`;
+            }
+
+            const lines = content.split('\n');
+            lines.forEach(line => {
+                if (line.includes('नक्षत्र') && nakshatraElem) {
+                    nakshatraElem.textContent = line.replace(/^.*?नक्षत्र\s*[-:]?\s*/, '').trim();
+                } else if (line.includes('राहुकाल') && rahuElem) {
+                    rahuElem.textContent = line.replace(/^.*?राहुकाल\s*[-:]?\s*/, '').trim();
+                }
+            });
+        }
+    } catch (e) {
+        console.error('Error updating panchang widget in article:', e);
+    }
+}
+

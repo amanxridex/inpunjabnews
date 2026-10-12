@@ -221,6 +221,252 @@
             </div>
         </section>
 
+        <!-- ── TAB 3: ADVERTISEMENTS MANAGEMENT ── -->
+        <section id="tab-ads" class="tab-content">
+            <div class="section-intro">
+                <h2>Advertisements</h2>
+                <p>Manage advertisement banners, adjust slots, upload new photos or edit links.</p>
+            </div>
+
+            <!-- Stats & Quick Action Bar -->
+            <div class="news-header-meta">
+                <span id="adsCountDisplay">Loading ads...</span>
+                <div style="display: flex; gap: 10px;">
+                    <button 
+                        type="button" 
+                        id="toggleNewAdBtn"
+                        onclick="toggleNewAdForm()" 
+                        class="btn-subaction">
+                        ➕ Add New Ad
+                    </button>
+                    <button 
+                        type="button" 
+                        onclick="loadAds()" 
+                        style="background: none; border: none; font-size: 12px; font-weight: 700; color: var(--brand-primary); cursor: pointer;">
+                        🔄 Refresh
+                    </button>
+                </div>
+            </div>
+
+            <!-- Collapsible Add New Advertisement Form Card -->
+            <div id="newAdCard" class="form-card" style="display: none;">
+                <div class="card-header-row">
+                    <h3 style="font-size: 16px; font-weight: 800; color: var(--text-primary);">New Advertisement</h3>
+                    <button type="button" class="btn-close-sm" onclick="toggleNewAdForm()">✕</button>
+                </div>
+
+                <form id="newAdForm" onsubmit="handleCreateAd(event)">
+                    <!-- Slot Placement -->
+                    <div class="form-group">
+                        <label class="form-label" for="newAdSlot">Ad Slot / Position *</label>
+                        <select id="newAdSlot" class="form-input" required onchange="handleSlotChange(this, 'newAdCustomSlotWrap')">
+                            <option value="Sidebar Ad – Top (300×250)">Sidebar Ad – Top (300×250)</option>
+                            <option value="Header Banner (728×90)">Header Banner (728×90)</option>
+                            <option value="Leaderboard – Mid Page (970×90)">Leaderboard – Mid Page (970×90)</option>
+                            <option value="Sidebar Ad – Bottom (300×250)">Sidebar Ad – Bottom (300×250)</option>
+                            <option value="In-Article Ad (600×250)">In-Article Ad (600×250)</option>
+                            <option value="Ad Strip – Ticker Row">Ad Strip – Ticker Row</option>
+                            <option value="custom">-- Custom Slot Name --</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group" id="newAdCustomSlotWrap" style="display: none;">
+                        <label class="form-label" for="newAdCustomSlot">Custom Slot Name</label>
+                        <input type="text" id="newAdCustomSlot" class="form-input" placeholder="e.g. Popup Banner (400×400)">
+                    </div>
+
+                    <!-- Client / Advertiser Name -->
+                    <div class="form-group">
+                        <label class="form-label" for="newAdClient">Advertiser / Brand Name *</label>
+                        <input type="text" id="newAdClient" class="form-input" placeholder="e.g. Omaxe Chandigarh, DLF Punjab" required>
+                    </div>
+
+                    <!-- Target Link / URL -->
+                    <div class="form-group">
+                        <label class="form-label" for="newAdLink">Click Destination URL</label>
+                        <input type="url" id="newAdLink" class="form-input" placeholder="https://example.com (or leave empty)">
+                    </div>
+
+                    <!-- Status -->
+                    <div class="form-group">
+                        <label class="form-label" for="newAdStatus">Status</label>
+                        <select id="newAdStatus" class="form-input">
+                            <option value="Live">🟢 Live (Active on Website)</option>
+                            <option value="Paused">🟡 Paused (Temporarily Hidden)</option>
+                        </select>
+                    </div>
+
+                    <!-- Image Selection -->
+                    <div class="form-group">
+                        <label class="form-label">
+                            Ad Image / Creative *
+                            <span class="hint">Upload, pick preset, or paste URL</span>
+                        </label>
+
+                        <!-- Hidden input storing chosen image data/url -->
+                        <input type="hidden" id="newAdImageUrl" required>
+
+                        <!-- Choice Tabs -->
+                        <div class="media-choice-tabs">
+                            <button type="button" class="media-tab-btn active" id="tabBtn-upload-new" onclick="switchAdImageTab('upload', 'new')">📷 Upload File</button>
+                            <button type="button" class="media-tab-btn" id="tabBtn-presets-new" onclick="switchAdImageTab('presets', 'new')">🖼️ Preset Ads</button>
+                            <button type="button" class="media-tab-btn" id="tabBtn-url-new" onclick="switchAdImageTab('url', 'new')">🔗 Image URL</button>
+                        </div>
+
+                        <!-- Panel A: Upload -->
+                        <div id="newAdImagePanel-upload" class="image-upload-zone" style="margin-top: 10px;">
+                            <input type="file" id="newAdFileInput" accept="image/*" onchange="handleAdFileUpload(event, 'new')">
+                            <div class="upload-icon-circle">🖼️</div>
+                            <div class="upload-prompt">Tap to Upload Ad Photo</div>
+                            <div class="upload-subprompt">JPG, PNG, WebP • Auto-compressed</div>
+                        </div>
+
+                        <!-- Panel B: Presets -->
+                        <div id="newAdImagePanel-presets" class="preset-images-grid" style="display: none; margin-top: 10px;">
+                            <div class="preset-img-item" onclick="selectPresetAdImage('AD1.jpeg', 'new')">
+                                <img src="AD1.jpeg" alt="AD1">
+                                <span>AD 1</span>
+                            </div>
+                            <div class="preset-img-item" onclick="selectPresetAdImage('AD2.jpeg', 'new')">
+                                <img src="AD2.jpeg" alt="AD2">
+                                <span>AD 2</span>
+                            </div>
+                            <div class="preset-img-item" onclick="selectPresetAdImage('AD3.jpeg', 'new')">
+                                <img src="AD3.jpeg" alt="AD3">
+                                <span>AD 3</span>
+                            </div>
+                            <div class="preset-img-item" onclick="selectPresetAdImage('ad4.jpeg', 'new')">
+                                <img src="ad4.jpeg" alt="AD 4">
+                                <span>AD 4</span>
+                            </div>
+                            <div class="preset-img-item" onclick="selectPresetAdImage('ad5.jpeg', 'new')">
+                                <img src="ad5.jpeg" alt="AD 5">
+                                <span>AD 5</span>
+                            </div>
+                            <div class="preset-img-item" onclick="selectPresetAdImage('ad6.jpeg', 'new')">
+                                <img src="ad6.jpeg" alt="AD 6">
+                                <span>AD 6</span>
+                            </div>
+                        </div>
+
+                        <!-- Panel C: URL -->
+                        <div id="newAdImagePanel-url" style="display: none; margin-top: 10px;">
+                            <input type="url" id="newAdUrlInput" class="form-input" placeholder="https://domain.com/banner.jpg" oninput="handleAdUrlInput(this.value, 'new')">
+                        </div>
+
+                        <!-- Preview Card -->
+                        <div id="newAdPreviewContainer" class="ad-preview-box" style="display: none; margin-top: 12px;">
+                            <img id="newAdPreviewImg" src="" alt="Ad Creative Preview">
+                            <button type="button" class="remove-btn" title="Remove" onclick="clearAdImagePreview('new')">✕</button>
+                        </div>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <button type="submit" id="createAdBtn" class="btn-publish" style="margin-top: 8px;">
+                        <span>Publish Advertisement</span>
+                        <span>📢</span>
+                    </button>
+                </form>
+            </div>
+
+            <!-- List of Current Advertisements -->
+            <div id="adsListContainer" class="ads-list">
+                <!-- Dynamically populated via admin.js -->
+            </div>
+        </section>
+
+        <!-- ── TAB 4: DAILY PANCHANG MANAGEMENT ── -->
+        <section id="tab-panchang" class="tab-content">
+            <div class="section-intro">
+                <h2>Daily Panchang (दैनिक पंचांग)</h2>
+                <p>Add everyday sacred panchang text • Syncs instantly with frontend & database.</p>
+            </div>
+
+            <!-- Panchang Editor Form Card -->
+            <form id="panchangForm" class="form-card" onsubmit="handleSavePanchang(event)">
+                <div class="card-header-row">
+                    <h3 style="font-size: 16px; font-weight: 800; color: var(--text-primary);" id="panchangFormTitle">Post Today's Panchang</h3>
+                    <button type="button" class="btn-template" onclick="insertPanchangTemplate()">✨ Insert Template</button>
+                </div>
+
+                <input type="hidden" id="editingPanchangId" value="">
+
+                <!-- 1. Date Picker Row -->
+                <div class="form-row-two">
+                    <div class="form-group" style="flex: 1;">
+                        <label class="form-label" for="panchangDate">Panchang Date *</label>
+                        <input type="date" id="panchangDate" class="form-input" required onchange="handlePanchangDateChange(this.value)">
+                    </div>
+                    <div class="form-group" style="flex: 1;">
+                        <label class="form-label" for="panchangAuthor">Pandit / Source</label>
+                        <input type="text" id="panchangAuthor" class="form-input" value="पं मनोज झा" placeholder="पं मनोज झा">
+                    </div>
+                </div>
+
+                <!-- 2. Title -->
+                <div class="form-group">
+                    <label class="form-label" for="panchangTitle">Heading / Title *</label>
+                    <input type="text" id="panchangTitle" class="form-input" placeholder="आज का पंचांग - 12 अक्टूबर 2026" required>
+                </div>
+
+                <!-- 3. Auspicious Summary (for Sidebar Widget) -->
+                <div class="form-group">
+                    <label class="form-label" for="panchangBrief">
+                        Auspicious Highlights (for Sidebar Widget)
+                        <span class="hint">Tithi, Nakshatra, Muhurat</span>
+                    </label>
+                    <input type="text" id="panchangBrief" class="form-input" placeholder="e.g. शुक्ल पक्ष द्वितीया • नक्षत्र: स्वाति • राहुकाल: 07:47 से 09:14">
+                </div>
+
+                <!-- 4. Sacred Panchang Full Text Area -->
+                <div class="form-group">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <label class="form-label" for="panchangContent">
+                            Sacred Panchang Full Text *
+                            <span class="hint">Hindi / Punjabi text</span>
+                        </label>
+                        <button type="button" class="btn-subaction" onclick="togglePanchangPreview()">👁️ Preview</button>
+                    </div>
+                    <textarea 
+                        id="panchangContent" 
+                        class="form-textarea panchang-textarea" 
+                        rows="12" 
+                        placeholder="🙏🙏जय श्री गंगा जी की 🙏🙏&#10;🙏🙏आज का पंचांग 🙏🙏&#10;दिनांक - ...&#10;दिन - ...&#10;विक्रम संवत् - 2083&#10;अयन - ...&#10;ऋतु - ...&#10;मास - ...&#10;पक्ष - ...&#10;तिथि - ...&#10;नक्षत्र - ...&#10;योग - ...&#10;दिशाशूल - ...&#10;सूर्योदय - ...&#10;सूर्यास्त - ...&#10;राहुकाल - ...&#10;आज का विचार - ..." 
+                        required 
+                        oninput="updatePanchangLivePreview()"></textarea>
+                </div>
+
+                <!-- Live Preview Sheet -->
+                <div id="panchangLivePreviewWrap" class="panchang-preview-card" style="display: none;">
+                    <div class="panchang-preview-tag">🕉️ Live Website Preview</div>
+                    <div id="panchangLivePreviewDisplay" class="panchang-preview-content"></div>
+                </div>
+
+                <!-- Submit Button -->
+                <div style="display: flex; gap: 10px;">
+                    <button type="submit" id="savePanchangBtn" class="btn-publish" style="flex: 2;">
+                        <span>Save & Sync Panchang</span>
+                        <span>🕉️</span>
+                    </button>
+                    <button type="button" id="resetPanchangBtn" class="btn-cancel" onclick="resetPanchangForm()" style="flex: 1; display: none;">
+                        Cancel
+                    </button>
+                </div>
+            </form>
+
+            <!-- Recent Panchang History -->
+            <div class="section-intro" style="margin-top: 20px;">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <h3 style="font-size: 16px; font-weight: 800; color: var(--text-primary);">Panchang History</h3>
+                    <a href="panchaang.html" target="_blank" class="link-external">Open Live Page ↗</a>
+                </div>
+            </div>
+
+            <div id="panchangEntriesList" class="panchang-history-list">
+                <!-- Dynamically populated via admin.js -->
+            </div>
+        </section>
+
         <!-- ── Fixed Floating Bottom Navigation Bar ── -->
         <nav class="bottom-nav">
             <button type="button" class="nav-item active" data-tab="new-post">
@@ -232,6 +478,15 @@
                 <span>News</span>
                 <span id="newsNavBadge" class="nav-badge-count">...</span>
             </button>
+            <button type="button" class="nav-item" data-tab="ads">
+                <span class="nav-icon">📢</span>
+                <span>Ads</span>
+                <span id="adsNavBadge" class="nav-badge-count">...</span>
+            </button>
+            <button type="button" class="nav-item" data-tab="panchang">
+                <span class="nav-icon">🕉️</span>
+                <span>Panchang</span>
+            </button>
         </nav>
 
         <!-- ── Full Article Preview Modal Sheet ── -->
@@ -240,7 +495,10 @@
                 <!-- Sticky Top Header with Cross Button -->
                 <div class="article-modal-header">
                     <span class="article-modal-title-bar">📰 Article Preview</span>
-                    <button type="button" class="modal-close-cross-btn" title="Close" onclick="closeArticleModal()">✕</button>
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <button type="button" class="modal-share-pill-btn" onclick="shareCurrentModalArticle()" title="Share Article & Image">📤 Share</button>
+                        <button type="button" class="modal-close-cross-btn" title="Close" onclick="closeArticleModal()">✕</button>
+                    </div>
                 </div>
 
                 <!-- Modal Body -->
@@ -253,6 +511,9 @@
                     <div id="modalArticleMeta" class="article-modal-meta-row">
                         <!-- Author, Date, Views -->
                     </div>
+                    <button type="button" class="modal-share-banner-btn" onclick="shareCurrentModalArticle()">
+                        <span>📤 Share this Article & Image</span>
+                    </button>
                     <div id="modalArticleBody" class="article-modal-text">
                         <!-- Full article body paragraphs and images -->
                     </div>
@@ -260,7 +521,119 @@
             </div>
         </div>
 
-        <!-- ── Delete Confirmation Modal ── -->
+        <!-- ── Edit Advertisement Modal Sheet ── -->
+        <div id="editAdModal" class="article-modal-overlay">
+            <div class="article-modal-container" style="height: 85vh;">
+                <div class="article-modal-header">
+                    <span class="article-modal-title-bar">✏️ Edit Advertisement</span>
+                    <button type="button" class="modal-close-cross-btn" title="Close" onclick="closeEditAdModal()">✕</button>
+                </div>
+                <form id="editAdForm" class="article-modal-body" onsubmit="handleUpdateAd(event)">
+                    <input type="hidden" id="editAdId">
+                    <input type="hidden" id="editAdImageUrl">
+
+                    <div class="form-group">
+                        <label class="form-label" for="editAdSlot">Ad Slot / Placement *</label>
+                        <select id="editAdSlot" class="form-input" required onchange="handleSlotChange(this, 'editAdCustomSlotWrap')">
+                            <option value="Sidebar Ad – Top (300×250)">Sidebar Ad – Top (300×250)</option>
+                            <option value="Header Banner (728×90)">Header Banner (728×90)</option>
+                            <option value="Leaderboard – Mid Page (970×90)">Leaderboard – Mid Page (970×90)</option>
+                            <option value="Sidebar Ad – Bottom (300×250)">Sidebar Ad – Bottom (300×250)</option>
+                            <option value="In-Article Ad (600×250)">In-Article Ad (600×250)</option>
+                            <option value="Ad Strip – Ticker Row">Ad Strip – Ticker Row</option>
+                            <option value="custom">-- Custom Slot Name --</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group" id="editAdCustomSlotWrap" style="display: none;">
+                        <label class="form-label" for="editAdCustomSlot">Custom Slot Name</label>
+                        <input type="text" id="editAdCustomSlot" class="form-input" placeholder="e.g. Popup Banner (400×400)">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="editAdClient">Advertiser / Brand Name *</label>
+                        <input type="text" id="editAdClient" class="form-input" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="editAdLink">Click Destination URL</label>
+                        <input type="url" id="editAdLink" class="form-input" placeholder="https://example.com">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="editAdStatus">Status</label>
+                        <select id="editAdStatus" class="form-input">
+                            <option value="Live">🟢 Live (Active on Website)</option>
+                            <option value="Paused">🟡 Paused (Temporarily Hidden)</option>
+                        </select>
+                    </div>
+
+                    <!-- Replace Image Section -->
+                    <div class="form-group">
+                        <label class="form-label">
+                            Replace / Change Image
+                            <span class="hint">Upload, pick preset, or paste URL</span>
+                        </label>
+                        
+                        <div class="media-choice-tabs">
+                            <button type="button" class="media-tab-btn active" id="tabBtn-upload-edit" onclick="switchAdImageTab('upload', 'edit')">📷 Upload File</button>
+                            <button type="button" class="media-tab-btn" id="tabBtn-presets-edit" onclick="switchAdImageTab('presets', 'edit')">🖼️ Preset Ads</button>
+                            <button type="button" class="media-tab-btn" id="tabBtn-url-edit" onclick="switchAdImageTab('url', 'edit')">🔗 Image URL</button>
+                        </div>
+
+                        <div id="editAdImagePanel-upload" class="image-upload-zone" style="margin-top: 10px;">
+                            <input type="file" id="editAdFileInput" accept="image/*" onchange="handleAdFileUpload(event, 'edit')">
+                            <div class="upload-icon-circle">🔄</div>
+                            <div class="upload-prompt">Tap to Upload New Ad Image</div>
+                            <div class="upload-subprompt">JPG, PNG, WebP • Auto-compressed</div>
+                        </div>
+
+                        <div id="editAdImagePanel-presets" class="preset-images-grid" style="display: none; margin-top: 10px;">
+                            <div class="preset-img-item" onclick="selectPresetAdImage('AD1.jpeg', 'edit')">
+                                <img src="AD1.jpeg" alt="AD1">
+                                <span>AD 1</span>
+                            </div>
+                            <div class="preset-img-item" onclick="selectPresetAdImage('AD2.jpeg', 'edit')">
+                                <img src="AD2.jpeg" alt="AD2">
+                                <span>AD 2</span>
+                            </div>
+                            <div class="preset-img-item" onclick="selectPresetAdImage('AD3.jpeg', 'edit')">
+                                <img src="AD3.jpeg" alt="AD3">
+                                <span>AD 3</span>
+                            </div>
+                            <div class="preset-img-item" onclick="selectPresetAdImage('ad4.jpeg', 'edit')">
+                                <img src="ad4.jpeg" alt="AD 4">
+                                <span>AD 4</span>
+                            </div>
+                            <div class="preset-img-item" onclick="selectPresetAdImage('ad5.jpeg', 'edit')">
+                                <img src="ad5.jpeg" alt="AD 5">
+                                <span>AD 5</span>
+                            </div>
+                            <div class="preset-img-item" onclick="selectPresetAdImage('ad6.jpeg', 'edit')">
+                                <img src="ad6.jpeg" alt="AD 6">
+                                <span>AD 6</span>
+                            </div>
+                        </div>
+
+                        <div id="editAdImagePanel-url" style="display: none; margin-top: 10px;">
+                            <input type="url" id="editAdUrlInput" class="form-input" placeholder="https://domain.com/banner.jpg" oninput="handleAdUrlInput(this.value, 'edit')">
+                        </div>
+
+                        <!-- Current Preview -->
+                        <div id="editAdPreviewContainer" class="ad-preview-box" style="margin-top: 12px;">
+                            <img id="editAdPreviewImg" src="" alt="Current Ad Creative">
+                        </div>
+                    </div>
+
+                    <button type="submit" id="updateAdBtn" class="btn-publish" style="margin-top: 10px;">
+                        <span>Save Changes</span>
+                        <span>💾</span>
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- ── Delete Confirmation Modal (News Article) ── -->
         <div id="deleteModal" class="modal-overlay">
             <div class="modal-sheet">
                 <div class="modal-icon-danger">🗑️</div>
@@ -269,6 +642,114 @@
                 <div class="modal-actions">
                     <button type="button" class="modal-btn-cancel" onclick="closeDeleteModal()">Cancel</button>
                     <button type="button" class="modal-btn-confirm" onclick="confirmDelete()">Delete</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ── Delete Ad Confirmation Modal ── -->
+        <div id="deleteAdModal" class="modal-overlay">
+            <div class="modal-sheet">
+                <div class="modal-icon-danger">🗑️</div>
+                <h3>Delete Advertisement</h3>
+                <p id="deleteAdModalMsg">Are you sure you want to permanently delete this advertisement?</p>
+                <div class="modal-actions">
+                    <button type="button" class="modal-btn-cancel" onclick="closeDeleteAdModal()">Cancel</button>
+                    <button type="button" class="modal-btn-confirm" onclick="confirmDeleteAd()">Delete</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ── Delete Panchang Confirmation Modal ── -->
+        <div id="deletePanchangModal" class="modal-overlay">
+            <div class="modal-sheet">
+                <div class="modal-icon-danger">🗑️</div>
+                <h3>Delete Panchang</h3>
+                <p id="deletePanchangModalMsg">Are you sure you want to remove this Panchang entry?</p>
+                <div class="modal-actions">
+                    <button type="button" class="modal-btn-cancel" onclick="closeDeletePanchangModal()">Cancel</button>
+                    <button type="button" class="modal-btn-confirm" onclick="confirmDeletePanchang()">Delete</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ── Share News Article Modal ── -->
+        <div id="shareArticleModal" class="modal-overlay">
+            <div class="modal-sheet share-modal-sheet">
+                <div class="share-modal-header">
+                    <div>
+                        <div class="share-modal-title">📤 Share News Article</div>
+                        <div class="share-modal-sub">Includes fetched image, headline & link</div>
+                    </div>
+                    <button type="button" class="modal-close-cross-btn" onclick="closeShareArticleModal()" title="Close">✕</button>
+                </div>
+
+                <div class="share-preview-card">
+                    <div class="share-preview-thumb">
+                        <img id="shareModalImg" src="" alt="News Image">
+                    </div>
+                    <div class="share-preview-info">
+                        <div class="share-badge-row">
+                            <span id="shareModalBadge" class="news-badge">Punjab</span>
+                            <span id="shareImgStatus" class="share-status-pill">✓ Image Ready</span>
+                        </div>
+                        <div id="shareModalTitle" class="share-preview-headline">Headline</div>
+                        <div id="shareModalUrl" class="share-preview-link">URL</div>
+                    </div>
+                </div>
+
+                <!-- Primary Native Share Trigger (Mobile / Supported Browsers) -->
+                <button type="button" id="shareNativeTriggerBtn" class="share-native-big-btn" onclick="triggerNativeShare()">
+                    <span>📱 System Share Sheet (WhatsApp, Instagram, etc.)</span>
+                </button>
+
+                <!-- Fast Direct Share Channels Grid -->
+                <div class="share-grid">
+                    <button type="button" class="share-action-btn wa-share" onclick="handleShareToWhatsApp()">
+                        <span class="share-action-icon">💬</span>
+                        <div class="share-action-text">
+                            <strong>WhatsApp</strong>
+                            <small>Image & Article Link</small>
+                        </div>
+                    </button>
+                    <button type="button" class="share-action-btn copy-link" onclick="handleCopyArticleLink()">
+                        <span class="share-action-icon">🔗</span>
+                        <div class="share-action-text">
+                            <strong>Copy Link</strong>
+                            <small>Direct Article URL</small>
+                        </div>
+                    </button>
+                    <button type="button" class="share-action-btn copy-image" id="shareCopyImageBtn" onclick="handleCopyArticleImage()">
+                        <span class="share-action-icon">📋</span>
+                        <div class="share-action-text">
+                            <strong>Copy Image</strong>
+                            <small>To Clipboard</small>
+                        </div>
+                    </button>
+                    <button type="button" class="share-action-btn download-image" onclick="handleDownloadArticleImage()">
+                        <span class="share-action-icon">⬇️</span>
+                        <div class="share-action-text">
+                            <strong>Save Image</strong>
+                            <small>Download File</small>
+                        </div>
+                    </button>
+                    <button type="button" class="share-action-btn x-share" onclick="handleShareToTwitter()">
+                        <span class="share-action-icon">🐦</span>
+                        <div class="share-action-text">
+                            <strong>X / Twitter</strong>
+                            <small>Post to Feed</small>
+                        </div>
+                    </button>
+                    <button type="button" class="share-action-btn tg-share" onclick="handleShareToTelegram()">
+                        <span class="share-action-icon">✈️</span>
+                        <div class="share-action-text">
+                            <strong>Telegram</strong>
+                            <small>Send to Channel</small>
+                        </div>
+                    </button>
+                </div>
+
+                <div class="modal-actions" style="margin-top: 10px;">
+                    <button type="button" class="modal-btn-cancel" style="width: 100%;" onclick="closeShareArticleModal()">Close</button>
                 </div>
             </div>
         </div>

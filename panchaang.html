@@ -7,6 +7,9 @@
     <link href="https://fonts.googleapis.com" rel="preconnect"/>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;900&family=Inter:wght@300;400;500;600;700&family=Noto+Sans+Gurmukhi:wght@400;700&display=swap" rel="stylesheet"/>
     <link href="index.css?v=1.5" rel="stylesheet"/>
+    <!-- Supabase Client for Live Sync -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabaseClient.js"></script>
     <script>
         const savedTheme = localStorage.getItem('theme');
         if (savedTheme !== 'dark') {
@@ -939,14 +942,79 @@
         return `${year}-${month}-${day}`;
     };
 
-    const todayStr = getISTDateString();
-    dateInput.max = todayStr;
-    dateInput.value = todayStr;
+    // Check URL param ?date=YYYY-MM-DD
+    const urlParams = new URLSearchParams(window.location.search);
+    const paramDate = urlParams.get('date');
 
-    const renderPanchaang = (dateStr) => {
-        if (panchaangData[dateStr]) {
-            let rawText = panchaangData[dateStr];
-            
+    const todayStr = getISTDateString();
+    const initialDate = (paramDate && /^\d{4}-\d{2}-\d{2}$/.test(paramDate)) ? paramDate : todayStr;
+    dateInput.value = initialDate;
+
+    // Database cache
+    const dbPanchangCache = {};
+
+    async function fetchPanchangFromDB(dateStr) {
+        if (dbPanchangCache[dateStr] !== undefined) {
+            return dbPanchangCache[dateStr];
+        }
+
+        if (typeof supabaseClient === 'undefined') {
+            return null;
+        }
+
+        try {
+            // 1. Try dedicated panchang table
+            const { data: pData, error: pErr } = await supabaseClient
+                .from('panchang')
+                .select('*')
+                .eq('date', dateStr)
+                .limit(1);
+
+            if (!pErr && pData && pData.length > 0) {
+                dbPanchangCache[dateStr] = pData[0];
+                return pData[0];
+            }
+        } catch (e) {}
+
+        try {
+            // 2. Fallback to articles where tag = 'Panchang' and slug = dateStr
+            const { data: artData, error: artErr } = await supabaseClient
+                .from('articles')
+                .select('*')
+                .eq('tag', 'Panchang')
+                .eq('slug', dateStr)
+                .limit(1);
+
+            if (!artErr && artData && artData.length > 0) {
+                dbPanchangCache[dateStr] = artData[0];
+                return artData[0];
+            }
+        } catch (e) {}
+
+        dbPanchangCache[dateStr] = null;
+        return null;
+    }
+
+    const renderPanchaang = async (dateStr) => {
+        displayArea.innerHTML = `<div class="panchaang-line" style="text-align: center; color: var(--text-muted, #888); padding: 30px;">
+            <p>🕉️ Loading sacred Panchang for <strong>${dateStr}</strong>...</p>
+        </div>`;
+
+        let rawText = '';
+        let isFromDb = false;
+        let authorText = '';
+
+        // Check Supabase first
+        const dbEntry = await fetchPanchangFromDB(dateStr);
+        if (dbEntry && dbEntry.content) {
+            rawText = dbEntry.content;
+            isFromDb = true;
+            authorText = dbEntry.author || 'पं मनोज झा';
+        } else if (panchaangData[dateStr]) {
+            rawText = panchaangData[dateStr];
+        }
+
+        if (rawText) {
             // Format *bold* text
             let formattedText = rawText.replace(/\*(.*?)\*/g, '<strong>$1</strong>');
             
@@ -954,17 +1022,20 @@
             let lines = formattedText.split('\n').filter(line => line.trim() !== '');
             let finalHtml = '';
             
+            if (isFromDb) {
+                finalHtml += `<div style="display:inline-block; margin-bottom:15px; font-size:12px; font-weight:700; background:rgba(255,107,0,0.12); color:#FF5E14; padding:4px 12px; border-radius:50px; border:1px solid rgba(255,107,0,0.25);">✓ Live Synced with Editorial Database</div>`;
+            }
+
             let inVichar = false;
             
             lines.forEach((line, index) => {
-                let delay = index * 0.1;
+                let delay = Math.min(index * 0.05, 0.6);
                 
-                if (line.includes('<strong>आज का विचार</strong>') || line.includes('<strong>आज का विचार</strong>')) {
+                if (line.includes('आज का विचार')) {
                     finalHtml += `<div class="spiritual-divider" style="animation-delay: ${delay}s"></div>`;
                     finalHtml += `<div class="vichar-box panchaang-line" style="animation-delay: ${delay + 0.1}s">`;
                     inVichar = true;
-                    // Remove the 'आज का विचार -' part and just keep the quote
-                    line = line.replace(/<strong>आज का विचार<\/strong>\s*-\s*/, '<strong>✨ आज का विचार ✨</strong><br><br>');
+                    line = line.replace(/आज का विचार\s*-\s*/, '<strong>✨ आज का विचार ✨</strong><br><br>');
                 }
                 
                 if (!inVichar) {
@@ -980,9 +1051,10 @@
             
             displayArea.innerHTML = finalHtml;
         } else {
-            displayArea.innerHTML = `<div class="panchaang-line" style="text-align: center; color: var(--text-muted, #888);">
-                <p>No panchaang data available for <strong>${dateStr}</strong>.</p>
-                <p>Please check back later or select another date.</p>
+            displayArea.innerHTML = `<div class="panchaang-line" style="text-align: center; color: var(--text-muted, #888); padding: 30px;">
+                <p style="font-size: 24px; margin-bottom: 10px;">🕉️</p>
+                <p>No Panchang recorded yet for <strong>${dateStr}</strong>.</p>
+                <p style="font-size: 14px; margin-top: 8px;">Please check back shortly or select another date.</p>
             </div>`;
         }
     };
@@ -991,13 +1063,7 @@
 
     dateInput.addEventListener('change', (e) => {
         const selectedDate = e.target.value;
-        if (selectedDate > todayStr) {
-            alert("Future dates are not allowed. Reverting to today.");
-            e.target.value = todayStr;
-            renderPanchaang(todayStr);
-        } else {
-            renderPanchaang(selectedDate);
-        }
+        renderPanchaang(selectedDate);
     });
 
     function updateClock() {

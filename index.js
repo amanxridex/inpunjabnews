@@ -8,6 +8,8 @@ document.addEventListener('DOMContentLoaded', () => {
     initDateTime();
     initTheme();
     loadEditorialArticles();
+    loadDynamicAds();
+    loadDailyPanchangWidget();
 });
 
 // ── Viewport Detection & Dynamic Adaptation ──
@@ -133,13 +135,13 @@ async function loadEditorialArticles() {
         if (error) throw error;
 
         if (articles && articles.length > 0) {
-            allLoadedArticles = articles;
-            renderLeadHero(articles.slice(0, 8));
-            renderVisualStories(articles);
-            renderPunjabGrid(articles.slice(8, 12).length > 0 ? articles.slice(8, 12) : articles.slice(0, 4));
-            renderStreamList(articles.slice(12).length > 0 ? articles.slice(12) : articles.slice(4));
-            renderTrendingList(articles);
-            renderTicker(articles.slice(0, 8));
+            allLoadedArticles = articles.filter(a => a.tag !== 'Panchang');
+            renderLeadHero(allLoadedArticles.slice(0, 8));
+            renderVisualStories(allLoadedArticles);
+            renderPunjabGrid(allLoadedArticles.slice(8, 12).length > 0 ? allLoadedArticles.slice(8, 12) : allLoadedArticles.slice(0, 4));
+            renderStreamList(allLoadedArticles.slice(12).length > 0 ? allLoadedArticles.slice(12) : allLoadedArticles.slice(4));
+            renderTrendingList(allLoadedArticles);
+            renderTicker(allLoadedArticles.slice(0, 8));
         }
 
     } catch (err) {
@@ -513,4 +515,108 @@ function escapeHtml(str) {
         }
     });
 }
+
+// ── 9. Dynamic Advertisements Sync from Database ──
+async function loadDynamicAds() {
+    if (typeof supabaseClient === 'undefined') return;
+    try {
+        const { data: ads, error } = await supabaseClient
+            .from('ads')
+            .select('*')
+            .order('created_at', { ascending: false });
+
+        if (error || !ads || ads.length === 0) return;
+
+        const liveAds = ads.filter(a => (a.status || 'Live').toLowerCase() === 'live');
+        if (liveAds.length === 0) return;
+
+        // Find best ad for sidebar or take first live ad
+        const sidebarAd = liveAds.find(a => (a.slot_name || '').toLowerCase().includes('sidebar')) || liveAds[0];
+        if (sidebarAd) {
+            const adImg = document.getElementById('sidebarAdImg');
+            const adLink = document.getElementById('sidebarAdLink');
+
+            let link = sidebarAd.link || '#';
+            if (sidebarAd.advertiser && sidebarAd.advertiser.includes('|')) {
+                link = sidebarAd.advertiser.split('|')[1].trim();
+            }
+
+            const imgVal = sidebarAd.image_url || sidebarAd.image || sidebarAd.size || 'ad5.jpeg';
+            if (adImg) adImg.src = imgVal;
+            if (adLink && link && link !== '#') {
+                adLink.href = link;
+                adLink.title = sidebarAd.advertiser ? sidebarAd.advertiser.split('|')[0].trim() : 'Advertisement';
+            }
+        }
+    } catch (e) {
+        console.error('Error fetching dynamic ads:', e);
+    }
+}
+
+// ── 10. Daily Panchang Widget Sync from Database ──
+async function loadDailyPanchangWidget() {
+    if (typeof supabaseClient === 'undefined') return;
+
+    // Get IST today's date YYYY-MM-DD
+    const now = new Date();
+    const istOffset = 5.5 * 60 * 60 * 1000;
+    const istTime = new Date(now.getTime() + now.getTimezoneOffset() * 60000 + istOffset);
+    const todayStr = `${istTime.getFullYear()}-${String(istTime.getMonth() + 1).padStart(2, '0')}-${String(istTime.getDate()).padStart(2, '0')}`;
+
+    try {
+        let content = '';
+        let brief = '';
+
+        // 1. Try panchang table
+        try {
+            const { data: pData } = await supabaseClient
+                .from('panchang')
+                .select('*')
+                .eq('date', todayStr)
+                .limit(1);
+            if (pData && pData.length > 0) {
+                content = pData[0].content || '';
+                brief = pData[0].brief || '';
+            }
+        } catch (e) {}
+
+        // 2. Fallback to articles tag = Panchang
+        if (!content) {
+            const { data: artData } = await supabaseClient
+                .from('articles')
+                .select('*')
+                .eq('tag', 'Panchang')
+                .eq('slug', todayStr)
+                .limit(1);
+            if (artData && artData.length > 0) {
+                content = artData[0].content || '';
+                brief = artData[0].brief || '';
+            }
+        }
+
+        if (content || brief) {
+            const dateElem = document.getElementById('sidebarPanchaangDate');
+            const tithiElem = document.getElementById('sidebarPanchaangDate');
+            const nakshatraElem = document.getElementById('sidebarPanchaangNakshatra');
+            const rahuElem = document.getElementById('sidebarPanchaangRahu');
+
+            if (dateElem) {
+                dateElem.textContent = `${istTime.toLocaleDateString('hi-IN', { day: 'numeric', month: 'long' })} • शुभ मुहूर्त`;
+            }
+
+            // Extract lines from content
+            const lines = content.split('\n');
+            lines.forEach(line => {
+                if (line.includes('नक्षत्र') && nakshatraElem) {
+                    nakshatraElem.textContent = line.replace(/^.*?नक्षत्र\s*[-:]?\s*/, '').trim();
+                } else if (line.includes('राहुकाल') && rahuElem) {
+                    rahuElem.textContent = line.replace(/^.*?राहुकाल\s*[-:]?\s*/, '').trim();
+                }
+            });
+        }
+    } catch (e) {
+        console.error('Error updating panchang widget:', e);
+    }
+}
+
 

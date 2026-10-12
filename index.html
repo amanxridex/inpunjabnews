@@ -527,7 +527,7 @@
                     </div>
 
                     <!-- Daily Panchaang Widget -->
-                    <div class="panchaang-widget-card">
+                    <div class="panchaang-widget-card" id="sidebarPanchaangWidget">
                         <div class="panchaang-header">
                             <h4>🕉️ Daily Panchaang</h4>
                             <span style="font-size: 11px; opacity: 0.9;">Punjab Edition</span>
@@ -539,20 +539,22 @@
                             </div>
                             <div class="panchaang-row">
                                 <strong>Nakshatra / ਨਕਸ਼ਤਰ:</strong>
-                                <span>Auspicious Muhurat</span>
+                                <span id="sidebarPanchaangNakshatra">Auspicious Muhurat</span>
                             </div>
                             <div class="panchaang-row">
                                 <strong>Rahu Kaal / ਰਾਹੂ ਕਾਲ:</strong>
-                                <span style="color: #DC2626;">Check Full Calendar</span>
+                                <span id="sidebarPanchaangRahu" style="color: #DC2626;">Check Full Calendar</span>
                             </div>
                             <a href="panchaang.html" class="panchaang-btn">View Full Daily Panchaang ➔</a>
                         </div>
                     </div>
 
                     <!-- Clean Single Ad Unit -->
-                    <div class="clean-ad-card">
+                    <div class="clean-ad-card" id="sidebarAdCard">
                         <div class="ad-disclaimer">Advertisement</div>
-                        <img src="ad5.jpeg" alt="Featured Advertisement" onerror="this.src='AD1.jpeg'">
+                        <a id="sidebarAdLink" href="#" target="_blank" rel="noopener" style="display:block; text-decoration:none;">
+                            <img id="sidebarAdImg" src="ad5.jpeg" alt="Featured Advertisement" onerror="this.src='AD1.jpeg'">
+                        </a>
                     </div>
 
                     <!-- Newsletter Subscription Card -->
